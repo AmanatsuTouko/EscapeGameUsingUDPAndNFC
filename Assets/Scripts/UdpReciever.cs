@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UdpReceiver : MonoBehaviour
 {
-    public int listenPort = 50392; // 受信するポート番号
+    public int listenPort = 50400; // 受信するポート番号
 
     private UdpClient udpClient;
     private Thread receiveThread;

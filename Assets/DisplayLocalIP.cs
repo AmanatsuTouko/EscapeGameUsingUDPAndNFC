@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class DisplayLocalIP : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // 自分のローカルIPアドレスを表示する
     void Start()
     {
         string hostname = Dns.GetHostName();
@@ -16,11 +16,5 @@ public class DisplayLocalIP : MonoBehaviour
         {
             Debug.Log(address.ToString());
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

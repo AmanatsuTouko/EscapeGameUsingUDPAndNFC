@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &368395504
 Transform:
   m_ObjectHideFlags: 0
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.21
+  remoteIpAddress: 192.168.11.15
   remotePort: 50400
 --- !u!1 &519420028
 GameObject:
@@ -366,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1731116138
 Transform:
   m_ObjectHideFlags: 0
