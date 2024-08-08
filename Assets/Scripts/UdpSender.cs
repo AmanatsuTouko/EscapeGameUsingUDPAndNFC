@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class UdpSender : MonoBehaviour
 {
-    // public string remoteIpAddress = "192.168.1.2"; // 受信者のIPアドレス
-    public int remotePort = 12345; // 受信者のポート番号
+    //public string remoteIpAddress = "192.168.1.2"; // 受信者のIPアドレス
+    public int remotePort = 50392; // 受信者のポート番号
 
     private UdpClient udpClient;
 
