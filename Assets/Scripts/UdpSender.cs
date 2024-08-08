@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class UdpSender : MonoBehaviour
 {
-    //public string remoteIpAddress = "192.168.1.2"; // 受信者のIPアドレス
-    public int remotePort = 50392; // 受信者のポート番号
+    public string remoteIpAddress = "192.168.1.2"; // 受信者のIPアドレス
+    public int remotePort = 50400; // 受信者のポート番号
 
     private UdpClient udpClient;
 
@@ -14,7 +14,7 @@ public class UdpSender : MonoBehaviour
     {
         udpClient = new UdpClient();
         // ブロードキャスト有効化
-        udpClient.EnableBroadcast = true;
+        // udpClient.EnableBroadcast = true;
     }
 
     void Update()
@@ -26,14 +26,12 @@ public class UdpSender : MonoBehaviour
     }
 
     void SendMessage(string message)
-    {
-        
-
+    {    
         byte[] data = Encoding.UTF8.GetBytes(message);
 
-        //udpClient.Send(data, data.Length, remoteIpAddress, remotePort);
+        udpClient.Send(data, data.Length, remoteIpAddress, remotePort);
         // ポート8888にブロードキャスト送信
-        udpClient.Send(data, data.Length, new IPEndPoint(IPAddress.Broadcast, remotePort));
+        // udpClient.Send(data, data.Length, new IPEndPoint(IPAddress.Broadcast, remotePort));
 
         Debug.Log("Message sent: " + message);
     }

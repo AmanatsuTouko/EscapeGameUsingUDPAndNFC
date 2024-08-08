@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9e16777e32c4e45b202e2b4a2058b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listenPort: 50000
+  listenPort: 50400
 --- !u!1 &368395503
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &368395504
 Transform:
   m_ObjectHideFlags: 0
@@ -212,8 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.15
-  remotePort: 50010
+  remoteIpAddress: 192.168.11.21
+  remotePort: 50400
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
