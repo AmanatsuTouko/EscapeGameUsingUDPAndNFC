@@ -123,51 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &355876723
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 355876724}
-  - component: {fileID: 355876725}
-  m_Layer: 0
-  m_Name: RecieveClient
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &355876724
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355876723}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &355876725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355876723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d9e16777e32c4e45b202e2b4a2058b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  listenPort: 50400
 --- !u!1 &368395503
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,8 +133,10 @@ GameObject:
   m_Component:
   - component: {fileID: 368395504}
   - component: {fileID: 368395505}
+  - component: {fileID: 368395506}
+  - component: {fileID: 368395507}
   m_Layer: 0
-  m_Name: SendClient
+  m_Name: ConnectionClient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,6 +171,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   remoteIpAddress: 192.168.11.15
   remotePort: 50400
+--- !u!114 &368395506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368395503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9e16777e32c4e45b202e2b4a2058b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listenPort: 50400
+--- !u!114 &368395507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368395503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ecbbc06b05be477ea0a0ffc422fcdf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,50 +288,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1222241123
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1222241125}
-  - component: {fileID: 1222241124}
-  m_Layer: 0
-  m_Name: DisplayLocalIP
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1222241124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222241123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ecbbc06b05be477ea0a0ffc422fcdf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1222241125
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222241123}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1731116136
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,9 +297,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1731116138}
+  - component: {fileID: 1731116140}
   - component: {fileID: 1731116139}
   m_Layer: 0
-  m_Name: Broadcast
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -394,6 +333,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54968d89fa9a34654b3494efe8b36f92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1731116140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731116136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa28a78bb7c47444f9943b36bf1738a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  udpSender: {fileID: 368395505}
+  udpReceiver: {fileID: 368395506}
+  displayLocalIP: {fileID: 368395507}
+  clientScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -401,5 +356,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1731116138}
   - {fileID: 368395504}
-  - {fileID: 355876724}
-  - {fileID: 1222241125}

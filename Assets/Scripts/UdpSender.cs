@@ -16,16 +16,8 @@ public class UdpSender : MonoBehaviour
         udpClient = new UdpClient();
     }
 
-    void Update()
+    public new void SendMessage(string message)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SendMessage("Hello from Sender");
-        }
-    }
-
-    void SendMessage(string message)
-    {    
         byte[] data = Encoding.UTF8.GetBytes(message);
 
         udpClient.Send(data, data.Length, remoteIpAddress, remotePort);

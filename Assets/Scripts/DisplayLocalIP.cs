@@ -9,12 +9,15 @@ public class DisplayLocalIP : MonoBehaviour
     // 自分のローカルIPアドレスを表示する
     void Start()
     {
-        string hostname = Dns.GetHostName();
-
-        IPAddress[] adrList = Dns.GetHostAddresses(hostname);
+        IPAddress[] adrList = GetLocalIPAdresses();
         foreach (IPAddress address in adrList)
         {
             Debug.Log(address.ToString());
         }
+    }
+
+    public IPAddress[] GetLocalIPAdresses()
+    {
+        return Dns.GetHostAddresses(Dns.GetHostName());
     }
 }
