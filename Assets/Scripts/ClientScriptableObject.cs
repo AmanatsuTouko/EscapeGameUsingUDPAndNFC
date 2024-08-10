@@ -6,21 +6,25 @@ using UnityEngine.UI;
 public class ClientScriptableObject : ScriptableObject
 {
     public List<CardImagePair> cardImagePair;
+    public Image image;
 
     public void DisplayQuestionImage(CardID cardID)
     {
-        switch (cardID)
+        // nullチェック
+        if(image == null)
         {
-            case CardID.ID01:
-                break;
-            case CardID.ID02:
-                break;
-            case CardID.ID03:
-                break;
-            default:
-                Debug.LogError($"Error:{cardID}に有効な実装がありません．");
-                break;
+            Debug.LogError($"Error:Spriteの反映先のImageが登録されていません．");
+            return;
         }
+
+        // cardIDに対応するSpriteでImageを更新する
+        int cardIdx = (int)cardID;
+        if (cardImagePair.Count <= cardIdx)
+        {
+            Debug.LogError($"Error:{cardID}に対応するSpriteが登録されていません．");
+            return;
+        }
+        image.sprite = cardImagePair[cardIdx].Sprite;
     }
 }
 
@@ -29,5 +33,5 @@ public class ClientScriptableObject : ScriptableObject
 public class CardImagePair
 {
     public CardID cardID;
-    public Image Image;
+    public Sprite Sprite;
 }
