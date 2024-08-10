@@ -10,6 +10,10 @@ public class NFCReader : MonoBehaviour
     private ISCardContext context;
     private ISCardMonitor monitor;
     string mainReaderName;
+    
+    // カードの読み取り時に外部から関数を実行できるようにする
+    public Action ActionOnReadCard;
+    public Action ActionOnReleaseCard;
 
     void Start()
     {
@@ -57,16 +61,24 @@ public class NFCReader : MonoBehaviour
             // カードを認識した状態
             case SCRState.Present:
                 Debug.Log($"カードを認識. カードリーダーの状態:{args.NewState}");
+                // UUIDなどを読み込んで表示
                 ReadData();
+                // カード読み込み時の関数を実行する
+                ActionOnReadCard.Invoke();
                 break;
+
             // カードが処理中（データの読み取りや書き込みを行っている可能性がある）
             case SCRState.Present | SCRState.InUse:
                 Debug.Log($"カードの処理中. カードリーダーの状態:{args.NewState}");
                 break;
+
             // カードが物理的にリーダから離れた状態
             case SCRState.Empty:
                 Debug.Log($"カードを認識しなくなったことを検出．カードリーダーの状態:{args.NewState}");
+                // カードリリース時の関数を実行する
+                ActionOnReleaseCard.Invoke();
                 break;
+
             default:
                 Debug.LogError($"カードリーダーが設定されていない状態:{args.NewState}を検出.");
                 break;
