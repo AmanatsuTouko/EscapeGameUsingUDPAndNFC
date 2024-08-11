@@ -44,22 +44,17 @@ public class GameManager : MonoBehaviour
     }
 
     // 受信した時に実行する関数
-    void DisplayQuestionImage(string cardIDString)
+    void DisplayQuestionImage(string uuidString)
     {
-        // TODO :
-        // CardIDをUUIDに変更する
-        // 辞書を用いて管理できるようにする
-
-        // cardNameをstringからenumへ変換する
-        CardID cardID;
-        if (!Enum.TryParse(cardIDString, out cardID))
+        // 文字列のUUIDからCardIDに変換する
+        CardID? cardID = uuidToCardIdDictScriptableObject.GetCardIDFromUUID(uuidString);
+        if(cardID == null)
         {
-            Debug.LogError($"Error:{cardIDString}はCardIDに存在しません");
+            Debug.LogError($"{uuidString}をCardIDに変換できないため，処理を停止します．");
             return;
         }
-
         // cardIDに応じた処理を行う
-        clientScriptableObject.DisplayQuestionImage(cardID);
+        clientScriptableObject.DisplayQuestionImage((CardID)cardID);
     }
 
     // NFCカードの識別番号と対応するクイズ画像のデータを更新する

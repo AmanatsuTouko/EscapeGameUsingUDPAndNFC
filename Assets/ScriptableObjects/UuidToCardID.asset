@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UuidCard:
   - Uuid: 
-    cardID: 0
+    CardID: 0
   - Uuid: 
-    cardID: 1
+    CardID: 1
   - Uuid: 
-    cardID: 2
+    CardID: 2

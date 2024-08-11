@@ -582,6 +582,7 @@ MonoBehaviour:
   displayLocalIP: {fileID: 368395507}
   nfcReader: {fileID: 2006035812}
   clientScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
+  uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
   QuizDisplayImage: {fileID: 727965794}
 --- !u!1 &2006035810
 GameObject:

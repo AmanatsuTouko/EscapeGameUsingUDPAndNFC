@@ -61,8 +61,8 @@ public class NFCReader : MonoBehaviour
             // カードを認識した状態
             case SCRState.Present:
                 Debug.Log($"カードを認識. カードリーダーの状態:{args.NewState}");
-                // UUIDなどを読み込んで表示
-                string uuid = ReadData();
+                // UUIDを取得する
+                string uuid = GetUUIDByReadData();
                 // カード読み込み時の関数を実行する
                 if(ActionOnReadCard != null)
                 {
@@ -116,7 +116,7 @@ public class NFCReader : MonoBehaviour
 
     // read data
     // Reference : https://github.com/danm-de/pcsc-sharp/blob/master/Examples/ISO7816-4/Transmit/Program.cs
-    private string ReadData() {
+    private string GetUUIDByReadData() {
 
         ICardReader reader = context.ConnectReader(mainReaderName, SCardShareMode.Shared, SCardProtocol.Any);
 
