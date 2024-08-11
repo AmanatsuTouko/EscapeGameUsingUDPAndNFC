@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] UdpReceiver udpReceiver;
     [SerializeField] DisplayLocalIP displayLocalIP;
 
+    // NFCカードの読み込み
+    [Header("Read NFC Card")]
+    [SerializeField] NFCReader nfcReader;
+
     // 1階もしくは2階のデータ
     [Header("Quiz Image Corresponding to NFC ID")]
     [SerializeField] ClientScriptableObject clientScriptableObject;
@@ -22,6 +26,8 @@ public class GameManager : MonoBehaviour
     {
         // UDP受信時に実行する関数を登録する
         udpReceiver.ActionRecieveData += DisplayQuestionImage;
+        // UUID取得時に実行する関数を登録する
+        nfcReader.ActionOnReadCard += SendUUID;
     }
 
     void Update()
@@ -37,6 +43,10 @@ public class GameManager : MonoBehaviour
     // 受信した時に実行する関数
     void DisplayQuestionImage(string cardIDString)
     {
+        // TODO :
+        // CardIDをUUIDに変更する
+        // 辞書を用いて管理できるようにする
+
         // cardNameをstringからenumへ変換する
         CardID cardID;
         if (!Enum.TryParse(cardIDString, out cardID))
@@ -54,5 +64,11 @@ public class GameManager : MonoBehaviour
     {
         this.clientScriptableObject = clientScriptableObject;
         clientScriptableObject.image = QuizDisplayImage;
+    }
+
+    // NFCカードから取得したUUIDをもとにメッセージをUDPで送信する
+    void SendUUID(string uuid)
+    {
+        udpSender.SendMessage(uuid);
     }
 }
