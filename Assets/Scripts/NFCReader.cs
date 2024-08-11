@@ -64,7 +64,10 @@ public class NFCReader : MonoBehaviour
                 // UUIDなどを読み込んで表示
                 ReadData();
                 // カード読み込み時の関数を実行する
-                ActionOnReadCard.Invoke();
+                if(ActionOnReadCard != null)
+                {
+                    ActionOnReadCard.Invoke();
+                }
                 break;
 
             // カードが処理中（データの読み取りや書き込みを行っている可能性がある）
@@ -76,7 +79,16 @@ public class NFCReader : MonoBehaviour
             case SCRState.Empty:
                 Debug.Log($"カードを認識しなくなったことを検出．カードリーダーの状態:{args.NewState}");
                 // カードリリース時の関数を実行する
-                ActionOnReleaseCard.Invoke();
+                if(ActionOnReleaseCard != null)
+                {
+                    ActionOnReleaseCard.Invoke();
+                }
+                break;
+            
+            // カードの認識はされているが，通信が行われていない状態
+            // リーダーがカードと通信を開始するためのリスクエストを送っていない もしくは カードがリクエストに応じていない
+            case SCRState.Present | SCRState.Mute:
+                Debug.Log($"カードを認識＋通信の失敗を検出．カードリーダーの状態:{args.NewState}");
                 break;
 
             default:
