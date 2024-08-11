@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] NFCReader nfcReader;
 
     // 1階もしくは2階のデータ
-    [Header("Quiz Image Corresponding to NFC ID")]
+    [Header("Quiz Image Corresponding to Card ID")]
     [SerializeField] ClientScriptableObject clientScriptableObject;
+
+    // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
+    [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
 
     // クイズ画像表示用UI
     [Header("UI")]
