@@ -12,7 +12,7 @@ public class NFCReader : MonoBehaviour
     string mainReaderName;
     
     // カードの読み取り時に外部から関数を実行できるようにする
-    public Action ActionOnReadCard;
+    public Action<string> ActionOnReadCard;
     public Action ActionOnReleaseCard;
 
     void Start()
@@ -62,11 +62,11 @@ public class NFCReader : MonoBehaviour
             case SCRState.Present:
                 Debug.Log($"カードを認識. カードリーダーの状態:{args.NewState}");
                 // UUIDなどを読み込んで表示
-                ReadData();
+                string uuid = ReadData();
                 // カード読み込み時の関数を実行する
                 if(ActionOnReadCard != null)
                 {
-                    ActionOnReadCard.Invoke();
+                    ActionOnReadCard.Invoke(uuid);
                 }
                 break;
 
@@ -116,10 +116,11 @@ public class NFCReader : MonoBehaviour
 
     // read data
     // Reference : https://github.com/danm-de/pcsc-sharp/blob/master/Examples/ISO7816-4/Transmit/Program.cs
-    private void ReadData() {
+    private string ReadData() {
 
         ICardReader reader = context.ConnectReader(mainReaderName, SCardShareMode.Shared, SCardProtocol.Any);
 
+        // ISO7816のAPDUコマンドを使用してカードからデータを読み取る
         var apdu = new CommandApdu(IsoCase.Case2Short, reader.Protocol) {
             CLA = 0xFF,
             Instruction = InstructionCode.GetData,
@@ -129,7 +130,7 @@ public class NFCReader : MonoBehaviour
         };
 
         using (reader.Transaction(SCardReaderDisposition.Leave)) {
-            Console.WriteLine("Retrieving the UID .... ");
+            Debug.Log("Retrieving the UID .... ");
 
             var sendPci = SCardPCI.GetPci(reader.Protocol);
             var receivePci = new SCardPCI(); // IO returned protocol control information.
@@ -151,7 +152,20 @@ public class NFCReader : MonoBehaviour
                 string.Format("SW1: {0:X2}, SW2: {1:X2}\nUid: {2}",
                 responseApdu.SW1,
                 responseApdu.SW2,
-                responseApdu.HasData ? BitConverter.ToString(responseApdu.GetData()) : "No uid received"));
+                responseApdu.HasData ? BitConverter.ToString(responseApdu.GetData()) : "No uid received")
+            );
+            
+            // UUIDを返却する
+            // 操作が正常に完了した かつ データを持っているとき
+            if(responseApdu.HasData && responseApdu.SW1 == 0x90 && responseApdu.SW2 == 0x00)
+            {
+                return BitConverter.ToString(responseApdu.GetData());
+            }
+            else
+            {
+                Debug.LogError("NFCカードのデータの読み取り操作が正常に完了しませんでした．");
+                return "";
+            }
         }
     }
 
