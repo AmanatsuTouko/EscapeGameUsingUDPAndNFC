@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ClientScriptableObject : ScriptableObject
 {
     public List<CardImagePair> cardImagePair;
+
+    [System.NonSerialized]
     public Image image;
 
     public void DisplayQuestionImage(CardID cardID)
