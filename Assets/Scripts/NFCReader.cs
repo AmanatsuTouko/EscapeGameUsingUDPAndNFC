@@ -12,8 +12,13 @@ public class NFCReader : MonoBehaviour
     string mainReaderName;
     
     // カードの読み取り時に外部から関数を実行できるようにする
+
+    // NFCカードを読み込んだときに実行する関数(UUIDを引数に持つ)
     public Action<string> ActionOnReadCard;
+    // 交通系ICを読み込んだ時に実行する関数
+    public Action ActionOnReadTranspotationICCard;
     public Action ActionOnReleaseCard;
+    
 
     void Start()
     {
@@ -73,6 +78,10 @@ public class NFCReader : MonoBehaviour
                 if(ActionOnReadCard != null)
                 {
                     // ActionOnReadCard.Invoke(uuid);
+                }
+                if(ActionOnReadTranspotationICCard != null && isTransportationICCard)
+                {
+                    ActionOnReadTranspotationICCard.Invoke();
                 }
                 break;
 
