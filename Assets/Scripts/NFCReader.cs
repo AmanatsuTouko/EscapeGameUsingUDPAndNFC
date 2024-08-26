@@ -61,12 +61,18 @@ public class NFCReader : MonoBehaviour
             // カードを認識した状態
             case SCRState.Present:
                 Debug.Log($"カードを認識. カードリーダーの状態:{args.NewState}");
+                
                 // UUIDを取得する
                 string uuid = GetUUIDByReadData();
+                // 交通系ICかどうか判定する
+                bool isTransportationICCard = IsTransportationICCard();
+
+                Debug.Log($"UUID: {uuid}, 交通系ICかどうか: {isTransportationICCard}");
+
                 // カード読み込み時の関数を実行する
                 if(ActionOnReadCard != null)
                 {
-                    ActionOnReadCard.Invoke(uuid);
+                    // ActionOnReadCard.Invoke(uuid);
                 }
                 break;
 
@@ -97,6 +103,16 @@ public class NFCReader : MonoBehaviour
         }
     }
 
+    void OnApplicationQuit()
+    {
+        // カードリーダーの接続を終了する
+        context.Dispose();
+
+        // NFCカードリーダーの状態のモニタリングを終了する
+        monitor.Cancel();
+        monitor.Dispose();
+    }
+
     private static void PrintReaderStatus(ICardReader reader) {
         try {
             var status = reader.GetStatus();
@@ -111,10 +127,10 @@ public class NFCReader : MonoBehaviour
         if (atr == null || atr.Length <= 0) {
             return;
         }
-        Console.WriteLine("Card ATR: {0}", BitConverter.ToString(atr));
+        Debug.Log($"Card ATR: {BitConverter.ToString(atr)}");
     }
 
-    // read data
+    // UUIDを取得する
     // Reference : https://github.com/danm-de/pcsc-sharp/blob/master/Examples/ISO7816-4/Transmit/Program.cs
     private string GetUUIDByReadData() {
 
@@ -169,13 +185,100 @@ public class NFCReader : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit()
-    {
-        // カードリーダーの接続を終了する
-        context.Dispose();
 
-        // NFCカードリーダーの状態のモニタリングを終了する
-        monitor.Cancel();
-        monitor.Dispose();
+    // 交通系ICかどうかの判別を，残高があるかどうかで判別する
+    // https://office-fun.com/techmemo-csharp-nfcreading-practice01/
+    // https://marunouchi-tech.i-studio.co.jp/5133/
+    // https://tomosoft.jp/design/?p=5543
+    private bool IsTransportationICCard()
+    {
+        var contextFactory = ContextFactory.Instance;
+ 
+        using (var context = contextFactory.Establish(SCardScope.System))
+        {
+            // using句を使うことで，using句を出るときに自動的にreaderインスタンスを破棄する
+            using (var rfidReader = context.ConnectReader(mainReaderName, SCardShareMode.Shared, SCardProtocol.Any))
+            {
+                using (rfidReader.Transaction(SCardReaderDisposition.Leave))
+                {
+                    // 交通系ICかどうかを判別する
+
+                    // Send Select File Command
+                    byte[] commnadSelectFile = { 0xff, 0xA4, 0x00, 0x01, 0x02, 0x0f, 0x09 };
+                    byte[] commnadReadBinary = { 0xff, 0xb0, 0x00, 0x00, 0x00 };
+        
+                    var sendPci = SCardPCI.GetPci(rfidReader.Protocol);
+                    var receivePci = new SCardPCI(); // IO returned protocol control information.
+                    var receiveBuffer = new byte[256];
+        
+                    var bytesReceived = rfidReader.Transmit(
+                        sendPci,                     // Protocol Control Information (T0, T1 or Raw)
+                        commnadSelectFile,           // command APDU
+                        commnadSelectFile.Length,
+                        receivePci,                  // returning Protocol Control Information
+                        receiveBuffer,
+                        receiveBuffer.Length         // data buffer
+                    );
+
+                    var responseApdu = new ResponseApdu(receiveBuffer, bytesReceived, IsoCase.Case2Short, rfidReader.Protocol);
+                    Debug.Log("SW1: " + responseApdu.SW1.ToString() + ", SW2: " + responseApdu.SW2.ToString());
+
+                    // コマンドが正常に実行されなかった場合は交通系ICではない
+                    // https://tex2e.github.io/blog/protocol/apdu-return-status-msg
+                    if(responseApdu.SW1 != 144 && responseApdu.SW2 != 0)
+                    {
+                        return false;
+                    }
+
+                    if (responseApdu.HasData)
+                    {
+                        Debug.Log("Uid: " + BitConverter.ToString(responseApdu.GetData()));
+                    }
+                    else
+                    {
+                        Debug.Log("Uid: No uid received");
+                    }
+
+                    // 残高を読み出す
+                    bytesReceived = rfidReader.Transmit(
+                        sendPci,                     // Protocol Control Information (T0, T1 or Raw)
+                        commnadReadBinary,           // command APDU
+                        commnadReadBinary.Length,
+                        receivePci,                  // returning Protocol Control Information
+                        receiveBuffer,
+                        receiveBuffer.Length         // data buffer
+                    );
+
+                    responseApdu = new ResponseApdu(receiveBuffer, bytesReceived, IsoCase.Case2Short, rfidReader.Protocol);
+                    Debug.Log("SW1: " + responseApdu.SW1.ToString() + ", SW2: " + responseApdu.SW2.ToString());
+
+                    // コマンドが正常に実行されなかった場合は交通系ICではない
+                    if(responseApdu.SW1 != 144 && responseApdu.SW2 != 0)
+                    {
+                        return false;
+                    }
+
+                    if (responseApdu.HasData)
+                    {
+                        GetBalanceParsingRecievedByte(responseApdu.GetData());
+                    }
+                    else
+                    {
+                        Debug.Log("No data received");
+                    }
+
+                    // コマンドが正常に実行されれば交通系IC
+                    return true;
+                }                
+            }
+        }
     }
+
+    private int GetBalanceParsingRecievedByte(byte[] data)
+    {
+        // 残高情報が10バイト目と11バイト目にあるので整数値にパースする
+        byte[] balance = new byte[] { data[10], data[11] };
+        Debug.Log("残高：" + BitConverter.ToInt16(balance, 0) + "円");
+        return BitConverter.ToInt16(balance, 0);
+    }    
 }
