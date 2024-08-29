@@ -66,28 +66,17 @@ public class NFCReader : MonoBehaviour
             // カードを認識した状態
             case SCRState.Present:
                 Debug.Log($"カードを認識. カードリーダーの状態:{args.NewState}");
-                
-                // UUIDを取得する
-                string uuid = GetUUIDByReadData();
-                // 交通系ICかどうか判定する
-                bool isTransportationICCard = IsTransportationICCard();
-
-                Debug.Log($"UUID: {uuid}, 交通系ICかどうか: {isTransportationICCard}");
-
-                // カード読み込み時の関数を実行する
-                if(ActionOnReadCard != null)
-                {
-                    // ActionOnReadCard.Invoke(uuid);
-                }
-                if(ActionOnReadTranspotationICCard != null && isTransportationICCard)
-                {
-                    ActionOnReadTranspotationICCard.Invoke();
-                }
+                DoMethodOnScan();
                 break;
 
             // カードが処理中（データの読み取りや書き込みを行っている可能性がある）
             case SCRState.Present | SCRState.InUse:
                 Debug.Log($"カードの処理中. カードリーダーの状態:{args.NewState}");
+                // Linux(Ubuntu)の場合は，1回目のスキャン以降に
+                // PresentInUseしか反応しなくなる？ので条件付きコンパイルを行う
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+                DoMethodOnScan();
+#endif
                 break;
 
             // カードが物理的にリーダから離れた状態
@@ -109,6 +98,26 @@ public class NFCReader : MonoBehaviour
             default:
                 Debug.LogError($"カードリーダーが設定されていない状態:{args.NewState}を検出.");
                 break;
+        }
+    }
+
+    void DoMethodOnScan()
+    {
+        // UUIDを取得する
+        string uuid = GetUUIDByReadData();
+        // 交通系ICかどうか判定する
+        bool isTransportationICCard = IsTransportationICCard();
+
+        Debug.Log($"UUID: {uuid}, 交通系ICかどうか: {isTransportationICCard}");
+
+        // カード読み込み時の関数を実行する
+        if (ActionOnReadCard != null)
+        {
+            // ActionOnReadCard.Invoke(uuid);
+        }
+        if (ActionOnReadTranspotationICCard != null && isTransportationICCard)
+        {
+            ActionOnReadTranspotationICCard.Invoke();
         }
     }
 
