@@ -27,10 +27,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Imageの反映先を自身の持つImageクラスにする
+        clientScriptableObject.image = QuizDisplayImage;
+
+        // カード読み取り時に実行する関数を登録する
+        nfcReader.ActionOnReadCard += DisplayImageOnRemoteClientFromUUID;
+
+        // 交通系IC読み取り時に実行する関数を登録する
+        nfcReader.ActionOnReadTranspotationICCard += ActionOnReadTransportationICCard;
+
         // UDP受信時に実行する関数を登録する
-        udpReceiver.ActionRecieveData += DisplayQuestionImage;
-        // UUID取得時に実行する関数を登録する
-        nfcReader.ActionOnReadCard += SendUUID;
+        udpReceiver.ActionRecieveData += OnRecieveMessage;
     }
 
     void Update()
@@ -43,8 +50,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 別クライアントでカード読み取り時にNFCカードから取得したUUIDを引数にして画像を表示する関数を起動するメッセージをUDPで送信する
+    void DisplayImageOnRemoteClientFromUUID(string uuid)
+    {
+        // UUIDを引数に，画像を表示する関数を別クライアントで実行する
+        RPCMethod.GetJsonFromMethodArgs(nameof(StaticMethods), nameof(StaticMethods.DisplayQuestionImage), new string[]{uuid});
+        udpSender.SendMessage(uuid);
+    }
+
+    // 交通系IC読み取り時に実行する関数
+    void ActionOnReadTransportationICCard()
+    {
+        // 特殊なクイズ画像の表示
+    }
+
+    // 受信した文字列に応じて関数を実行する
+    void OnRecieveMessage(string receivedString)
+    {
+        RPCMethod.DoMethodFromJson(receivedString);
+    }
+
+    // NFCカードの識別番号と対応するクイズ画像のデータを更新する
+    void UpdateClientScriptableObject(ClientScriptableObject clientScriptableObject)
+    {
+        this.clientScriptableObject = clientScriptableObject;
+        clientScriptableObject.image = QuizDisplayImage;
+    }
+
+    // TODO：RPCするので，staticにしなければならない
     // 受信した時に実行する関数
-    void DisplayQuestionImage(string uuidString)
+    public void DisplayQuestionImage(string uuidString)
     {
         // 文字列のUUIDからCardIDに変換する
         CardID? cardID = uuidToCardIdDictScriptableObject.GetCardIDFromUUID(uuidString);
@@ -56,17 +91,14 @@ public class GameManager : MonoBehaviour
         // cardIDに応じた処理を行う
         clientScriptableObject.DisplayQuestionImage((CardID)cardID);
     }
+}
 
-    // NFCカードの識別番号と対応するクイズ画像のデータを更新する
-    void UpdateClientScriptableObject(ClientScriptableObject clientScriptableObject)
+// RPCで実行される関数(publicでstaticでなければならない)
+public class StaticMethods
+{
+    public static void DisplayQuestionImage(string uuidString)
     {
-        this.clientScriptableObject = clientScriptableObject;
-        clientScriptableObject.image = QuizDisplayImage;
-    }
-
-    // NFCカードから取得したUUIDをもとにメッセージをUDPで送信する
-    void SendUUID(string uuid)
-    {
-        udpSender.SendMessage(uuid);
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.DisplayQuestionImage(uuidString);
     }
 }
