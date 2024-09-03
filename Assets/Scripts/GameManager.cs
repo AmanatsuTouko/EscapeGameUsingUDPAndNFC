@@ -77,7 +77,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         clientScriptableObject.image = QuizDisplayImage;
     }
 
-    // TODO：RPCするので，staticにしなければならない
     // 受信した時に実行する関数
     public void DisplayQuestionImage(string uuidString)
     {
