@@ -40,11 +40,16 @@ public class UdpReceiver : MonoBehaviour
                 string message = Encoding.UTF8.GetString(data);
                 Debug.Log("Message received: " + message);
 
-                // 登録したメソッドを実行する
-                if(ActionRecieveData != null)
+                // メインスレッドに処理を戻して，登録したメソッドを実行する
+                // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
+                this.Invoke(new Action(() =>
                 {
-                    ActionRecieveData.Invoke(message);
-                }
+                    // 登録したメソッドを実行する
+                    if(ActionRecieveData != null)
+                    {
+                        ActionRecieveData.Invoke(message);
+                    }
+                }).Method.Name, 0f);   
             }
         }
         catch (SocketException ex)
