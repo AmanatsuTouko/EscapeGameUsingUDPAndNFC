@@ -54,8 +54,8 @@ public class GameManager : MonoBehaviour
     void DisplayImageOnRemoteClientFromUUID(string uuid)
     {
         // UUIDを引数に，画像を表示する関数を別クライアントで実行する
-        RPCMethod.GetJsonFromMethodArgs(nameof(StaticMethods), nameof(StaticMethods.DisplayQuestionImage), new string[]{uuid});
-        udpSender.SendMessage(uuid);
+        string jsonMethod = RPCManager.GetJsonFromMethodArgs(nameof(RPCStaticMethods), nameof(RPCStaticMethods.DisplayQuestionImage), new string[]{uuid});
+        udpSender.SendMessage(jsonMethod);
     }
 
     // 交通系IC読み取り時に実行する関数
@@ -65,9 +65,9 @@ public class GameManager : MonoBehaviour
     }
 
     // 受信した文字列に応じて関数を実行する
-    void OnRecieveMessage(string receivedString)
+    void OnRecieveMessage(string receivedJson)
     {
-        RPCMethod.DoMethodFromJson(receivedString);
+        RPCManager.InvokeFromJson(receivedJson);
     }
 
     // NFCカードの識別番号と対応するクイズ画像のデータを更新する
@@ -90,15 +90,5 @@ public class GameManager : MonoBehaviour
         }
         // cardIDに応じた処理を行う
         clientScriptableObject.DisplayQuestionImage((CardID)cardID);
-    }
-}
-
-// RPCで実行される関数(publicでstaticでなければならない)
-public class StaticMethods
-{
-    public static void DisplayQuestionImage(string uuidString)
-    {
-        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        gameManager.DisplayQuestionImage(uuidString);
     }
 }
