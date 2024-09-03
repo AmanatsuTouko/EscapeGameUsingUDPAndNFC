@@ -113,7 +113,7 @@ public class NFCReader : MonoBehaviour
         // カード読み込み時の関数を実行する
         if (ActionOnReadCard != null)
         {
-            // ActionOnReadCard.Invoke(uuid);
+            ActionOnReadCard.Invoke(uuid);
         }
         if (ActionOnReadTranspotationICCard != null && isTransportationICCard)
         {
