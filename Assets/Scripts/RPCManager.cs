@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // UDPで受信した文字列をもとに関数を実行できるようにする
-public class RPCMethod : MonoBehaviour
+public class RPCManager : MonoBehaviour
 {
     // サンプルコード
 
@@ -38,7 +38,7 @@ public class RPCMethod : MonoBehaviour
         public string[] Args;
     }
 
-    public static void DoMethodFromJson(string jsonMethodArgs)
+    public static void InvokeFromJson(string jsonMethodArgs)
     {
         // Jsonをデシリアライズする
         MethodArgs methodArgs = JsonUtility.FromJson<MethodArgs>(jsonMethodArgs);
