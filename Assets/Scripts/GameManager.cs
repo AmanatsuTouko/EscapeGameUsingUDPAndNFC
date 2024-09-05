@@ -16,10 +16,16 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [Header("Read NFC Card")]
     [SerializeField] NFCReader nfcReader;
 
+    // 現在読み込んでいるCardID
+    [SerializeField] CardID? currentDisplayCardID = null;
+
     // 1階もしくは2階のデータ
     [Header("Quiz Image Corresponding to Card ID")]
     [SerializeField] ClientScriptableObject clientScriptableObject;
+    // 問題と答えのデータ
+    [SerializeField] AnswerCardIDPairScriptableObject answerCardIDPairScriptableObject;
 
+    [Header("UUID / Card ID Pair")]
     // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
     [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
 
@@ -28,10 +34,12 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [SerializeField] Image QuizDisplayImage;
     [SerializeField] Slider ProgressBarSlider;
 
+    private bool isUpdatingProgressBar = false;
+
     void Start()
     {
         // Imageの反映先を自身の持つImageクラスにする
-        clientScriptableObject.image = QuizDisplayImage;
+        RegisterImageToScriptableObjejcts(QuizDisplayImage);
 
         // カード読み取り時に実行する関数を登録する
         nfcReader.ActionOnReadCard += DisplayImageOnRemoteClientFromUUID;
@@ -70,14 +78,14 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
     }
 
-    // NFCカードの識別番号と対応するクイズ画像のデータを更新する
-    void UpdateClientScriptableObject(ClientScriptableObject clientScriptableObject)
-    {
-        this.clientScriptableObject = clientScriptableObject;
-        clientScriptableObject.image = QuizDisplayImage;
-    }
-
     // ==== UI操作 ====
+
+    // ScriptableObjejctとImageの紐づけ
+    private void RegisterImageToScriptableObjejcts(Image image)
+    {
+        clientScriptableObject.TargetImage = image;
+        answerCardIDPairScriptableObject.TargetImage = image;
+    }
 
     // 受信した時に実行する関数
     public void DisplayQuestionImage(string uuidString)
@@ -94,8 +102,32 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             Debug.LogError($"{uuidString}をCardIDに変換できないため，処理を停止します．");
             return;
         }
-        // cardIDに応じた処理を行う
-        clientScriptableObject.DisplayQuestionImage((CardID)cardID);
+
+        // 既に読み込み中の場合は何もしない
+        if(isUpdatingProgressBar)
+        {
+            return;
+        }
+
+        isUpdatingProgressBar = true;
+
+        // ImageをOFFにする
+        DisplayImageSetActive(false);
+
+        // 今読んだカードが現在読み込んでいる問題の答えの場合
+        if(currentDisplayCardID != null && answerCardIDPairScriptableObject.IsExistQuestionAnswerCardIDPair((CardID)currentDisplayCardID, (CardID)cardID))
+        {
+            // 新たな問題を表示する
+            answerCardIDPairScriptableObject.DisplayQuestionImage((CardID)currentDisplayCardID, (CardID)cardID);
+        }
+        else
+        {
+            // 答えではないので，単体で読み込んだときの処理を行う
+            clientScriptableObject.DisplayQuestionImage((CardID)cardID);
+        }
+
+        // 現在表示しているカードIDを更新する
+        currentDisplayCardID = cardID;
 
         // イージングを繋ぐタイミングをややランダムにする
         float addSeconds_01 = UnityEngine.Random.Range(-0.1f, 0.1f);
@@ -123,6 +155,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         // リセット処理
         ProgressBarSlider.value = 0;
+
+        isUpdatingProgressBar = false;
     }
 
     // N秒でaからbまでイージングを行う関数
@@ -148,7 +182,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // Imageのオンオフを行う
     public void DisplayImageSetActive(bool active)
     {
-        clientScriptableObject.image.enabled = active;
+        QuizDisplayImage.enabled = active;
     }
 
     // === UI操作 ===

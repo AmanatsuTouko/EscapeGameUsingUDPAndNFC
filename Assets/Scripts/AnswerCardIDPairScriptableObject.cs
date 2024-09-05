@@ -10,23 +10,20 @@ public class AnswerCardIDPairScriptableObject : ScriptableObject
 
     [System.NonSerialized]
     public Image TargetImage;
-
-    // 引数に持つCardIDが持つ答えを取得する
-    public CardID? GetAnswerCardID(CardID cardID)
+   
+    public bool IsExistQuestionAnswerCardIDPair(CardID questionCardID, CardID answerCardD)
     {
-        // 存在する場合はカードIDを返す
         foreach(QuestionAnswerPair pair in QuestionAnswerPairs)
         {
-            if(pair.QuestionCardID == cardID)
+            if(pair.QuestionCardID == questionCardID && pair.AnswerCardID == answerCardD)
             {
-                return pair.AnswerCardID;
+                return true;
             }
         }
-        // 存在しない場合はnullを返す
-        return null;
+        return false;
     }
 
-    public void DisplayQuestionImage(CardID cardID)
+    public void DisplayQuestionImage(CardID questionCardID, CardID answerCardD)
     {
         // nullチェック
         if(TargetImage == null)
@@ -35,23 +32,26 @@ public class AnswerCardIDPairScriptableObject : ScriptableObject
             return;
         }
 
-        // cardIDに対応するSpriteでImageを更新する
-        int cardIdx = (int)cardID;
+        // 対応する問題と解答のペアに一致するSpriteを取得
+        Sprite sprite = null;
+        foreach(QuestionAnswerPair pair in QuestionAnswerPairs)
+        {
+            if(pair.QuestionCardID == questionCardID && pair.AnswerCardID == answerCardD)
+            {
+                sprite = pair.Sprite;
+                break;
+            }
+        }
 
         // Spriteのnullチェック
-        if (QuestionAnswerPairs[cardIdx].Sprite == null)
+        if (sprite == null)
         {
-            Debug.LogError($"Error:{cardID}に対応するSpriteがnullです．");
-            return;
-        }
-        if (QuestionAnswerPairs.Count <= cardIdx)
-        {
-            Debug.LogError($"Error:{cardID}に対応するSpriteが登録されていません．");
+            Debug.LogError($"Error:{questionCardID}の問題の答えとなる{answerCardD}は設定されていません．");
             return;
         }
 
         // ImageへSpriteを反映させる
-        TargetImage.sprite = QuestionAnswerPairs[cardIdx].Sprite;
+        TargetImage.sprite = sprite;
     }
 }
 

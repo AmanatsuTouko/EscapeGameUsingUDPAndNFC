@@ -8,34 +8,37 @@ public class ClientScriptableObject : ScriptableObject
     public List<CardImagePair> cardImagePair;
 
     [System.NonSerialized]
-    public Image image;
+    public Image TargetImage;
+
+    private Sprite? GetSpriteFromCardID(CardID cardID)
+    {
+        foreach(CardImagePair pair in cardImagePair)
+        {
+            if(pair.cardID == cardID)
+            {
+                return pair.Sprite;
+            }
+        }
+        return null;
+    }
 
     public void DisplayQuestionImage(CardID cardID)
     {
         // nullチェック
-        if(image == null)
+        if(TargetImage == null)
         {
             Debug.LogError($"Error:Spriteの反映先のImageが登録されていません．");
             return;
         }
 
-        // cardIDに対応するSpriteでImageを更新する
-        int cardIdx = (int)cardID;
-
-        // Spriteのnullチェック
-        if (cardImagePair[cardIdx].Sprite == null)
+        Sprite? sprite = GetSpriteFromCardID(cardID);
+        if(sprite == null)
         {
-            Debug.LogError($"Error:{cardID}に対応するSpriteがnullです．");
-            return;
-        }
-        if (cardImagePair.Count <= cardIdx)
-        {
-            Debug.LogError($"Error:{cardID}に対応するSpriteが登録されていません．");
-            return;
+            Debug.LogError($"Error:{cardID}に対応するSpriteがnullか，{cardID}に対応するSpriteが登録されていません．．");
         }
 
         // ImageへSpriteを反映させる
-        image.sprite = cardImagePair[cardIdx].Sprite;
+        TargetImage.sprite = sprite;
     }
 }
 
