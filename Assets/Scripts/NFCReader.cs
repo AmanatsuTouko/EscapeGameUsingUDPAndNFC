@@ -72,9 +72,9 @@ public class NFCReader : MonoBehaviour
             // カードが処理中（データの読み取りや書き込みを行っている可能性がある）
             case SCRState.Present | SCRState.InUse:
                 Debug.Log($"カードの処理中. カードリーダーの状態:{args.NewState}");
-                // Linux(Ubuntu)の場合は，1回目のスキャン以降に
+                // Linux(Ubuntu) or MacOSX の場合は，1回目のスキャン以降に
                 // PresentInUseしか反応しなくなる？ので条件付きコンパイルを行う
-#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
                 DoMethodOnScan();
 #endif
                 break;
