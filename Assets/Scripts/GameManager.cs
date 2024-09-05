@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public class GameManager : SingletonMonobehaviour<GameManager>
 {
@@ -24,6 +25,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // クイズ画像表示用UI
     [Header("UI")]
     [SerializeField] Image QuizDisplayImage;
+    [SerializeField] Slider ProgressBarSlider;
 
     void Start()
     {
@@ -74,18 +76,73 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         clientScriptableObject.image = QuizDisplayImage;
     }
 
+    // ==== UI操作 ====
+
     // 受信した時に実行する関数
     public void DisplayQuestionImage(string uuidString)
     {
+        DisplayQuestionImageWithProgressBarUniTask(uuidString).Forget();
+    }
+
+    private async UniTask DisplayQuestionImageWithProgressBarUniTask(string uuidString)
+    {
         // 文字列のUUIDからCardIDに変換する
         CardID? cardID = uuidToCardIdDictScriptableObject.GetCardIDFromUUID(uuidString);
-        if(cardID == null)
+        if (cardID == null)
         {
             Debug.LogError($"{uuidString}をCardIDに変換できないため，処理を停止します．");
             return;
         }
         // cardIDに応じた処理を行う
         clientScriptableObject.DisplayQuestionImage((CardID)cardID);
+
+        // イージングを繋ぐタイミングをややランダムにする
+        float addSeconds_01 = UnityEngine.Random.Range(0f, 0.1f);
+        float addSeconds_02 = UnityEngine.Random.Range(0f, 0.1f);
+
+        // イージングを掛けてプログレスバーを上昇させる
+        //await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, Easing.Ease.OutCirc);
+        //await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, Easing.Ease.InQuint);
+        //await UniTask.Delay(500);
+        //await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  Easing.Ease.OutQuart);
+
+        // イージングの種類をランダムにする(弾性や振動を除く)
+        int enumLength = Enum.GetNames(typeof(Easing.Ease)).Length - 9;
+        int easeRandIdx_01 = UnityEngine.Random.Range(0, enumLength);
+        int easeRandIdx_02 = UnityEngine.Random.Range(0, enumLength);
+        int easeRandIdx_03 = UnityEngine.Random.Range(0, enumLength);
+
+        await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01);
+        await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02);
+        await UniTask.Delay(500);
+        await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03);
+
+        // ImageをONにする
+        DisplayImageSetActive(true);
+
+        // リセット処理
+        ProgressBarSlider.value = 0;
+    }
+
+    // N秒でaからbまでイージングを行う関数
+    private async UniTask EasingSecondsFromTo(float seconds, float fromValue, float toValue, Easing.Ease easing)
+    {
+        Func<float, float> easingMethod = Easing.GetEasingMethod(easing);
+        float rate = 0;
+        float sub = toValue - fromValue;
+        while (rate < 1.0f)
+        {
+            await UniTask.Yield();
+            rate += Time.deltaTime / seconds;
+            if (rate >= 1.0f) rate = 1.0f;
+            ProgressBarSlider.value = fromValue + easingMethod(rate) * sub;
+        }
+    }
+
+    // Imageのオンオフを行う
+    public void DisplayImageSetActive(bool active)
+    {
+        clientScriptableObject.image.enabled = active;
     }
 
     public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()

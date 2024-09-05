@@ -30,5 +30,11 @@ public class DebugInput : MonoBehaviour
         {
             RPCStaticMethods.DisplayQuestionImage(CardUUIDs[TestCardID].Uuid);
         }
+
+        // Imageの画像をオフにする
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            GameManager.Instance.DisplayImageSetActive(false);
+        }
     }
 }
