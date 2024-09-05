@@ -21,11 +21,20 @@ public class ClientScriptableObject : ScriptableObject
 
         // cardIDに対応するSpriteでImageを更新する
         int cardIdx = (int)cardID;
+
+        // Spriteのnullチェック
+        if (cardImagePair[cardIdx].Sprite == null)
+        {
+            Debug.LogError($"Error:{cardID}に対応するSpriteがnullです．");
+            return;
+        }
         if (cardImagePair.Count <= cardIdx)
         {
             Debug.LogError($"Error:{cardID}に対応するSpriteが登録されていません．");
             return;
         }
+
+        // ImageへSpriteを反映させる
         image.sprite = cardImagePair[cardIdx].Sprite;
     }
 }
