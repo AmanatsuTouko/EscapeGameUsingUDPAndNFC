@@ -6,7 +6,7 @@ using UnityEngine;
 public class DebugInput : MonoBehaviour
 {
     // テスト用に送受信するUUIDのインデックス
-    public int TestCardID = 0;
+    public CardID TestCardID;
 
     // CardのUUID(GameManagerが所持しているScriptableObjectを参照する)
     public List<UUIDCardID> CardUUIDs;    
@@ -22,13 +22,13 @@ public class DebugInput : MonoBehaviour
         // NFCカードを読み込んだ後のUDP送信をデバッグする
         if(Input.GetKeyDown(KeyCode.P))
         {
-            GameManager.Instance.DisplayImageOnRemoteClientFromUUID(CardUUIDs[TestCardID].Uuid);
+            GameManager.Instance.DisplayImageOnRemoteClientFromUUID(CardUUIDs[(int)TestCardID].Uuid);
         }
 
         // 別クライアントから送信されたきた時をデバッグする
         if (Input.GetKeyDown(KeyCode.M))
         {
-            RPCStaticMethods.DisplayQuestionImage(CardUUIDs[TestCardID].Uuid);
+            RPCStaticMethods.DisplayQuestionImage(CardUUIDs[(int)TestCardID].Uuid);
         }
 
         // Imageの画像をオフにする
