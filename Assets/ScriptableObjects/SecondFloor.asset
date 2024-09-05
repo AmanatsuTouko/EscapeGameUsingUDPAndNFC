@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardImagePair:
   - cardID: 0
-    Image: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: b28858173b35d4bedaee5ec1e2d2103c, type: 3}
   - cardID: 1
-    Image: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: e41d4eaa403ab426fbd505f66201dbda, type: 3}
   - cardID: 2
-    Image: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: e6186a31d99c743cfa12deda92a49a1d, type: 3}
