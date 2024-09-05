@@ -1,13 +1,13 @@
 # EscapeGameUsingUDPAndNFC
 
 ## Unity Version
-- 
+- 2022.3.11f1
 
 ## Used Library
-- PCSC-Sharp
-- UniTask
+- [PCSC-Sharp](https://github.com/danm-de/pcsc-sharp) version 6.2.0
+- [UniTask](https://github.com/Cysharp/UniTask) version 2.5.5
 
-## ubuntuへのPCSCのインストール
+## Install PCSC to ubuntu
 
 - version 20.04
 
@@ -49,10 +49,7 @@ pcsc_scan
 ```
 カードリーダーにカードを置くと、NFCカードの情報が表示されるはずです。
 
-これで、UbuntuにPC/SCがインストールされ、NFCカードの読み取りが可能になります。問題が発生した場合や、さらなるサポートが必要な場合は教えてください。
-
-
-## ubuntuのUSBドライバのインストール
+## Install drivers to ubuntu
 
 ### 1. **ドライバの問題**
    - **USBドライバのサポート**: UbuntuにSony PaSoRiデバイス用のUSBドライバが正しくインストールされていることを確認してください。通常、`libccid`はほとんどのスマートカードリーダーをサポートしますが、PaSoRi用の特定のドライバが不足しているか、正常に動作していない可能性があります。次のコマンドを実行して、必要なライブラリをインストールしてください。
