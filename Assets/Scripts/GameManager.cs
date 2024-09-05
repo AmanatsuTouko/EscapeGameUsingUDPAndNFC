@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using TMPro;
 
 public class GameManager : SingletonMonobehaviour<GameManager>
 {
@@ -97,14 +98,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         clientScriptableObject.DisplayQuestionImage((CardID)cardID);
 
         // イージングを繋ぐタイミングをややランダムにする
-        float addSeconds_01 = UnityEngine.Random.Range(0f, 0.1f);
-        float addSeconds_02 = UnityEngine.Random.Range(0f, 0.1f);
-
-        // イージングを掛けてプログレスバーを上昇させる
-        //await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, Easing.Ease.OutCirc);
-        //await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, Easing.Ease.InQuint);
-        //await UniTask.Delay(500);
-        //await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  Easing.Ease.OutQuart);
+        float addSeconds_01 = UnityEngine.Random.Range(-0.1f, 0.1f);
+        float addSeconds_02 = UnityEngine.Random.Range(-0.1f, 0.1f);
 
         // イージングの種類をランダムにする(弾性や振動を除く)
         int enumLength = Enum.GetNames(typeof(Easing.Ease)).Length - 9;
@@ -112,9 +107,15 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         int easeRandIdx_02 = UnityEngine.Random.Range(0, enumLength);
         int easeRandIdx_03 = UnityEngine.Random.Range(0, enumLength);
 
+        // プログレスバーを3段階に分けて上昇させる
+        UpdateProgressText("組成を分析中……");
         await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01);
+
+        UpdateProgressText("物質を構成中……");
         await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02);
         await UniTask.Delay(500);
+
+        UpdateProgressText("生成物を検証中……");
         await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03);
 
         // ImageをONにする
@@ -139,11 +140,18 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
     }
 
+    private void UpdateProgressText(string text)
+    {
+        // プログレスバーに記載されている文字を変更する
+    }
+
     // Imageのオンオフを行う
     public void DisplayImageSetActive(bool active)
     {
         clientScriptableObject.image.enabled = active;
     }
+
+    // === UI操作 ===
 
     public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
     {
