@@ -1,0 +1,11 @@
+PCSC-Sharp 6.2.0
+https://github.com/danm-de/pcsc-sharp/tree/release/6.2.0
+
+変更点
+1..Net Standard2.0向けにビルドしたdllファイル
+  (Untiy2022.3バージョンは.NetStandard2.0に対応)
+
+2.MacOSXについて，NativeのPCSCのDllImport先を相対パスから絶対パスに変更してある．
+  PCSC/Interop/MacOSX\MacOsxNativeMethods.csにおいて，以下の2-1から2-2に変更した．
+  2-1.private const string PCSC_LIB = "PCSC.framework/PCSC";
+  2-2.private const string PCSC_LIB = "/System/Library/Frameworks/PCSC.framework/PCSC";
