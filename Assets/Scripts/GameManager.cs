@@ -40,18 +40,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         udpReceiver.ActionRecieveData += OnRecieveMessage;
     }
 
-    void Update()
-    {
-        // キー入力でUDPを送信する
-        // NFCカードの読み取りがあれば，読み込んだCardIDを送信する
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            udpSender.SendMessage("Hello from MacBook!");
-        }
-    }
-
     // 別クライアントでカード読み取り時にNFCカードから取得したUUIDを引数にして画像を表示する関数を起動するメッセージをUDPで送信する
-    void DisplayImageOnRemoteClientFromUUID(string uuid)
+    public void DisplayImageOnRemoteClientFromUUID(string uuid)
     {
         // UUIDを引数に，画像を表示する関数を別クライアントで実行する
         string jsonMethod = RPCManager.GetJsonFromMethodArgs(nameof(RPCStaticMethods), nameof(RPCStaticMethods.DisplayQuestionImage), new string[]{uuid});
@@ -67,7 +57,14 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 受信した文字列に応じて関数を実行する
     void OnRecieveMessage(string receivedJson)
     {
-        RPCManager.InvokeFromJson(receivedJson);
+        try
+        {
+            RPCManager.InvokeFromJson(receivedJson);
+        }
+        catch
+        {
+            Debug.LogError("関数として無効な文字列を受信したため，動作を終了しました．");
+        }
     }
 
     // NFCカードの識別番号と対応するクイズ画像のデータを更新する
@@ -89,5 +86,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
         // cardIDに応じた処理を行う
         clientScriptableObject.DisplayQuestionImage((CardID)cardID);
+    }
+
+    public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
+    {
+        return uuidToCardIdDictScriptableObject;
     }
 }

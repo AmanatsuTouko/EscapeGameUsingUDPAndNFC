@@ -543,6 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1731116138}
   - component: {fileID: 1731116140}
+  - component: {fileID: 1731116141}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -584,6 +585,20 @@ MonoBehaviour:
   clientScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
   uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
   QuizDisplayImage: {fileID: 727965794}
+--- !u!114 &1731116141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731116136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc62174da9d6429d8c60ec1e2db229a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardUUIDs: []
+  TestCardID: 0
 --- !u!1 &2006035810
 GameObject:
   m_ObjectHideFlags: 0
