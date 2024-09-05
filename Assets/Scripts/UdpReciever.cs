@@ -16,9 +16,15 @@ public class UdpReceiver : MonoBehaviour
     // 受信した時に実行するメソッド
     public Action<string> ActionRecieveData;
 
+    // UDPを待機しているスレッドからメインスレッドに処理を戻せるようにする
+    private SynchronizationContext mainThreadContext;
+
     void Start()
     {
         udpClient = new UdpClient(listenPort);
+
+        // メインスレッドのSynchronizationContextを取得
+        mainThreadContext = SynchronizationContext.Current;
         
         // 別スレッドでUDP受信を待機する
         receiveThread = new Thread(new ThreadStart(ReceiveData));
@@ -42,14 +48,14 @@ public class UdpReceiver : MonoBehaviour
 
                 // メインスレッドに処理を戻して，登録したメソッドを実行する
                 // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
-                this.Invoke(new Action(() =>
+                mainThreadContext.Post(_ =>
                 {
                     // 登録したメソッドを実行する
-                    if(ActionRecieveData != null)
+                    if (ActionRecieveData != null)
                     {
                         ActionRecieveData.Invoke(message);
                     }
-                }).Method.Name, 0f);   
+                }, null);
             }
         }
         catch (SocketException ex)
