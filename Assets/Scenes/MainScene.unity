@@ -447,6 +447,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &547987911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 547987912}
+  - component: {fileID: 547987913}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &547987912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547987911}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &547987913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547987911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6fd88eb1c7da3348bf9c987b75b4613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  QuizDisplayImage: {fileID: 727965794}
+  ProgressBarSlider: {fileID: 955941483}
 --- !u!1 &711165803
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +609,7 @@ GameObject:
   - component: {fileID: 727965795}
   - component: {fileID: 727965794}
   m_Layer: 5
-  m_Name: ImageQuastion
+  m_Name: QuestionImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -982,11 +1028,9 @@ MonoBehaviour:
   udpReceiver: {fileID: 368395506}
   displayLocalIP: {fileID: 368395507}
   nfcReader: {fileID: 2006035812}
-  clientScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
-  answerCardIDPairScriptableObject: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
+  cardIDImagePair: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
+  answerQuizCardIDsImagePair: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
   uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
-  QuizDisplayImage: {fileID: 727965794}
-  ProgressBarSlider: {fileID: 955941483}
 --- !u!114 &1731116141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1051,8 +1095,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1731116138}
+  - {fileID: 547987912}
+  - {fileID: 416231084}
   - {fileID: 368395504}
   - {fileID: 2006035811}
-  - {fileID: 416231084}
   - {fileID: 711165807}
   - {fileID: 762052973}

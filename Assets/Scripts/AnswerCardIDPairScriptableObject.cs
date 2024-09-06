@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/AnswerCardIDPairScriptableObject", order = 3)]
-public class AnswerCardIDPairScriptableObject : ScriptableObject
+public class AnswerQuizCardIDsImagepair : ScriptableObject
 {
     public List<QuestionAnswerPair> QuestionAnswerPairs;
 

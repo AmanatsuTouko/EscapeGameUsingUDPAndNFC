@@ -16,7 +16,6 @@ public class DebugInput : MonoBehaviour
         CardUUIDs = GameManager.Instance.GetUuidToCardIdDictScriptableObject().UuidCard;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // NFCカードを読み込んだ後のUDP送信をデバッグする
@@ -34,7 +33,7 @@ public class DebugInput : MonoBehaviour
         // Imageの画像をオフにする
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            GameManager.Instance.DisplayImageSetActive(false);
+            UIManager.Instance.DisplayImageSetActive(false);
         }
     }
 }
