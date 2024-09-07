@@ -85,28 +85,34 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         currentDisplayCardID = cardID;
 
         // イージングを繋ぐタイミングをややランダムにする
-        float addSeconds_01 = UnityEngine.Random.Range(-0.1f, 0.1f);
-        float addSeconds_02 = UnityEngine.Random.Range(-0.1f, 0.1f);
+        float addSeconds_12 = UnityEngine.Random.Range(-0.1f, 0.1f);
+        float addSeconds_23 = UnityEngine.Random.Range(-0.1f, 0.1f);
+        float addSeconds_34 = UnityEngine.Random.Range(-0.1f, 0.1f);
 
         // イージングの種類をランダムにする(弾性や振動を除く)
         int enumLength = Enum.GetNames(typeof(Easing.Ease)).Length - 9;
         int easeRandIdx_01 = UnityEngine.Random.Range(0, enumLength);
         int easeRandIdx_02 = UnityEngine.Random.Range(0, enumLength);
         int easeRandIdx_03 = UnityEngine.Random.Range(0, enumLength);
+        int easeRandIdx_04 = UnityEngine.Random.Range(0, enumLength);
 
         // プログレスバーの上の文字を表示する
         progressText.enabled = true;
 
-        // プログレスバーを3段階に分けて上昇させる
-        UpdateProgressText(isQuizHasAnswer ? "組成を分析中......" : "組成を分析中......");
-        await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01, token);
+        // プログレスバーを4段階に分けて上昇させる
+        UpdateProgressText("機器を初期化中......");
+        await EasingSecondsFromTo(1.2f, 0.0f,                  0.20f + addSeconds_12, (Easing.Ease)easeRandIdx_01, token);
 
-        UpdateProgressText(isQuizHasAnswer ? "正当性を確認中......" : "物質を構成中......");
-        await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02, token);
+        UpdateProgressText(isQuizHasAnswer ? "正当性を確認中......" : "原子を生成中......");
+        await EasingSecondsFromTo(1.0f, 0.20f + addSeconds_12, 0.45f + addSeconds_23, (Easing.Ease)easeRandIdx_02, token);
+        await UniTask.Delay(100);
+
+        UpdateProgressText(isQuizHasAnswer ? "権限を確認中......" : "電気を充填中......");
+        await EasingSecondsFromTo(1.2f, 0.45f + addSeconds_23, 0.65f + addSeconds_34, (Easing.Ease)easeRandIdx_03, token);
+
+        UpdateProgressText(isQuizHasAnswer ? "電子錠を開錠中......" : "物体を転送中......");
+        await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04, token);
         await UniTask.Delay(500);
-
-        UpdateProgressText(isQuizHasAnswer ? "電子錠を開錠中......" : "生成物を検証中......");
-        await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03, token);
 
         // ImageをONにする
         QuizPanelComponentSetActive(true);

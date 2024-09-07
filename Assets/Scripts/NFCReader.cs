@@ -127,8 +127,15 @@ public class NFCReader : MonoBehaviour
         context.Dispose();
 
         // NFCカードリーダーの状態のモニタリングを終了する
-        monitor.Cancel();
-        monitor.Dispose();
+        if(monitor != null)
+        {
+            monitor.Cancel();
+            monitor.Dispose();
+        }
+        else
+        {
+            Debug.LogError("No NFC readers found. Monitoring cannot exit.");
+        }
     }
 
     private static void PrintReaderStatus(ICardReader reader) {
