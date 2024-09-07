@@ -9,8 +9,9 @@ public class DebugInput : MonoBehaviour
     public CardID TestCardID;
 
     // CardのUUID(GameManagerが所持しているScriptableObjectを参照する)
-    public List<UUIDCardID> CardUUIDs;    
+    public List<UUIDCardID> CardUUIDs;
 
+#if UNITY_EDITOR
     void Start()
     {
         CardUUIDs = GameManager.Instance.GetUuidToCardIdDictScriptableObject().UuidCard;
@@ -33,7 +34,8 @@ public class DebugInput : MonoBehaviour
         // Imageの画像をオフにする
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            UIManager.Instance.DisplayImageSetActive(false);
+            UIManager.Instance.QuizPanelComponentSetActive(false);
         }
     }
+#endif
 }

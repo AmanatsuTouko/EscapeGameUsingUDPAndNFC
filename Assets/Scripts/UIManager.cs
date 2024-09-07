@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using System.Threading;
 
 public class UIManager : SingletonMonobehaviour<UIManager>
 {
@@ -25,25 +26,42 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     // 読み込み中の文言
     [SerializeField] TextMeshProUGUI progressText;
-    
+
+    // UniTaskのキャンセル用トークン
+    private CancellationTokenSource cancellationTokenSource;
 
     private void Start()
     {
         progressText.enabled = false;
     }
 
-    public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID)
+    public void DisplayQuestionImageWithProgressBar(CardID cardID)
+    {
+        // トークンソースのリソース解放
+        if (cancellationTokenSource != null)
+        {
+            cancellationTokenSource.Dispose();
+        }
+        // CancellationTokenSource を初期化
+        cancellationTokenSource = new CancellationTokenSource();
+        // UniTask を実行
+        DisplayQuestionImageWithProgressBarUniTask(cardID, cancellationTokenSource.Token).Forget();
+    }
+
+    public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID, CancellationToken token)
     {
         // 読み込み演出の途中で新たに読み込み演出をしないようにする
-        if(isUpdatingProgressBar)
+        if (isUpdatingProgressBar)
         {
             return;
         }
         isUpdatingProgressBar = true;
 
-        QuizPanel.SetActive(true);
-        // ImageをOFFにする
-        DisplayImageSetActive(false);
+        // リセット処理
+        ProgressBarSlider.value = 0;
+
+        QuizPanelSetActive(true);
+        QuizPanelComponentSetActive(false);
 
         // クイズが他の問題の答えかどうか
         bool isQuizHasAnswer = false;
@@ -81,20 +99,17 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // プログレスバーを3段階に分けて上昇させる
         UpdateProgressText(isQuizHasAnswer ? "組成を分析中......" : "組成を分析中......");
-        await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01);
+        await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01, token);
 
         UpdateProgressText(isQuizHasAnswer ? "正当性を確認中......" : "物質を構成中......");
-        await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02);
+        await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02, token);
         await UniTask.Delay(500);
 
         UpdateProgressText(isQuizHasAnswer ? "電子錠を開錠中......" : "生成物を検証中......");
-        await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03);
+        await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03, token);
 
         // ImageをONにする
-        DisplayImageSetActive(true);
-
-        // リセット処理
-        ProgressBarSlider.value = 0;
+        QuizPanelComponentSetActive(true);
 
         // プログレスバーの上の文字を非表示にして文字を消す
         UpdateProgressText("");
@@ -104,14 +119,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     }
 
     // N秒でaからbまでイージングを行う関数
-    private async UniTask EasingSecondsFromTo(float seconds, float fromValue, float toValue, Easing.Ease easing)
+    private async UniTask EasingSecondsFromTo(float seconds, float fromValue, float toValue, Easing.Ease easing, CancellationToken token)
     {
         Func<float, float> easingMethod = Easing.GetEasingMethod(easing);
         float rate = 0;
         float sub = toValue - fromValue;
         while (rate < 1.0f)
         {
-            await UniTask.Yield();
+            await UniTask.Yield(token);
             rate += Time.deltaTime / seconds;
             if (rate >= 1.0f) rate = 1.0f;
             ProgressBarSlider.value = fromValue + easingMethod(rate) * sub;
@@ -124,10 +139,21 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         progressText.text = text;
     }
 
-    // Imageのオンオフを行う
-    public void DisplayImageSetActive(bool active)
+    // UI要素のON・OFF
+    public void QuizPanelSetActive(bool active)
     {
-        QuizDisplayImage.enabled = active;
+        QuizPanel.SetActive(active);
+
+        // パネルをOFFにする時に，プログレスバーが進行中であればUniTaskのキャンセル処理を行う
+        if(active == false)
+        {
+            cancellationTokenSource.Cancel();
+            isUpdatingProgressBar = false;
+        }
+    }
+    public void QuizPanelComponentSetActive(bool quizImageActive)
+    {
+        QuizDisplayImage.enabled = quizImageActive;
     }
 
     // 時刻の更新

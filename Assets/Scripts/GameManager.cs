@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Threading.Tasks;
 
 public class GameManager : SingletonMonobehaviour<GameManager>
 {
@@ -38,7 +37,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         return answerQuizCardIDsImagePair;
     }
 
-    void Start()
+    private void Start()
     {
         // Imageの反映先を自身の持つImageクラスにする
         RegisterImageToScriptableObjejcts(UIManager.Instance.QuizDisplayImage);
@@ -51,6 +50,18 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         // UDP受信時に実行する関数を登録する
         udpReceiver.ActionRecieveData += OnRecieveMessage;
+
+        // カードを離したタイミングでクイズ画像を非表示にする関数を登録する
+        nfcReader.ActionOnReleaseCard += DisableQuizPanel;
+    }
+
+    private void Update()
+    {
+        // スペースキー入力でクイズ画像を消せるようにする
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DisableQuizPanel();
+        }
     }
 
     // 別クライアントでカード読み取り時にNFCカードから取得したUUIDを引数にして画像を表示する関数を起動するメッセージをUDPで送信する
@@ -80,7 +91,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
     }
 
-    // ==== UI操作 ====
     // ScriptableObjejctとImageの紐づけ
     public void RegisterImageToScriptableObjejcts(Image image)
     {
@@ -99,10 +109,14 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             return;
         }
         // クイズ画像の表示
-        UIManager.Instance.DisplayQuestionImageWithProgressBarUniTask((CardID)cardID).Forget();
+        UIManager.Instance.DisplayQuestionImageWithProgressBar((CardID)cardID);
     }
 
-    // === UI操作 ===
+    // クイズ画像の非表示
+    private void DisableQuizPanel()
+    {
+        UIManager.Instance.QuizPanelSetActive(false);
+    }
 
     public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
     {
