@@ -17,8 +17,16 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // 現在読み込んでいるCardID
     [SerializeField] CardID? currentDisplayCardID = null;
 
+    // 読み込み中の文言
+    [SerializeField] TextMeshProUGUI progressText;
+
     [Header("Timer")]
     [SerializeField] TextMeshProUGUI limitTimeText;
+
+    private void Start()
+    {
+        progressText.enabled = false;
+    }
 
     public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID)
     {
@@ -58,15 +66,18 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         int easeRandIdx_02 = UnityEngine.Random.Range(0, enumLength);
         int easeRandIdx_03 = UnityEngine.Random.Range(0, enumLength);
 
+        // プログレスバーの上の文字を表示する
+        progressText.enabled = true;
+
         // プログレスバーを3段階に分けて上昇させる
-        UpdateProgressText("組成を分析中……");
+        UpdateProgressText("組成を分析中......");
         await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01);
 
-        UpdateProgressText("物質を構成中……");
+        UpdateProgressText("物質を構成中......");
         await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02);
         await UniTask.Delay(500);
 
-        UpdateProgressText("生成物を検証中……");
+        UpdateProgressText("生成物を検証中......");
         await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03);
 
         // ImageをONにする
@@ -74,6 +85,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // リセット処理
         ProgressBarSlider.value = 0;
+
+        // プログレスバーの上の文字を非表示にして文字を消す
+        UpdateProgressText("");
+        progressText.enabled = false;
 
         isUpdatingProgressBar = false;
     }
@@ -96,6 +111,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     private void UpdateProgressText(string text)
     {
         // プログレスバーに記載されている文字を変更する
+        progressText.text = text;
     }
 
     // Imageのオンオフを行う
