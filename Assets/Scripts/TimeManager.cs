@@ -25,7 +25,7 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
         // 時間の整形
         string remainText = $"{remainTime.Hours.ToString("00")}:{remainTime.Minutes.ToString("00")}:{remainTime.Seconds.ToString("00")}";
         // UIの更新
-        // UIManager.Instance.SetLimitTimeText(remainText);
+        UIManager.Instance.SetLimitTimeText(remainText);
     }
 
     public Timer Timer

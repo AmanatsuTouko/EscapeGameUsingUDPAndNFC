@@ -6,8 +6,14 @@ using TMPro;
 
 public class UIManager : SingletonMonobehaviour<UIManager>
 {
+    // メイン画面
+    [Header("Main Panel")]
+    [SerializeField] GameObject mainPanel;
+    [SerializeField] TextMeshProUGUI limitTimeText;
+
     // クイズ画像の表示
-    [Header("Display Quiz")]
+    [Header("Quiz Panel")]
+    [SerializeField] GameObject QuizPanel;
     [SerializeField] public Image QuizDisplayImage;
     [SerializeField] Slider ProgressBarSlider;
 
@@ -19,9 +25,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     // 読み込み中の文言
     [SerializeField] TextMeshProUGUI progressText;
-
-    [Header("Timer")]
-    [SerializeField] TextMeshProUGUI limitTimeText;
+    
 
     private void Start()
     {
@@ -37,6 +41,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         isUpdatingProgressBar = true;
 
+        QuizPanel.SetActive(true);
         // ImageをOFFにする
         DisplayImageSetActive(false);
 
