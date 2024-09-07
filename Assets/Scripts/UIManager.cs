@@ -45,17 +45,22 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // ImageをOFFにする
         DisplayImageSetActive(false);
 
+        // クイズが他の問題の答えかどうか
+        bool isQuizHasAnswer = false;
+
         // 今読んだカードが現在読み込んでいる問題の答えの場合
         if( currentDisplayCardID != null 
             && GameManager.Instance.GetAnswerQuizCardIDsImagepair().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayCardID, (CardID)cardID) )
         {
             // 新たな問題を表示する
             GameManager.Instance.GetAnswerQuizCardIDsImagepair().DisplayQuestionImage((CardID)currentDisplayCardID, (CardID)cardID);
+            isQuizHasAnswer = true;
         }
         else
         {
             // 答えではないので，単体で読み込んだときの処理を行う
             GameManager.Instance.GetCardIDImagePair().DisplayQuestionImage((CardID)cardID);
+            isQuizHasAnswer = false;
         }
 
         // 現在表示しているカードIDを更新する
@@ -75,14 +80,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         progressText.enabled = true;
 
         // プログレスバーを3段階に分けて上昇させる
-        UpdateProgressText("組成を分析中......");
+        UpdateProgressText(isQuizHasAnswer ? "組成を分析中......" : "組成を分析中......");
         await EasingSecondsFromTo(1.5f, 0.0f,                  0.25f + addSeconds_01, (Easing.Ease)easeRandIdx_01);
 
-        UpdateProgressText("物質を構成中......");
+        UpdateProgressText(isQuizHasAnswer ? "正当性を確認中......" : "物質を構成中......");
         await EasingSecondsFromTo(1.0f, 0.25f + addSeconds_01, 0.55f + addSeconds_02, (Easing.Ease)easeRandIdx_02);
         await UniTask.Delay(500);
 
-        UpdateProgressText("生成物を検証中......");
+        UpdateProgressText(isQuizHasAnswer ? "電子錠を開錠中......" : "生成物を検証中......");
         await EasingSecondsFromTo(1.5f, 0.55f + addSeconds_02, 1.0f,                  (Easing.Ease)easeRandIdx_03);
 
         // ImageをONにする
