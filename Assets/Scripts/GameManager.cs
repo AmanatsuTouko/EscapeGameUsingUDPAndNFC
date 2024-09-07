@@ -51,8 +51,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         // UDP受信時に実行する関数を登録する
         udpReceiver.ActionRecieveData += OnRecieveMessage;
 
-        // カードを離したタイミングでクイズ画像を非表示にする関数を登録する
-        nfcReader.ActionOnReleaseCard += DisableQuizPanel;
+        // カード読み込み中にカードを離した場合は，読み込み処理を中断する
+        nfcReader.ActionOnReleaseCard += DisableQuizPanelIfWhileReadCard;
     }
 
     private void Update()
@@ -112,14 +112,22 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         UIManager.Instance.DisplayQuestionImageWithProgressBar((CardID)cardID);
     }
 
+    public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
+    {
+        return uuidToCardIdDictScriptableObject;
+    }
+
+    // カード読み込み中だった場合には，クイズ画像を非表示にする
+    private void DisableQuizPanelIfWhileReadCard()
+    {
+        if (UIManager.Instance.IsUpdatingProgressBar)
+        {
+            DisableQuizPanel();
+        }
+    }
     // クイズ画像の非表示
     private void DisableQuizPanel()
     {
         UIManager.Instance.QuizPanelSetActive(false);
-    }
-
-    public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
-    {
-        return uuidToCardIdDictScriptableObject;
     }
 }

@@ -19,7 +19,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] Slider ProgressBarSlider;
 
     // プログレスバーが上昇中かどうか
-    private bool isUpdatingProgressBar = false;
+    public bool IsUpdatingProgressBar { get; private set; } = false;
 
     // 現在読み込んでいるCardID
     [SerializeField] CardID? currentDisplayCardID = null;
@@ -51,11 +51,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID, CancellationToken token)
     {
         // 読み込み演出の途中で新たに読み込み演出をしないようにする
-        if (isUpdatingProgressBar)
+        if (IsUpdatingProgressBar)
         {
             return;
         }
-        isUpdatingProgressBar = true;
+        IsUpdatingProgressBar = true;
 
         // リセット処理
         ProgressBarSlider.value = 0;
@@ -121,7 +121,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         UpdateProgressText("");
         progressText.enabled = false;
 
-        isUpdatingProgressBar = false;
+        IsUpdatingProgressBar = false;
     }
 
     // N秒でaからbまでイージングを行う関数
@@ -154,7 +154,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         if(active == false)
         {
             cancellationTokenSource.Cancel();
-            isUpdatingProgressBar = false;
+            IsUpdatingProgressBar = false;
         }
     }
     public void QuizPanelComponentSetActive(bool quizImageActive)
