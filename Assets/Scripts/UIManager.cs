@@ -4,9 +4,14 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using System.Threading;
+using UnityEngine.Rendering.PostProcessing;
 
 public class UIManager : SingletonMonobehaviour<UIManager>
 {
+    // PostProcess
+    [Header("Post Process")]
+    [SerializeField] PostProcessVolume postProcessVolume;
+
     // メイン画面
     [Header("Main Panel")]
     [SerializeField] GameObject mainPanel;
@@ -59,6 +64,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // リセット処理
         ProgressBarSlider.value = 0;
+        postProcessVolume.enabled = true;
 
         QuizPanelSetActive(true);
         QuizPanelComponentSetActive(false);
@@ -114,6 +120,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04, token);
         await UniTask.Delay(500);
 
+        // PostProcessをOFFにする
+        postProcessVolume.enabled = false;
+
         // ImageをONにする
         QuizPanelComponentSetActive(true);
 
@@ -155,6 +164,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         {
             cancellationTokenSource.Cancel();
             IsUpdatingProgressBar = false;
+            // PostProcessの再開
+            postProcessVolume.enabled = true;
         }
     }
     public void QuizPanelComponentSetActive(bool quizImageActive)
