@@ -27,8 +27,9 @@ public class UUIDToCardIDScriptableObject : ScriptableObject
 [System.Serializable]
 public class UUIDCardID : IEquatable<UUIDCardID>
 {
-    public string Uuid;
     public CardID CardID;
+    public CardType CardType;
+    public string Uuid;
 
     public override string ToString()
     {
@@ -53,4 +54,10 @@ public class UUIDCardID : IEquatable<UUIDCardID>
         if (other == null) return false;
         return this.Uuid.Equals(other.Uuid) && this.CardID.Equals(other.CardID);
     }
+}
+
+public enum CardType
+{
+    Question,
+    Hint,
 }
