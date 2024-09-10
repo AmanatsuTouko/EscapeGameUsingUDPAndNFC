@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ClientScriptableObject", order = 1)]
-public class CardIDImagePair : ScriptableObject
+public class QuestionCardIDImagePair : ScriptableObject
 {
     public List<CardImagePair> cardImagePair;
 

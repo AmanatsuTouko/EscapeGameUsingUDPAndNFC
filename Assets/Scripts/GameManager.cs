@@ -18,7 +18,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [Header("Quiz Image Corresponding to Card ID")]
 
     // CardIDとクイズ画像の組み合わせのデータ
-    [SerializeField] CardIDImagePair cardIDImagePair;
+    [SerializeField] QuestionCardIDImagePair cardIDImagePair;
 
     // クイズ画像における問題と答えの組み合わせのデータ
     [SerializeField] AnswerQuizCardIDsImagepair answerQuizCardIDsImagePair;
@@ -27,7 +27,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
     [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
 
-    public CardIDImagePair GetCardIDImagePair()
+    public QuestionCardIDImagePair GetCardIDImagePair()
     {
         return cardIDImagePair;
     }
