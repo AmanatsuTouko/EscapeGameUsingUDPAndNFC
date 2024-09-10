@@ -107,7 +107,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 交通系IC読み取り時に実行する関数
     void ActionOnReadTransportationICCard()
     {
-        // 特殊なクイズ画像の表示
+        UIManager.Instance.CorrectPerformanceOfTransportationICCard();
     }
 
     // 受信した文字列に応じて関数を実行する

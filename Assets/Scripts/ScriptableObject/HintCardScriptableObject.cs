@@ -15,7 +15,7 @@ public class HintCardScriptableObject : ScriptableObject
     {
         foreach(QuizHintImagePair pair in QuizHintImagePairs)
         {
-            if(pair.QuizCardID == questionCardID && pair.HIntCardID == answerCardD)
+            if(pair.QuizCardID == questionCardID && pair.HintCardID == answerCardD)
             {
                 return true;
             }
@@ -36,7 +36,7 @@ public class HintCardScriptableObject : ScriptableObject
         Sprite sprite = null;
         foreach(QuizHintImagePair pair in QuizHintImagePairs)
         {
-            if(pair.QuizCardID == questionCardID && pair.HIntCardID == hintCardD)
+            if(pair.QuizCardID == questionCardID && pair.HintCardID == hintCardD)
             {
                 sprite = pair.Sprite;
                 break;
@@ -60,6 +60,6 @@ public class HintCardScriptableObject : ScriptableObject
 public class QuizHintImagePair
 {
     public CardID QuizCardID;
-    public CardID HIntCardID;
+    public CardID HintCardID;
     public Sprite Sprite;
 }

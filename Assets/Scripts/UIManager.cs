@@ -60,6 +60,17 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         Debug.LogError("未実装の関数がコールされました。");
     }
 
+    // 交通系ICを読み込んだ時に正答だったら処理を行う
+    public void CorrectPerformanceOfTransportationICCard()
+    {
+        // 現在、問題4(Loop)が表示されていてかつ、ヒント4(Arrow)が読み込まれた後の画像かどうか
+        if (currentDisplayQuestionCard == CardID.Question04_Loop && currentDisplayHintCard == CardID.Hint04_Arrow)
+        {
+            // 処理を行う
+            Debug.LogError("Suicaを読みこんで正答した際の処理が未実装です。");
+        }
+    }
+
     public void DisplayQuestionImageWithProgressBar(CardID cardID)
     {
         // トークンソースのリソース解放
