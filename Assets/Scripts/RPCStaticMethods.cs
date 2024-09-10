@@ -7,4 +7,9 @@ public class RPCStaticMethods : MonoBehaviour
     {
         GameManager.Instance.DisplayQuestionImage(uuidString);
     }
+
+    public static void DisableQuizPanelIfWhileReadCard()
+    {
+        GameManager.Instance.DisableQuizPanelIfWhileReadCard();
+    }
 }

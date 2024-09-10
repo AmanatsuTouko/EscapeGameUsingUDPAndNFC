@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.21
+  remoteIpAddress: 192.168.11.15
   remotePort: 50400
 --- !u!114 &368395506
 MonoBehaviour:
@@ -6310,7 +6310,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TestCardID: 0
-  CardUUIDs: []
 --- !u!1 &1911449739
 GameObject:
   m_ObjectHideFlags: 0
