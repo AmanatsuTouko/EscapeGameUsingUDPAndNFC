@@ -43,7 +43,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         RegisterImageToScriptableObjejcts(UIManager.Instance.QuizDisplayImage);
 
         // カード読み取り時に実行する関数を登録する
-        nfcReader.ActionOnReadCard += DisplayImageOnRemoteClientFromUUID;
+        nfcReader.ActionOnReadCard += OnRead;
 
         // 交通系IC読み取り時に実行する関数を登録する
         nfcReader.ActionOnReadTranspotationICCard += ActionOnReadTransportationICCard;
@@ -61,6 +61,31 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         if (Input.GetKeyDown(KeyCode.Space))
         {
             DisableQuizPanel();
+        }
+    }
+
+    public void OnRead(string uuid)
+    {
+        CardID? cardID = GetCardIDFromUUID(uuid);
+        if(cardID == null)
+        {
+            Debug.LogError($"エラー：登録されていないカードのUUID:{uuid}が読み込まれました。");
+            return;
+        }
+
+        // 今読んだカードが表示している問題の正答かどうかを判定する
+        bool isCorrectQuestion = UIManager.Instance.IsCorrectForCurrentQuestion((CardID)cardID);
+        // 正答の場合はクリアフラグをONにして、演出を追加する、その後メイン画面に戻る
+        if(isCorrectQuestion)
+        {
+            UIManager.Instance.CorrectPerformance(uuid);
+        }
+        // そうではない場合は、問題カードorヒントカードなので、他クライアントに送信する
+        else
+        {
+            // 問題カードかどうか
+            // ヒントカードかどうかは他クライアントが判別して処理を行う
+            DisplayImageOnRemoteClientFromUUID(uuid);
         }
     }
 
@@ -102,7 +127,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     public void DisplayQuestionImage(string uuidString)
     {
         // 文字列のUUIDからCardIDに変換する
-        CardID? cardID = uuidToCardIdDictScriptableObject.GetCardIDFromUUID(uuidString);
+        CardID? cardID = GetCardIDFromUUID(uuidString);
+
         if (cardID == null)
         {
             Debug.LogError($"{uuidString}をCardIDに変換できないため，処理を停止します．");
@@ -129,5 +155,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     private void DisableQuizPanel()
     {
         UIManager.Instance.QuizPanelSetActive(false);
+    }
+
+    // uuidからカードIDに変換する
+    private CardID? GetCardIDFromUUID(string cardUuid)
+    {
+        return uuidToCardIdDictScriptableObject.GetCardIDFromUUID(cardUuid);
     }
 }

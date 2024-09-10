@@ -35,9 +35,29 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // UniTaskのキャンセル用トークン
     private CancellationTokenSource cancellationTokenSource;
 
+    // 現在読み込んでいる問題カード
+    public CardID currentDisplayQuestionCard;
+    // 現在読み込んでいるヒントカード
+    public CardID currentDisplayHintCard;
+
     private void Start()
     {
         progressText.enabled = false;
+    }
+
+    // 読み込んだカードが現在読み込んでいる問題の答えかどうか
+    public bool IsCorrectForCurrentQuestion(CardID readCardID)
+    {
+        // 修正 ヒントカード + 問題カード + 解答カードの組み合わせで答えなければならない
+        // return currentDisplayCardID != null 
+        //     && GameManager.Instance.GetAnswerQuizCardIDsImagepair().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayCardID, (CardID)cardID);
+        Debug.LogError("未実装の関数がコールされました。");
+        return false;
+    }
+
+    public void CorrectPerformance(string uuid)
+    {
+        Debug.LogError("未実装の関数がコールされました。");
     }
 
     public void DisplayQuestionImageWithProgressBar(CardID cardID)
