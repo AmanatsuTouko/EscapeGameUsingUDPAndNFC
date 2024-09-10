@@ -82,9 +82,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         // 今読んだカードが表示している問題の正答かどうかを判定する
         bool isCorrectQuestion = UIManager.Instance.IsCorrectForCurrentQuestion((CardID)cardID);
-        // 正答の場合はクリアフラグをONにして、演出を追加する、その後メイン画面に戻る
+        // 正答の場合
         if(isCorrectQuestion)
         {
+            // クリアフラグをONにして、演出を追加する、その後メイン画面に戻る
             UIManager.Instance.CorrectPerformance(uuid);
         }
         // そうではない場合は、問題カードorヒントカードなので、他クライアントに送信する

@@ -13,9 +13,24 @@ MonoBehaviour:
   m_Name: UuidToCardID
   m_EditorClassIdentifier: 
   UuidCard:
-  - Uuid: 04-A5-C1-2A-02-12-90
-    CardID: 0
-  - Uuid: 04-A7-4E-2A-02-12-90
-    CardID: 1
-  - Uuid: 04-A3-13-2A-02-12-90
-    CardID: 2
+  - CardID: 0
+    CardType: 0
+    Uuid: 04-A5-C1-2A-02-12-90
+  - CardID: 1
+    CardType: 0
+    Uuid: 04-A7-4E-2A-02-12-90
+  - CardID: 2
+    CardType: 0
+    Uuid: 04-A3-13-2A-02-12-90
+  - CardID: 3
+    CardType: 0
+    Uuid: 04-45-BD-2A-02-12-91
+  - CardID: 4
+    CardType: 0
+    Uuid: 04-A6-73-2A-02-12-90
+  - CardID: 5
+    CardType: 0
+    Uuid: 04-86-75-2A-02-12-90
+  - CardID: 6
+    CardType: 0
+    Uuid: 04-B1-6E-2A-02-12-90

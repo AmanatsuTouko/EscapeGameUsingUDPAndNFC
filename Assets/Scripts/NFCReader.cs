@@ -107,8 +107,15 @@ public class NFCReader : MonoBehaviour
         string uuid = GetUUIDByReadData();
         // 交通系ICかどうか判定する
         bool isTransportationICCard = IsTransportationICCard();
-
         Debug.Log($"UUID: {uuid}, 交通系ICかどうか: {isTransportationICCard}");
+
+        // どのカードIDかを出力する(デバッグ用)
+        CardID? cardID = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardIDFromUUID(uuid);
+        if(cardID != null)
+        {
+            CardType? cardType = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardTypeFromCardID((CardID)cardID);
+            Debug.Log($"CardID:{cardID}, CardType:{cardType}");
+        }
 
         // カード読み込み時の関数を実行する
         if (ActionOnReadCard != null)
