@@ -18,7 +18,7 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: f172c24ac9b10704b8770cbc20297fd2, type: 3}
   - QuizCardID: 4
     HintCardID: 11
-    Sprite: {fileID: 21300000, guid: c7b4914ae0dd82b47bf968ec113ff2d1, type: 3}
+    Sprite: {fileID: 21300000, guid: 5ac958e798525064e9a4394ec004d584, type: 3}
   - QuizCardID: 5
     HintCardID: 12
     Sprite: {fileID: 21300000, guid: 23804ad1b5397ac41812b0ad202ba9dc, type: 3}
