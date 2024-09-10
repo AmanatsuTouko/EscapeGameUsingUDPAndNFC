@@ -26,9 +26,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // プログレスバーが上昇中かどうか
     public bool IsUpdatingProgressBar { get; private set; } = false;
 
-    // 現在読み込んでいるCardID
-    [SerializeField] CardID? currentDisplayCardID = null;
-
     // 読み込み中の文言
     [SerializeField] TextMeshProUGUI progressText;
 
@@ -36,23 +33,26 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     private CancellationTokenSource cancellationTokenSource;
 
     // 現在読み込んでいる問題カード
-    public CardID currentDisplayQuestionCard;
+    CardID? currentDisplayQuestionCard = null;
     // 現在読み込んでいるヒントカード
-    public CardID currentDisplayHintCard;
+    [SerializeField] CardID currentDisplayHintCard;
 
     private void Start()
     {
         progressText.enabled = false;
+        currentDisplayQuestionCard = null;
     }
 
     // 読み込んだカードが現在読み込んでいる問題の答えかどうか
     public bool IsCorrectForCurrentQuestion(CardID readCardID)
     {
         // 修正 ヒントカード + 問題カード + 解答カードの組み合わせで答えなければならない
-        // return currentDisplayCardID != null 
-        //     && GameManager.Instance.GetAnswerQuizCardIDsImagepair().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayCardID, (CardID)cardID);
-        Debug.LogError("未実装の関数がコールされました。");
-        return false;
+        if(currentDisplayQuestionCard == null)
+        {
+            Debug.LogError($"エラー：問題が表示されていません。");
+            return false;
+        }
+        return GameManager.Instance.GetAnswerPairScriptableObject().IsExistPair((CardID)currentDisplayQuestionCard, currentDisplayHintCard, readCardID);
     }
 
     public void CorrectPerformance(string uuid)
@@ -82,33 +82,50 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         IsUpdatingProgressBar = true;
 
-        // リセット処理
-        ProgressBarSlider.value = 0;
-        postProcessVolume.enabled = true;
-
         QuizPanelSetActive(true);
         QuizPanelComponentSetActive(false);
 
-        // クイズが他の問題の答えかどうか
-        bool isQuizHasAnswer = false;
-
-        // 今読んだカードが現在読み込んでいる問題の答えの場合
-        if( currentDisplayCardID != null 
-            && GameManager.Instance.GetAnswerQuizCardIDsImagepair().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayCardID, (CardID)cardID) )
+        // カードの種類を取得する
+        CardType? cardType = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardTypeFromCardID(cardID);
+        if(cardType == null)
         {
-            // 新たな問題を表示する
-            GameManager.Instance.GetAnswerQuizCardIDsImagepair().DisplayQuestionImage((CardID)currentDisplayCardID, (CardID)cardID);
-            isQuizHasAnswer = true;
+            Debug.Log($"存在しないCardID:{cardID}のCardTypeを取得できないため終了します。");
+            return;
+        }
+        else if(cardType == CardType.Question)
+        {
+            // 問題カードなので問題を表示する
+            GameManager.Instance.GetQuizCardScriptableObject().DisplayQuestionImage((CardID)cardID);
+            // 現在表示している問題の変数を更新する
+            currentDisplayQuestionCard = cardID;
+        }
+        else if(cardType == CardType.Hint)
+        {
+            // 問題にヒントを加えた画像に差し替える
+            GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+            // 現在表示しているヒントの変数を更新する
+            currentDisplayHintCard = cardID;
         }
         else
         {
-            // 答えではないので，単体で読み込んだときの処理を行う
-            GameManager.Instance.GetCardIDImagePair().DisplayQuestionImage((CardID)cardID);
-            isQuizHasAnswer = false;
+            Debug.LogError($"CardType:{cardType}に対応する処理が割り当てられていません。");
         }
 
-        // 現在表示しているカードIDを更新する
-        currentDisplayCardID = cardID;
+        // プログレスバーを動的に変化させる
+        await InCreaseProgressBarUniTask(false, token);
+
+        IsUpdatingProgressBar = false;
+    }
+
+    // プログレスバーを表示する
+    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, CancellationToken token)
+    {
+        // クイズの正答かどうか
+        bool isAnswer = false;
+
+        // リセット処理
+        ProgressBarSlider.value = 0;
+        postProcessVolume.enabled = true;
 
         // イージングを繋ぐタイミングをややランダムにする
         float addSeconds_12 = UnityEngine.Random.Range(-0.1f, 0.1f);
@@ -129,14 +146,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         UpdateProgressText("機器を初期化中......");
         await EasingSecondsFromTo(1.2f, 0.0f,                  0.20f + addSeconds_12, (Easing.Ease)easeRandIdx_01, token);
 
-        UpdateProgressText(isQuizHasAnswer ? "正当性を確認中......" : "原子を生成中......");
+        UpdateProgressText(isAnswer ? "正当性を確認中......" : "原子を生成中......");
         await EasingSecondsFromTo(1.0f, 0.20f + addSeconds_12, 0.45f + addSeconds_23, (Easing.Ease)easeRandIdx_02, token);
         await UniTask.Delay(100);
 
-        UpdateProgressText(isQuizHasAnswer ? "権限を確認中......" : "電気を充填中......");
+        UpdateProgressText(isAnswer ? "権限を確認中......" : "電気を充填中......");
         await EasingSecondsFromTo(1.2f, 0.45f + addSeconds_23, 0.65f + addSeconds_34, (Easing.Ease)easeRandIdx_03, token);
 
-        UpdateProgressText(isQuizHasAnswer ? "電子錠を開錠中......" : "物体を転送中......");
+        UpdateProgressText(isAnswer ? "電子錠を開錠中......" : "物体を転送中......");
         await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04, token);
         await UniTask.Delay(500);
 
@@ -149,8 +166,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // プログレスバーの上の文字を非表示にして文字を消す
         UpdateProgressText("");
         progressText.enabled = false;
-
-        IsUpdatingProgressBar = false;
     }
 
     // N秒でaからbまでイージングを行う関数

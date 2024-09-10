@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.15
+  remoteIpAddress: 192.168.11.21
   remotePort: 50400
 --- !u!114 &368395506
 MonoBehaviour:
@@ -714,6 +714,7 @@ MonoBehaviour:
   QuizDisplayImage: {fileID: 727965794}
   ProgressBarSlider: {fileID: 955941483}
   progressText: {fileID: 1911449741}
+  currentDisplayHintCard: 0
 --- !u!114 &547987914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6292,8 +6293,9 @@ MonoBehaviour:
   udpReceiver: {fileID: 368395506}
   displayLocalIP: {fileID: 368395507}
   nfcReader: {fileID: 2006035812}
-  cardIDImagePair: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
-  answerQuizCardIDsImagePair: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
+  quizCardScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
+  hintCardScriptableObject: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
+  answerPairScriptableObject: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
   uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
 --- !u!114 &1731116141
 MonoBehaviour:

@@ -18,23 +18,30 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [Header("Quiz Image Corresponding to Card ID")]
 
     // 問題カードとその画像
-    [SerializeField] QuizCardScriptableObject cardIDImagePair;
+    [SerializeField] QuizCardScriptableObject quizCardScriptableObject;
 
     // 問題のヒントカードとその画像
-    [SerializeField] HintCardScriptableObject answerQuizCardIDsImagePair;
+    [SerializeField] HintCardScriptableObject hintCardScriptableObject;
+
+    // 解答カード
+    [SerializeField] AnswerPairScriptableObject answerPairScriptableObject;
+
 
     [Header("UUID / Card ID Pair")]
     // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
     [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
 
-    public QuizCardScriptableObject GetCardIDImagePair()
+    public QuizCardScriptableObject GetQuizCardScriptableObject()
     {
-        return cardIDImagePair;
+        return quizCardScriptableObject;
     }
-
-    public HintCardScriptableObject GetAnswerQuizCardIDsImagepair()
+    public HintCardScriptableObject GetHintCardScriptableObject()
     {
-        return answerQuizCardIDsImagePair;
+        return hintCardScriptableObject;
+    }
+    public AnswerPairScriptableObject GetAnswerPairScriptableObject()
+    {
+        return answerPairScriptableObject;
     }
 
     private void Start()
@@ -83,8 +90,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         // そうではない場合は、問題カードorヒントカードなので、他クライアントに送信する
         else
         {
-            // 問題カードかどうか
-            // ヒントカードかどうかは他クライアントが判別して処理を行う
+            // 問題カードかヒントカードかどうかは他クライアントが判別して処理を行う
             DisplayImageOnRemoteClientFromUUID(uuid);
         }
     }
@@ -119,8 +125,9 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // ScriptableObjejctとImageの紐づけ
     public void RegisterImageToScriptableObjejcts(Image image)
     {
-        cardIDImagePair.TargetImage = image;
-        answerQuizCardIDsImagePair.TargetImage = image;
+        quizCardScriptableObject.TargetImage = image;
+        hintCardScriptableObject.TargetImage = image;
+        answerPairScriptableObject.TargetImage = image;
     }
 
     // 受信した時に実行する関数

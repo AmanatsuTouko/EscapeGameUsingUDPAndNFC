@@ -22,6 +22,20 @@ public class UUIDToCardIDScriptableObject : ScriptableObject
             return null;
         }
     }
+
+    // カードの種類を返す
+    public CardType? GetCardTypeFromCardID(CardID cardID)
+    {
+        if (UuidCard.Exists(x => x.CardID == cardID))
+        {
+            return UuidCard.Find(x => x.CardID == cardID).CardType;
+        }
+        else
+        {
+            Debug.LogError($"エラー:登録されていないCardID{cardID}をCardTypeに変換できません．");
+            return null;
+        }
+    }
 }
 
 [System.Serializable]

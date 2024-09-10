@@ -19,22 +19,22 @@ public class DebugInput : MonoBehaviour
 
     void Update()
     {
-        // NFCカードを読み込んだ後のUDP送信をデバッグする
-        if(Input.GetKeyDown(KeyCode.P))
+        // NFCカードを読み込んだ際の挙動をデバッグする(R:Readの略)
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.OnRead(CardUUIDs[(int)TestCardID].Uuid.ToString());
+        }
+
+        // NFCカードを読み込んだ後のUDP送信をデバッグする(S:Sendの略)
+        if(Input.GetKeyDown(KeyCode.S))
         {
             GameManager.Instance.DisplayImageOnRemoteClientFromUUID(CardUUIDs[(int)TestCardID].Uuid);
         }
 
-        // 別クライアントから送信されたきた時をデバッグする
+        // 別クライアントから送信されたきた時をデバッグする(M:Messageの略)
         if (Input.GetKeyDown(KeyCode.M))
         {
             RPCStaticMethods.DisplayQuestionImage(CardUUIDs[(int)TestCardID].Uuid);
-        }
-
-        // Imageの画像をオフにする
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-            UIManager.Instance.QuizPanelComponentSetActive(false);
         }
     }
 #endif
