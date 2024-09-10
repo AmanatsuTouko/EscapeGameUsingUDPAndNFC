@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c116d6cfcca04bb385c03f6fe853d60, type: 3}
   m_Name: SecondFloorQuiz
   m_EditorClassIdentifier: 
-  cardImagePair:
-  - cardID: 0
-    Sprite: {fileID: 21300000, guid: b28858173b35d4bedaee5ec1e2d2103c, type: 3}
-  - cardID: 1
-    Sprite: {fileID: 21300000, guid: e41d4eaa403ab426fbd505f66201dbda, type: 3}
-  - cardID: 2
-    Sprite: {fileID: 21300000, guid: e6186a31d99c743cfa12deda92a49a1d, type: 3}
+  QuizImagePairs:
+  - QuizCardID: 1
+    Sprite: {fileID: 21300000, guid: 23510a4d3e001bd4db6cf44dfd9ea1f3, type: 3}
+  - QuizCardID: 4
+    Sprite: {fileID: 21300000, guid: 953e76a6ee9cd2545a0f6140cf3004b9, type: 3}
+  - QuizCardID: 5
+    Sprite: {fileID: 21300000, guid: de788e8054f750848bb5eeee9a89bfa6, type: 3}
+  - QuizCardID: 6
+    Sprite: {fileID: 0}

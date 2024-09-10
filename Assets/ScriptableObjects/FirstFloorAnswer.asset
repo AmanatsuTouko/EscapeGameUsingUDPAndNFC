@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4bdd8a527ff56642b7edab56a992292, type: 3}
   m_Name: FirstFloorAnswer
   m_EditorClassIdentifier: 
-  AnswerPairs: []
+  AnswerPairs:
+  - QuizCardID: 0
+    HintCardID: 7
+    AnswerCardID: 14
+    Sprite: {fileID: 0}
+  - QuizCardID: 2
+    HintCardID: 9
+    AnswerCardID: 16
+    Sprite: {fileID: 0}
+  - QuizCardID: 6
+    HintCardID: 13
+    AnswerCardID: 19
+    Sprite: {fileID: 0}
