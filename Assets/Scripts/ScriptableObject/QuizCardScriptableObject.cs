@@ -2,19 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ClientScriptableObject", order = 1)]
-public class QuestionCardIDImagePair : ScriptableObject
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/QuizCardScriptableObject", order = 2)]
+public class QuizCardScriptableObject : ScriptableObject
 {
-    public List<CardImagePair> cardImagePair;
+    public List<QuizImagePair> QuizImagePairs;
 
     [System.NonSerialized]
     public Image TargetImage;
 
     private Sprite? GetSpriteFromCardID(CardID cardID)
     {
-        foreach(CardImagePair pair in cardImagePair)
+        foreach(QuizImagePair pair in QuizImagePairs)
         {
-            if(pair.cardID == cardID)
+            if(pair.QuizCardID == cardID)
             {
                 return pair.Sprite;
             }
@@ -44,8 +44,8 @@ public class QuestionCardIDImagePair : ScriptableObject
 
 // CardIDと表示する画像のPair
 [System.Serializable]
-public class CardImagePair
+public class QuizImagePair
 {
-    public CardID cardID;
+    public CardID QuizCardID;
     public Sprite Sprite;
 }

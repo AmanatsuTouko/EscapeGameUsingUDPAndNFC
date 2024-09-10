@@ -17,22 +17,22 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     [Header("Quiz Image Corresponding to Card ID")]
 
-    // CardIDとクイズ画像の組み合わせのデータ
-    [SerializeField] QuestionCardIDImagePair cardIDImagePair;
+    // 問題カードとその画像
+    [SerializeField] QuizCardScriptableObject cardIDImagePair;
 
-    // クイズ画像における問題と答えの組み合わせのデータ
-    [SerializeField] AnswerQuizCardIDsImagepair answerQuizCardIDsImagePair;
+    // 問題のヒントカードとその画像
+    [SerializeField] HintCardScriptableObject answerQuizCardIDsImagePair;
 
     [Header("UUID / Card ID Pair")]
     // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
     [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
 
-    public QuestionCardIDImagePair GetCardIDImagePair()
+    public QuizCardScriptableObject GetCardIDImagePair()
     {
         return cardIDImagePair;
     }
 
-    public AnswerQuizCardIDsImagepair GetAnswerQuizCardIDsImagepair()
+    public HintCardScriptableObject GetAnswerQuizCardIDsImagepair()
     {
         return answerQuizCardIDsImagePair;
     }

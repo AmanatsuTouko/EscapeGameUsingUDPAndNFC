@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/UUIDCardIDDictScriptableObject", order = 2)]
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/UUIDCardIDDictScriptableObject", order = 1)]
 public class UUIDToCardIDScriptableObject : ScriptableObject
 {
     [SerializeField]

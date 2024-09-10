@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/AnswerCardIDPairScriptableObject", order = 3)]
-public class AnswerQuizCardIDsImagepair : ScriptableObject
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/HintCardScriptableObject", order = 3)]
+public class HintCardScriptableObject : ScriptableObject
 {
-    public List<QuestionAnswerPair> QuestionAnswerPairs;
+    public List<QuizHintImagePair> QuizHintImagePairs;
 
     [System.NonSerialized]
     public Image TargetImage;
    
     public bool IsExistQuestionAnswerCardIDPair(CardID questionCardID, CardID answerCardD)
     {
-        foreach(QuestionAnswerPair pair in QuestionAnswerPairs)
+        foreach(QuizHintImagePair pair in QuizHintImagePairs)
         {
-            if(pair.QuestionCardID == questionCardID && pair.AnswerCardID == answerCardD)
+            if(pair.QuizCardID == questionCardID && pair.HIntCardID == answerCardD)
             {
                 return true;
             }
@@ -23,7 +23,7 @@ public class AnswerQuizCardIDsImagepair : ScriptableObject
         return false;
     }
 
-    public void DisplayQuestionImage(CardID questionCardID, CardID answerCardD)
+    public void DisplayQuestionImage(CardID questionCardID, CardID hintCardD)
     {
         // nullチェック
         if(TargetImage == null)
@@ -32,11 +32,11 @@ public class AnswerQuizCardIDsImagepair : ScriptableObject
             return;
         }
 
-        // 対応する問題と解答のペアに一致するSpriteを取得
+        // 対応するクイズとヒントのペアに一致するSpriteを取得
         Sprite sprite = null;
-        foreach(QuestionAnswerPair pair in QuestionAnswerPairs)
+        foreach(QuizHintImagePair pair in QuizHintImagePairs)
         {
-            if(pair.QuestionCardID == questionCardID && pair.AnswerCardID == answerCardD)
+            if(pair.QuizCardID == questionCardID && pair.HIntCardID == hintCardD)
             {
                 sprite = pair.Sprite;
                 break;
@@ -46,7 +46,7 @@ public class AnswerQuizCardIDsImagepair : ScriptableObject
         // Spriteのnullチェック
         if (sprite == null)
         {
-            Debug.LogError($"Error:{questionCardID}の問題の答えとなる{answerCardD}は設定されていません．");
+            Debug.LogError($"Error:{questionCardID}の問題のヒントとなる{hintCardD}は設定されていません．");
             return;
         }
 
@@ -57,9 +57,9 @@ public class AnswerQuizCardIDsImagepair : ScriptableObject
 
 // CardIDと表示する画像のPair
 [System.Serializable]
-public class QuestionAnswerPair
+public class QuizHintImagePair
 {
-    public CardID QuestionCardID;
-    public CardID AnswerCardID;
+    public CardID QuizCardID;
+    public CardID HIntCardID;
     public Sprite Sprite;
 }
