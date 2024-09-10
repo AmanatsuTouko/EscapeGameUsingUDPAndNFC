@@ -23,6 +23,19 @@ public class UUIDToCardIDScriptableObject : ScriptableObject
         }
     }
 
+    public string? GetUUIDFromCardID(CardID cardID)
+    {
+        if (UuidCard.Exists(x => x.CardID == cardID))
+        {
+            return UuidCard.Find(x => x.CardID == cardID).Uuid;
+        }
+        else
+        {
+            Debug.LogError($"エラー:登録されていないCardID{cardID}をUUIDに変換できません．");
+            return null;
+        }
+    }
+
     // カードの種類を返す
     public CardType? GetCardTypeFromCardID(CardID cardID)
     {
