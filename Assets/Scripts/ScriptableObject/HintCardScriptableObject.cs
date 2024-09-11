@@ -88,17 +88,19 @@ public class HintCardScriptableObject : ScriptableObject
     // 実態はStaticMethodsOnHintReadに記述する
     public void OnReadQuizSnowHint()
     {
-        Debug.Log("OnReadQuiz03Hint");
+        Debug.Log("OnReadQuizSnowHint");
         StaticMethodsOnHintRead.OnReadQuizSnowHintUniTask().Forget();
     }
 
     public void OnReadQuizBugHint()
     {
+        Debug.Log("OnReadQuizBugHint");
         StaticMethodsOnHintRead.OnReadQuizBugHintUniTask().Forget();
     }
 
     public void OnReadQuizTrafficJamHint()
     {
+        Debug.Log("OnReadQuizTrafficJamHint");
         StaticMethodsOnHintRead.OnReadQuizTrafficJamHintUniTask().Forget();
     }
 }

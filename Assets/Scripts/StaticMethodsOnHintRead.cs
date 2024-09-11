@@ -8,7 +8,7 @@ public class StaticMethodsOnHintRead : MonoBehaviour
 {
     public static async UniTask OnReadQuizSnowHintUniTask()
     {
-        Debug.Log("OnReadQuiz03HintUniTask");
+        Debug.Log("OnReadQuizHintUniTask");
 
         UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
         Image image = UIManager.Instance.SnowFadeImage;
@@ -37,11 +37,21 @@ public class StaticMethodsOnHintRead : MonoBehaviour
 
     public static async UniTask OnReadQuizBugHintUniTask()
     {
+        Debug.Log("OnReadQuizBugHintUniTask");
+        
+        // 殺虫剤の画像の表示
+        
+        // 音を出しながら毛虫を消す
+
+        // 殺虫剤の画像の削除（フェードアウトさせる）
 
     }
 
     public static async UniTask OnReadQuizTrafficJamHintUniTask()
     {
+        Debug.Log("OnReadQuizTrafficJamHintUniTask");
 
+        // フェードアウトして"dog"の画像を表示させる
+        
     }
 }
