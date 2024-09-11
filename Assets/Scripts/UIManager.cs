@@ -62,6 +62,16 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public void CorrectPerformance(string uuid)
     {
         Debug.LogError("未実装の関数がコールされました。");
+
+        CardID? cardID = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardIDFromUUID(uuid);
+        if(cardID == null)
+        {
+            Debug.LogError($"正答したカードのUUID:{uuid}は，登録されていないUUIDのため，正答処理を中断します．");
+        }
+
+        // 正解！を表示する
+
+        // CardIDやPhaseに応じて，正答処理を行う
     }
 
     // 交通系ICを読み込んだ時に正答だったら処理を行う
@@ -159,6 +169,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                 }
                 else
                 {
+                    // 現在表示しているクイズ画像を再度表示する
+                    // （正答したヒント画像に，上から別のヒントが重なって表示されないようにする）
+                    GameManager.Instance.GetQuizCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard);
+
                     // 現在表示している画像の指定の位置にヒント画像を乗せて表示する
                     GameManager.Instance.GetHintDefaultSpriteScriptableObject().DisplayIncorrectHintImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
                     isDefaultHint = true;
