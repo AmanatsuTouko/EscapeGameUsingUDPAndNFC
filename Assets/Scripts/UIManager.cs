@@ -38,6 +38,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     CardID? currentDisplayHintCard = null;
 
     [Header("For Unique Method")]
+    [SerializeField] GameObject SnowParticle;
     public Image SnowFadeImage;
 
     private void Start()
@@ -246,6 +247,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // PostProcessをOFFにする
         postProcessVolume.enabled = false;
 
+        // 雪を降らせる
+        DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
+
         // ImageをONにする
         QuizPanelComponentSetActive(true, isDefaultHint);
 
@@ -287,6 +291,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             IsUpdatingProgressBar = false;
             // PostProcessの再開
             postProcessVolume.enabled = true;
+            // 雪の日表示
+            SnowParticle.SetActive(false);
         }
     }
     public void QuizPanelComponentSetActive(bool quizImageActive, bool hintImageActive)
@@ -315,6 +321,19 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         set
         {
             IsUpdatingProgressBar = value;
+        }
+    }
+
+    // 指定したカードならば雪を降らせる
+    private void DisplaySnowParticleIfCan(CardID quiz)
+    {
+        if(quiz == CardID.Question03_Snow)
+        {
+            SnowParticle.SetActive(true);
+        }
+        else
+        {
+            SnowParticle.SetActive(false);
         }
     }
 }

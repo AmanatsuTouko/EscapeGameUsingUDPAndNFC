@@ -717,6 +717,7 @@ MonoBehaviour:
   ProgressBarSlider: {fileID: 955941483}
   DefaultHintImage: {fileID: 1569583693}
   progressText: {fileID: 1911449741}
+  SnowParticle: {fileID: 1070583863}
   SnowFadeImage: {fileID: 1886507379}
 --- !u!114 &547987914
 MonoBehaviour:
@@ -1225,7 +1226,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &1070583864
 ParticleSystemRenderer:
   serializedVersion: 6
