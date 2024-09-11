@@ -137,4 +137,17 @@ public class DataBase : SingletonMonobehaviour<DataBase>
     {
         GetHint().InvokeUniqueMethodIfPossible(quiz, hint);
     }
+
+    public bool IsExistQuiz(CardID quiz, Client targetClient)
+    {
+        switch(targetClient)
+        {
+            case Client.FirstFloor:
+                return firstFloorQuiz.IsExistQuiz(quiz);
+            case Client.SecondFloor:
+                return secondFloorQuiz.IsExistQuiz(quiz);
+            default:
+                return false;
+        }
+    }
 }

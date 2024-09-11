@@ -66,6 +66,18 @@ public class QuizCardScriptableObject : ScriptableObject
         pos = quiz.HintDefaultPos;
         size = quiz.HintDefaultSize;
     }
+
+    public bool IsExistQuiz(CardID quizCard)
+    {
+        if(GetQuizCard(quizCard) != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 // CardIDと表示する画像のPair
