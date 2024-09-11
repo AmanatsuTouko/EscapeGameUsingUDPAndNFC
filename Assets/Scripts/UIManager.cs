@@ -228,17 +228,17 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         progressText.enabled = true;
 
         // プログレスバーを4段階に分けて上昇させる
-        UpdateProgressText("機器を初期化中......");
+        UpdateProgressText("機器を初期化中...");
         await EasingSecondsFromTo(1.2f, 0.0f,                  0.20f + addSeconds_12, (Easing.Ease)easeRandIdx_01);
 
-        UpdateProgressText(isAnswer ? "正当性を確認中......" : "原子を生成中......");
+        UpdateProgressText(isAnswer ? "正当性を確認中..." : "原子を生成中...");
         await EasingSecondsFromTo(1.0f, 0.20f + addSeconds_12, 0.45f + addSeconds_23, (Easing.Ease)easeRandIdx_02);
         await UniTask.Delay(100);
 
-        UpdateProgressText(isAnswer ? "権限を確認中......" : "電気を充填中......");
+        UpdateProgressText(isAnswer ? "権限を確認中..." : "電気を充填中...");
         await EasingSecondsFromTo(1.2f, 0.45f + addSeconds_23, 0.65f + addSeconds_34, (Easing.Ease)easeRandIdx_03);
 
-        UpdateProgressText(isAnswer ? "電子錠を開錠中......" : "物体を転送中......");
+        UpdateProgressText(isAnswer ? "電子錠を開錠中..." : "物体を転送中...");
         await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04);
         await UniTask.Delay(500);
 

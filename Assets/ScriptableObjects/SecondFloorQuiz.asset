@@ -15,9 +15,17 @@ MonoBehaviour:
   QuizImagePairs:
   - QuizCardID: 1
     Sprite: {fileID: 21300000, guid: 23510a4d3e001bd4db6cf44dfd9ea1f3, type: 3}
+    HintDefaultPos: {x: 104, y: -124}
+    HintDefaultSize: {x: 150, y: 150}
   - QuizCardID: 4
     Sprite: {fileID: 21300000, guid: 953e76a6ee9cd2545a0f6140cf3004b9, type: 3}
+    HintDefaultPos: {x: 0, y: 0}
+    HintDefaultSize: {x: 400, y: 400}
   - QuizCardID: 5
     Sprite: {fileID: 21300000, guid: de788e8054f750848bb5eeee9a89bfa6, type: 3}
+    HintDefaultPos: {x: -758, y: -401}
+    HintDefaultSize: {x: 300, y: 300}
   - QuizCardID: 6
     Sprite: {fileID: 0}
+    HintDefaultPos: {x: 0, y: 0}
+    HintDefaultSize: {x: 0, y: 0}
