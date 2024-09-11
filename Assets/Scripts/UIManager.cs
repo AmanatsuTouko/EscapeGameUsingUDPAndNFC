@@ -30,29 +30,33 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] TextMeshProUGUI progressText;
 
     // UniTaskのキャンセル用トークン
-    private CancellationTokenSource cancellationTokenSource;
+    public CancellationTokenSource cancellationTokenSource { get; private set; }
 
     // 現在読み込んでいる問題カード
     CardID? currentDisplayQuestionCard = null;
     // 現在読み込んでいるヒントカード
-    [SerializeField] CardID currentDisplayHintCard;
+    CardID? currentDisplayHintCard = null;
+
+    [Header("For Unique Method")]
+    public Image SnowFadeImage;
 
     private void Start()
     {
         progressText.enabled = false;
         currentDisplayQuestionCard = null;
+        currentDisplayHintCard = null;
     }
 
     // 読み込んだカードが現在読み込んでいる問題の答えかどうか
     public bool IsCorrectForCurrentQuestion(CardID readCardID)
     {
         // 修正 ヒントカード + 問題カード + 解答カードの組み合わせで答えなければならない
-        if(currentDisplayQuestionCard == null)
+        if(IsValidCurrentQuiz() && IsValidCurrentHint())
         {
-            Debug.LogError($"エラー：問題が表示されていません。");
-            return false;
+            return GameManager.Instance.GetAnswerPairScriptableObject().IsExistPair((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard, readCardID);
         }
-        return GameManager.Instance.GetAnswerPairScriptableObject().IsExistPair((CardID)currentDisplayQuestionCard, currentDisplayHintCard, readCardID);
+        Debug.LogError($"読み込んだカード{readCardID}は現在読み込んでいる問題の答えではありません。");
+        return false;
     }
 
     public void CorrectPerformance(string uuid)
@@ -71,6 +75,26 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
     }
 
+    // 問題とヒントのNullチェック
+    private bool IsValidCurrentQuiz()
+    {
+        if(currentDisplayQuestionCard == null)
+        {
+            Debug.LogError("エラー：問題が表示されていません。");
+            return false;
+        }
+        return true;
+    }
+    private bool IsValidCurrentHint()
+    {
+        if(currentDisplayHintCard == null)
+        {
+            Debug.LogError("エラー：ヒントが表示されていません。");
+            return false;
+        }
+        return true;
+    }
+
     public void DisplayQuestionImageWithProgressBar(CardID cardID)
     {
         // トークンソースのリソース解放
@@ -81,10 +105,20 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // CancellationTokenSource を初期化
         cancellationTokenSource = new CancellationTokenSource();
         // UniTask を実行
-        DisplayQuestionImageWithProgressBarUniTask(cardID, cancellationTokenSource.Token).Forget();
+        DisplayQuestionImageWithProgressBarUniTask(cardID).Forget();
     }
 
-    public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID, CancellationToken token)
+    public void InitializeCancellationTokenSource()
+    {
+        if (cancellationTokenSource != null)
+        {
+            cancellationTokenSource.Dispose();
+        }
+        // CancellationTokenSource を初期化
+        cancellationTokenSource = new CancellationTokenSource();
+    }
+
+    public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID)
     {
         // 読み込み演出の途中で新たに読み込み演出をしないようにする
         if (IsUpdatingProgressBar)
@@ -112,10 +146,13 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         else if(cardType == CardType.Hint)
         {
-            // 問題にヒントを加えた画像に差し替える
-            GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
-            // 現在表示しているヒントの変数を更新する
-            currentDisplayHintCard = cardID;
+            if(IsValidCurrentQuiz())
+            {
+                // 問題にヒントを加えた画像に差し替える
+                GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                // 現在表示しているヒントの変数を更新する
+                currentDisplayHintCard = cardID;
+            }
         }
         else
         {
@@ -123,16 +160,23 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
 
         // プログレスバーを動的に変化させる
-        await InCreaseProgressBarUniTask(false, token);
+        await InCreaseProgressBarUniTask(false);
 
         // 特殊処理が設定されていた場合は追加で実行する
-        GameManager.Instance.GetHintCardScriptableObject().InvokeUniqueMethodIfPossible((CardID)currentDisplayQuestionCard, currentDisplayHintCard);
+        if(IsValidCurrentQuiz() && IsValidCurrentHint())
+        {
+            GameManager.Instance.GetHintCardScriptableObject().InvokeUniqueMethodIfPossible((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard);
+        }
+        else
+        {
+            Debug.LogError($"問題：{currentDisplayQuestionCard}の時にヒント：{currentDisplayQuestionCard}を読み込んだ際の関数が登録されていないので、実行しません。");
+        }
 
         IsUpdatingProgressBar = false;
     }
 
     // プログレスバーを表示する
-    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, CancellationToken token)
+    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz)
     {
         // クイズの正答かどうか
         bool isAnswer = false;
@@ -158,17 +202,17 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // プログレスバーを4段階に分けて上昇させる
         UpdateProgressText("機器を初期化中......");
-        await EasingSecondsFromTo(1.2f, 0.0f,                  0.20f + addSeconds_12, (Easing.Ease)easeRandIdx_01, token);
+        await EasingSecondsFromTo(1.2f, 0.0f,                  0.20f + addSeconds_12, (Easing.Ease)easeRandIdx_01);
 
         UpdateProgressText(isAnswer ? "正当性を確認中......" : "原子を生成中......");
-        await EasingSecondsFromTo(1.0f, 0.20f + addSeconds_12, 0.45f + addSeconds_23, (Easing.Ease)easeRandIdx_02, token);
+        await EasingSecondsFromTo(1.0f, 0.20f + addSeconds_12, 0.45f + addSeconds_23, (Easing.Ease)easeRandIdx_02);
         await UniTask.Delay(100);
 
         UpdateProgressText(isAnswer ? "権限を確認中......" : "電気を充填中......");
-        await EasingSecondsFromTo(1.2f, 0.45f + addSeconds_23, 0.65f + addSeconds_34, (Easing.Ease)easeRandIdx_03, token);
+        await EasingSecondsFromTo(1.2f, 0.45f + addSeconds_23, 0.65f + addSeconds_34, (Easing.Ease)easeRandIdx_03);
 
         UpdateProgressText(isAnswer ? "電子錠を開錠中......" : "物体を転送中......");
-        await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04, token);
+        await EasingSecondsFromTo(1.0f, 0.65f + addSeconds_34, 1.00f,                 (Easing.Ease)easeRandIdx_04);
         await UniTask.Delay(500);
 
         // PostProcessをOFFにする
@@ -183,14 +227,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     }
 
     // N秒でaからbまでイージングを行う関数
-    private async UniTask EasingSecondsFromTo(float seconds, float fromValue, float toValue, Easing.Ease easing, CancellationToken token)
+    private async UniTask EasingSecondsFromTo(float seconds, float fromValue, float toValue, Easing.Ease easing)
     {
         Func<float, float> easingMethod = Easing.GetEasingMethod(easing);
         float rate = 0;
         float sub = toValue - fromValue;
         while (rate < 1.0f)
         {
-            await UniTask.Yield(token);
+            await UniTask.Yield(cancellationTokenSource.Token);            
             rate += Time.deltaTime / seconds;
             if (rate >= 1.0f) rate = 1.0f;
             ProgressBarSlider.value = fromValue + easingMethod(rate) * sub;

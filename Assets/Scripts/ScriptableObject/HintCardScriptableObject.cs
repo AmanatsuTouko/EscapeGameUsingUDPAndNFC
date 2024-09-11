@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,11 +25,11 @@ public class HintCardScriptableObject : ScriptableObject
     [System.NonSerialized]
     public Image TargetImage;
    
-    public bool IsExistQuestionAnswerCardIDPair(CardID questionCardID, CardID answerCardD)
+    public bool IsExistQuestionAnswerCardIDPair(CardID questionCardID, CardID hintCardD)
     {
         foreach(QuizHintImagePair pair in QuizHintImagePairs)
         {
-            if(pair.QuizCardID == questionCardID && pair.HintCardID == answerCardD)
+            if(pair.QuizCardID == questionCardID && pair.HintCardID == hintCardD)
             {
                 return true;
             }
@@ -85,9 +86,20 @@ public class HintCardScriptableObject : ScriptableObject
 
     // 固有メソッドを呼び出すラッパー
     // 実態はStaticMethodsOnHintReadに記述する
-    public void OnReadQuiz03Hint()
+    public void OnReadQuizSnowHint()
     {
-        StaticMethodsOnHintRead.OnReadQuiz03HintUniTask().Forget();
+        Debug.Log("OnReadQuiz03Hint");
+        StaticMethodsOnHintRead.OnReadQuizSnowHintUniTask().Forget();
+    }
+
+    public void OnReadQuizBugHint()
+    {
+        StaticMethodsOnHintRead.OnReadQuizBugHintUniTask().Forget();
+    }
+
+    public void OnReadQuizTrafficJamHint()
+    {
+        StaticMethodsOnHintRead.OnReadQuizTrafficJamHintUniTask().Forget();
     }
 }
 
