@@ -53,7 +53,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // 修正 ヒントカード + 問題カード + 解答カードの組み合わせで答えなければならない
         if(IsValidCurrentQuiz() && IsValidCurrentHint())
         {
-            return GameManager.Instance.GetAnswerPairScriptableObject().IsExistPair((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard, readCardID);
+            return DataBase.Instance.IsCorrectAnswer((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard, readCardID);
         }
         Debug.LogError($"読み込んだカード{readCardID}は現在読み込んでいる問題の答えではありません。");
         return false;
@@ -63,7 +63,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     {
         Debug.LogError("未実装の関数がコールされました。");
 
-        CardID? cardID = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardIDFromUUID(uuid);
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
         if(cardID == null)
         {
             Debug.LogError($"正答したカードのUUID:{uuid}は，登録されていないUUIDのため，正答処理を中断します．");
@@ -143,7 +143,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         QuizPanelComponentSetActive(false, false);
 
         // カードの種類を取得する
-        CardType? cardType = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardTypeFromCardID(cardID);
+        CardType? cardType = DataBase.Instance.GetCardTypeFromCardID(cardID);
         if(cardType == null)
         {
             Debug.Log($"存在しないCardID:{cardID}のCardTypeを取得できないため終了します。");
@@ -152,7 +152,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         else if(cardType == CardType.Question)
         {
             // 問題カードなので問題を表示する
-            GameManager.Instance.GetQuizCardScriptableObject().DisplayQuestionImage((CardID)cardID);
+            DataBase.Instance.DisplayQuiz(cardID);
+
             // 現在表示している問題の変数を更新する
             currentDisplayQuestionCard = cardID;
         }
@@ -162,19 +163,19 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             if (IsValidCurrentQuiz())
             {
                 // ヒントが正答かどうか
-                if(GameManager.Instance.GetHintCardScriptableObject().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayQuestionCard, (CardID)cardID))
+                if(DataBase.Instance.IsCorrectHint((CardID)currentDisplayQuestionCard, cardID))
                 {
                     // 問題にヒントを加えた画像に差し替える
-                    GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                    DataBase.Instance.DisplayQuizAddedHint((CardID)currentDisplayQuestionCard, cardID);
                 }
                 else
                 {
                     // 現在表示しているクイズ画像を再度表示する
                     // （正答したヒント画像に，上から別のヒントが重なって表示されないようにする）
-                    GameManager.Instance.GetQuizCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard);
+                    DataBase.Instance.DisplayQuiz((CardID)currentDisplayQuestionCard);
 
                     // 現在表示している画像の指定の位置にヒント画像を乗せて表示する
-                    GameManager.Instance.GetHintDefaultSpriteScriptableObject().DisplayIncorrectHintImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                    DataBase.Instance.DisplayQuizWrongHint((CardID)currentDisplayQuestionCard, cardID);
                     isDefaultHint = true;
                 }
                 // 現在表示しているヒントの変数を更新する
@@ -192,7 +193,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // 特殊処理が設定されていた場合は追加で実行する
         if(IsValidCurrentQuiz() && IsValidCurrentHint())
         {
-            GameManager.Instance.GetHintCardScriptableObject().InvokeUniqueMethodIfPossible((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard);
+            DataBase.Instance.InvokeMethodOnHintDisplay((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard);
         }
         else
         {

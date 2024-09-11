@@ -101,10 +101,10 @@ public class NFCReader : MonoBehaviour
         Debug.Log($"UUID: {uuid}, 交通系ICかどうか: {isTransportationICCard}");
 
         // どのカードIDかを出力する(デバッグ用)
-        CardID? cardID = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardIDFromUUID(uuid);
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
         if(cardID != null)
         {
-            CardType? cardType = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardTypeFromCardID((CardID)cardID);
+            CardType? cardType = DataBase.Instance.GetCardTypeFromCardID((CardID)cardID);
             Debug.Log($"CardID:{cardID}, CardType:{cardType}");
         }
 

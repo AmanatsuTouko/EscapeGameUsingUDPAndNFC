@@ -35,7 +35,7 @@ public class DebugInput : MonoBehaviour
 
     private string GetUUIDFromCardID(CardID cardID)
     {
-        string? uuid = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetUUIDFromCardID(TestCardID);
+        string? uuid = DataBase.Instance.GetUUIDFromCardID(TestCardID);
         if(uuid == null)
         {
             Debug.LogError($"CardID{TestCardID}に対応するUUIDが存在しません。");

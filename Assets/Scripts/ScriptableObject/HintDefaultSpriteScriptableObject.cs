@@ -27,7 +27,7 @@ public class HintDefaultSpriteScriptableObject : ScriptableObject
         // 画像を表示する座標とWidthHeightを取得する
         Vector2 size = Vector2.zero;
         Vector2 pos = Vector2.zero;
-        GameManager.Instance.GetQuizCardScriptableObject().GetHintDefaultPosSize(quizCard, out pos, out size);
+        DataBase.Instance.GetHintDefaultPosSize(quizCard, out pos, out size);
 
         if(size == Vector2.zero)
         {

@@ -14,48 +14,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [Header("Read NFC Card")]
     [SerializeField] NFCReader nfcReader;
 
-
-    [Header("Quiz Image Corresponding to Card ID")]
-
-    // 問題カードとその画像
-    [SerializeField] QuizCardScriptableObject quizCardScriptableObject;
-
-    // 問題のヒントカードとその画像
-    [SerializeField] HintCardScriptableObject hintCardScriptableObject;
-
-    // 解答カード
-    [SerializeField] AnswerPairScriptableObject answerPairScriptableObject;
-
-    // ヒントカードが不正解の場合の画像
-    [SerializeField] HintDefaultSpriteScriptableObject hintDefaultSpriteScriptableObject;
-
-    [Header("UUID / Card ID Pair")]
-    // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
-    [SerializeField] UUIDToCardIDScriptableObject uuidToCardIdDictScriptableObject;
-
-    public QuizCardScriptableObject GetQuizCardScriptableObject()
-    {
-        return quizCardScriptableObject;
-    }
-    public HintCardScriptableObject GetHintCardScriptableObject()
-    {
-        return hintCardScriptableObject;
-    }
-    public AnswerPairScriptableObject GetAnswerPairScriptableObject()
-    {
-        return answerPairScriptableObject;
-    }
-    public HintDefaultSpriteScriptableObject GetHintDefaultSpriteScriptableObject()
-    {
-        return hintDefaultSpriteScriptableObject;
-    }
-
     private void Start()
     {
-        // Imageの反映先を自身の持つImageクラスにする
-        RegisterImageToScriptableObjejcts(UIManager.Instance.QuizDisplayImage);
-        hintDefaultSpriteScriptableObject.TargetImage = UIManager.Instance.DefaultHintImage;
-
         // カード読み取り時に実行する関数を登録する
         nfcReader.ActionOnReadCard += OnRead;
 
@@ -80,7 +40,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     public void OnRead(string uuid)
     {
-        CardID? cardID = GetCardIDFromUUID(uuid);
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
+
         if(cardID == null)
         {
             Debug.LogError($"エラー：登録されていないカードのUUID:{uuid}が読み込まれました。");
@@ -130,19 +91,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
     }
 
-    // ScriptableObjejctとImageの紐づけ
-    public void RegisterImageToScriptableObjejcts(Image image)
-    {
-        quizCardScriptableObject.TargetImage = image;
-        hintCardScriptableObject.TargetImage = image;
-        answerPairScriptableObject.TargetImage = image;
-    }
-
     // 受信した時に実行する関数
     public void DisplayQuestionImage(string uuidString)
     {
         // 文字列のUUIDからCardIDに変換する
-        CardID? cardID = GetCardIDFromUUID(uuidString);
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuidString);
 
         if (cardID == null)
         {
@@ -151,11 +104,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
         // クイズ画像の表示
         UIManager.Instance.DisplayQuestionImageWithProgressBar((CardID)cardID);
-    }
-
-    public UUIDToCardIDScriptableObject GetUuidToCardIdDictScriptableObject()
-    {
-        return uuidToCardIdDictScriptableObject;
     }
 
     // 別クライアントでクイズ画像を非表示にする
@@ -178,11 +126,5 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     private void DisableQuizPanel()
     {
         UIManager.Instance.QuizPanelSetActive(false);
-    }
-
-    // uuidからカードIDに変換する
-    private CardID? GetCardIDFromUUID(string cardUuid)
-    {
-        return uuidToCardIdDictScriptableObject.GetCardIDFromUUID(cardUuid);
     }
 }

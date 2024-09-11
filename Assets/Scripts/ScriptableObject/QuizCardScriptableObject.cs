@@ -34,7 +34,7 @@ public class QuizCardScriptableObject : ScriptableObject
         Sprite? sprite = GetSpriteFromCardID(cardID);
         if(sprite == null)
         {
-            Debug.LogError($"Error:{cardID}に対応するSpriteがnullか，{cardID}に対応するSpriteが登録されていません．．");
+            Debug.LogError($"Error:{cardID}に対応するSpriteがnullか，{cardID}に対応するSpriteが登録されていません．");
         }
 
         // ImageへSpriteを反映させる

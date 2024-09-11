@@ -6247,6 +6247,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190432986}
   m_CullTransparentMesh: 1
+--- !u!1 &1263602272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1263602273}
+  - component: {fileID: 1263602274}
+  m_Layer: 0
+  m_Name: DataBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1263602273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263602272}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1263602274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263602272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1505526b4ea93fe4ab14fd62b704f25e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  client: 0
+  firstFloorQuiz: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
+  firstFloorHint: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
+  firstFloorAnswer: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
+  secondFloorQuiz: {fileID: 11400000, guid: bb241bbad1b9e4abebdce5bc40d6e6b9, type: 2}
+  secondFloorHint: {fileID: 11400000, guid: 76ad6b80c087b5445ba93e48b96a3011, type: 2}
+  secondFloorAnswer: {fileID: 11400000, guid: e987977a01c0e194687b24057cc61fa4, type: 2}
+  cardUUID: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
+  hintDefaultSprite: {fileID: 11400000, guid: a1217cf99c3b747088a3d57b723b1a16, type: 2}
 --- !u!1 &1499262988
 GameObject:
   m_ObjectHideFlags: 0
@@ -6403,11 +6456,6 @@ MonoBehaviour:
   udpReceiver: {fileID: 368395506}
   displayLocalIP: {fileID: 368395507}
   nfcReader: {fileID: 2006035812}
-  quizCardScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
-  hintCardScriptableObject: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
-  answerPairScriptableObject: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
-  hintDefaultSpriteScriptableObject: {fileID: 11400000, guid: a1217cf99c3b747088a3d57b723b1a16, type: 2}
-  uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
 --- !u!114 &1731116141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6683,6 +6731,7 @@ SceneRoots:
   - {fileID: 1070583866}
   - {fileID: 932652307}
   - {fileID: 1731116138}
+  - {fileID: 1263602273}
   - {fileID: 547987912}
   - {fileID: 416231084}
   - {fileID: 368395504}
