@@ -48,4 +48,6 @@ public class QuizImagePair
 {
     public CardID QuizCardID;
     public Sprite Sprite;
+    public Vector2 HintDefaultPos;  // ヒント画像の中心位置
+    public Vector2 HintDefaultSize; // ヒント画像のWidth/Height
 }

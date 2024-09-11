@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51be23e124e8f42f2a546b9e6ea48a66, type: 3}
+  m_Name: HintDefaultSprite
+  m_EditorClassIdentifier: 
+  HintImagePairs:
+  - HintCardID: 7
+    Sprite: {fileID: 0}
+  - HintCardID: 8
+    Sprite: {fileID: 0}
+  - HintCardID: 9
+    Sprite: {fileID: 0}
+  - HintCardID: 10
+    Sprite: {fileID: 0}
+  - HintCardID: 11
+    Sprite: {fileID: 0}
+  - HintCardID: 12
+    Sprite: {fileID: 0}
+  - HintCardID: 14
+    Sprite: {fileID: 0}
+  - HintCardID: 15
+    Sprite: {fileID: 0}
+  - HintCardID: 16
+    Sprite: {fileID: 0}
+  - HintCardID: 17
+    Sprite: {fileID: 0}
+  - HintCardID: 18
+    Sprite: {fileID: 0}
+  - HintCardID: 20
+    Sprite: {fileID: 0}
+  - HintCardID: 21
+    Sprite: {fileID: 0}
+  - HintCardID: 22
+    Sprite: {fileID: 0}
+  - HintCardID: 23
+    Sprite: {fileID: 0}
