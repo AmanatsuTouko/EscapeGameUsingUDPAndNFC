@@ -125,6 +125,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // プログレスバーを動的に変化させる
         await InCreaseProgressBarUniTask(false, token);
 
+        // 特殊処理が設定されていた場合は追加で実行する
+        GameManager.Instance.GetHintCardScriptableObject().InvokeUniqueMethodIfPossible((CardID)currentDisplayQuestionCard, currentDisplayHintCard);
+
         IsUpdatingProgressBar = false;
     }
 
@@ -223,5 +226,22 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public void SetLimitTimeText(string text)
     {
         limitTimeText.text = text;
+    }
+
+    // 固有メソッドからプログレスバーのUpdate状態を編集できるようにする
+    // TODO:
+    // ReadOnlyなのを壊してしまうので、他の解決策を模索中
+    // UniTaskの関数をInspectorに登録できれば万事解決なのだけれども
+    // ScriptableObjectに関数を登録するという考えが良くない？
+    public bool IsUpdatingProgressBarFromExternal 
+    {
+        get
+        {
+            return IsUpdatingProgressBar;
+        } 
+        set
+        {
+            IsUpdatingProgressBar = value;
+        }
     }
 }

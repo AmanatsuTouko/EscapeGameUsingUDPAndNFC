@@ -16,12 +16,36 @@ MonoBehaviour:
   - QuizCardID: 0
     HintCardID: 7
     Sprite: {fileID: 21300000, guid: 6b4a5ecea0ea74840ad4095de25aeeeb, type: 3}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls: []
   - QuizCardID: 2
     HintCardID: 9
     Sprite: {fileID: 21300000, guid: 9af484de3eb3952419aa625a29b178b2, type: 3}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 11500000, guid: 02fe1d5ac40ef0041a90be8f2f383bf7, type: 3}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - QuizCardID: 3
     HintCardID: 10
     Sprite: {fileID: 21300000, guid: c7b4914ae0dd82b47bf968ec113ff2d1, type: 3}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls: []
   - QuizCardID: 6
     HintCardID: 13
     Sprite: {fileID: 0}
+    UnityEvent:
+      m_PersistentCalls:
+        m_Calls: []
