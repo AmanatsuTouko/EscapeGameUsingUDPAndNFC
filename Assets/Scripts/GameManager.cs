@@ -26,6 +26,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 解答カード
     [SerializeField] AnswerPairScriptableObject answerPairScriptableObject;
 
+    // ヒントカードが不正解の場合の画像
+    [SerializeField] HintDefaultSpriteScriptableObject hintDefaultSpriteScriptableObject;
 
     [Header("UUID / Card ID Pair")]
     // NECカードのUUIDとCardIDの対応付けを定義したScriptableObject
@@ -43,11 +45,16 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         return answerPairScriptableObject;
     }
+    public HintDefaultSpriteScriptableObject GetHintDefaultSpriteScriptableObject()
+    {
+        return hintDefaultSpriteScriptableObject;
+    }
 
     private void Start()
     {
         // Imageの反映先を自身の持つImageクラスにする
         RegisterImageToScriptableObjejcts(UIManager.Instance.QuizDisplayImage);
+        hintDefaultSpriteScriptableObject.TargetImage = UIManager.Instance.DefaultHintImage;
 
         // カード読み取り時に実行する関数を登録する
         nfcReader.ActionOnReadCard += OnRead;

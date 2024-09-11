@@ -40,6 +40,32 @@ public class QuizCardScriptableObject : ScriptableObject
         // ImageへSpriteを反映させる
         TargetImage.sprite = sprite;
     }
+
+    private QuizImagePair GetQuizCard(CardID cardID)
+    {
+        foreach (QuizImagePair pair in QuizImagePairs)
+        {
+            if (pair.QuizCardID == cardID)
+            {
+                return pair;
+            }
+        }
+        return null;
+    }
+
+    public void GetHintDefaultPosSize(CardID quizCard, out Vector2 pos, out Vector2 size)
+    {
+        // クイズカードを取得する
+        QuizImagePair quiz = GetQuizCard(quizCard);
+        if(quiz == null)
+        {
+            Debug.LogError($"Error:QuizCardID:{quizCard}が存在しません．");
+            pos = Vector2.zero;
+            size = Vector2.zero;
+        }
+        pos = quiz.HintDefaultPos;
+        size = quiz.HintDefaultSize;
+    }
 }
 
 // CardIDと表示する画像のPair

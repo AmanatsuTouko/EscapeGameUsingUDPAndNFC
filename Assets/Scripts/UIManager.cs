@@ -22,10 +22,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] GameObject QuizPanel;
     [SerializeField] public Image QuizDisplayImage;
     [SerializeField] Slider ProgressBarSlider;
+    public Image DefaultHintImage;
 
     // プログレスバーが上昇中かどうか
     public bool IsUpdatingProgressBar { get; private set; } = false;
-
     // 読み込み中の文言
     [SerializeField] TextMeshProUGUI progressText;
 
@@ -127,8 +127,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         IsUpdatingProgressBar = true;
 
+        bool isDefaultHint = false;
+
         QuizPanelSetActive(true);
-        QuizPanelComponentSetActive(false);
+        QuizPanelComponentSetActive(false, false);
 
         // カードの種類を取得する
         CardType? cardType = GameManager.Instance.GetUuidToCardIdDictScriptableObject().GetCardTypeFromCardID(cardID);
@@ -146,10 +148,21 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         else if(cardType == CardType.Hint)
         {
-            if(IsValidCurrentQuiz())
+            // currentDisplayQuestionCardのnullチェック
+            if (IsValidCurrentQuiz())
             {
-                // 問題にヒントを加えた画像に差し替える
-                GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                // ヒントが正答かどうか
+                if(GameManager.Instance.GetHintCardScriptableObject().IsExistQuestionAnswerCardIDPair((CardID)currentDisplayQuestionCard, (CardID)cardID))
+                {
+                    // 問題にヒントを加えた画像に差し替える
+                    GameManager.Instance.GetHintCardScriptableObject().DisplayQuestionImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                }
+                else
+                {
+                    // 現在表示している画像の指定の位置にヒント画像を乗せて表示する
+                    GameManager.Instance.GetHintDefaultSpriteScriptableObject().DisplayIncorrectHintImage((CardID)currentDisplayQuestionCard, (CardID)cardID);
+                    isDefaultHint = true;
+                }
                 // 現在表示しているヒントの変数を更新する
                 currentDisplayHintCard = cardID;
             }
@@ -160,7 +173,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
 
         // プログレスバーを動的に変化させる
-        await InCreaseProgressBarUniTask(false);
+        await InCreaseProgressBarUniTask(false, isDefaultHint);
 
         // 特殊処理が設定されていた場合は追加で実行する
         if(IsValidCurrentQuiz() && IsValidCurrentHint())
@@ -176,7 +189,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     }
 
     // プログレスバーを表示する
-    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz)
+    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, bool isDefaultHint)
     {
         // クイズの正答かどうか
         bool isAnswer = false;
@@ -219,7 +232,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         postProcessVolume.enabled = false;
 
         // ImageをONにする
-        QuizPanelComponentSetActive(true);
+        QuizPanelComponentSetActive(true, isDefaultHint);
 
         // プログレスバーの上の文字を非表示にして文字を消す
         UpdateProgressText("");
@@ -261,9 +274,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             postProcessVolume.enabled = true;
         }
     }
-    public void QuizPanelComponentSetActive(bool quizImageActive)
+    public void QuizPanelComponentSetActive(bool quizImageActive, bool hintImageActive)
     {
         QuizDisplayImage.enabled = quizImageActive;
+        DefaultHintImage.enabled = hintImageActive;
     }
 
     // 時刻の更新

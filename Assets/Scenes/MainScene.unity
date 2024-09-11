@@ -715,6 +715,7 @@ MonoBehaviour:
   QuizPanel: {fileID: 248935091}
   QuizDisplayImage: {fileID: 727965794}
   ProgressBarSlider: {fileID: 955941483}
+  DefaultHintImage: {fileID: 1569583693}
   progressText: {fileID: 1911449741}
   SnowFadeImage: {fileID: 1886507379}
 --- !u!114 &547987914
@@ -6405,6 +6406,7 @@ MonoBehaviour:
   quizCardScriptableObject: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
   hintCardScriptableObject: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
   answerPairScriptableObject: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
+  hintDefaultSpriteScriptableObject: {fileID: 11400000, guid: a1217cf99c3b747088a3d57b723b1a16, type: 2}
   uuidToCardIdDictScriptableObject: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
 --- !u!114 &1731116141
 MonoBehaviour:
