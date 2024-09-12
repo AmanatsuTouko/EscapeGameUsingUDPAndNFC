@@ -40,6 +40,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [Header("For Unique Method")]
     [SerializeField] GameObject SnowParticle;
     public Image SnowFadeImage;
+    public Image BugImage;
+    public Image KillBugSprayImage;
 
     private void Start()
     {
@@ -47,6 +49,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         currentDisplayQuestionCard = null;
         currentDisplayHintCard = null;
     }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log($"現在の問題:{currentDisplayQuestionCard}, 現在のヒント:{currentDisplayHintCard}");
+        }
+    }    
 
     // 読み込んだカードが現在読み込んでいる問題の答えかどうか
     public bool IsCorrectForCurrentQuestion(CardID readCardID)
@@ -71,9 +81,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             return;
         }
 
-        // 正解！を表示する
-
-
         // CardIDやPhaseに応じて，正答処理を行う
         CardID? quiz = DataBase.Instance.GetCardIDFromAnswer((CardID)answer);
         if(quiz == null)
@@ -81,7 +88,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             Debug.LogError($"正答したカード:{answer}の問題が定義されていないため、正答処理を中断します。");
             return;
         }
-        // PhaseManager.Instance.QuizClear((CardID)cardID);
+        // PhaseManager.Instance.QuizClear((CardID)quiz);
         GameManager.Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
 
@@ -303,6 +310,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             postProcessVolume.enabled = true;
             // 雪の日表示
             SnowParticle.SetActive(false);
+            // 現在読み込んでいる問題をリセットする
+            // currentDisplayQuestionCard = null;
         }
     }
     public void QuizPanelComponentSetActive(bool quizImageActive, bool hintImageActive)

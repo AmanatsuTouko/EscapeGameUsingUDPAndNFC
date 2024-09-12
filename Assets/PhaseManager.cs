@@ -95,6 +95,10 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
             Debug.LogError($"エラー：クイズとして登録されていないCardID{cardID}のクリア通知を受信しました。");
             return;
         }
+
+        // TODO:
+        // 正解！のUIを表示してメイン画面に戻る
+
         
         // 残りクイズ数がどのクライアントも0になった場合はフェーズクリア
         if(firstFloorRemainQuiz == 0 && SecondFloorRemainQuiz == 0)
