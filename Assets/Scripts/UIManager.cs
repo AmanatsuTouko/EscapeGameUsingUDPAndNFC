@@ -56,6 +56,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public Image KillBugSprayImage;
     public Image DogFadeImageForQuizTrafficJam;
 
+    private SynchronizationContext mainThreadContext;
+    
     private void Start()
     {
         progressText.enabled = false;
@@ -65,6 +67,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // デバッグ時にTokenSourceがnullとなるので初期化だけしておく
         // （カードをスキャンせずに，クリア演出をしようとするとなる）
         InitializeCancellationTokenSource();
+
+        // メインスレッドのSynchronizationContextを取得
+        mainThreadContext = SynchronizationContext.Current;
     }
 
     private void Update()
@@ -87,6 +92,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         return false;
     }
 
+    
+
     public void CorrectPerformance(string answerUUID)
     {
         Debug.LogError("未実装の関数がコールされました。");
@@ -105,7 +112,16 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             Debug.LogError($"正答したカード:{answer}の問題が定義されていないため、正答処理を中断します。");
             return;
         }
-        // PhaseManager.Instance.QuizClear((CardID)quiz);
+
+        // メインスレッドで実行しなければならない
+        // メインスレッドに処理を戻して，登録したメソッドを実行する
+        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
+        mainThreadContext.Post(_ =>
+        {
+            PhaseManager.Instance.QuizClear((CardID)quiz);
+        }, null);
+        
+
         GameManager.Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
 
