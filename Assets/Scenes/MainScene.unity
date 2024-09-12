@@ -830,8 +830,9 @@ MonoBehaviour:
   secondFloorLockImage:
   - {fileID: 852773655}
   - {fileID: 1918156866}
-  lockedSpriteRed: {fileID: 0}
-  lockedSpriteBlue: {fileID: 0}
+  lockedSpriteRed: {fileID: 21300000, guid: 48b2f7b53c4467b41804d43f19252d30, type: 3}
+  lockedSpriteBlue: {fileID: 21300000, guid: 151441b317df71244bf4e82e21961325, type: 3}
+  IsClearQuizIndex: 000000000000
 --- !u!1 &711165803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1137,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 48b2f7b53c4467b41804d43f19252d30, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1273,7 +1274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 151441b317df71244bf4e82e21961325, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6604,7 +6605,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 151441b317df71244bf4e82e21961325, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7057,7 +7058,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 48b2f7b53c4467b41804d43f19252d30, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
