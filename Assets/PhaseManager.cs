@@ -76,18 +76,18 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         // どのクライアントが担当しているクイズかどうかを判別して、残りクイズ数を減少させる
         if(DataBase.Instance.IsExistQuiz(cardID, Client.FirstFloor))
         {
-            if(IsClearQuizIndex[(int)cardID] == false)
+            if(IsClearQuizIndex[GetQuizIndex(cardID)] == false)
             {
                 firstFloorRemainQuiz -= 1;
-                IsClearQuizIndex[(int)cardID] = true;
+                IsClearQuizIndex[GetQuizIndex(cardID)] = true;
             }
         }
         else if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
         {
-            if(IsClearQuizIndex[(int)cardID] == false)
+            if(IsClearQuizIndex[GetQuizIndex(cardID)] == false)
             {
                 secondFloorRemainQuiz -= 1;
-                IsClearQuizIndex[(int)cardID] = true;
+                IsClearQuizIndex[GetQuizIndex(cardID)] = true;
             }
         }
         else
@@ -108,6 +108,28 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 
         // UIの更新
         UpdateLockedQuizUI();
+    }
+
+    private int GetQuizIndex(CardID cardID)
+    {
+        switch(cardID)
+        {
+            case CardID.Question01_RedBlueArrow:
+                return 0;
+            case CardID.Question02_Siritori:
+                return 1;
+            case CardID.Question03_Snow:
+                return 2;
+            case CardID.Question04_Loop:
+                return 3;
+            case CardID.Question05_Bug:
+                return 4;
+            case CardID.Question06_TrafficJam:
+                return 5;
+            // それ以外の場合はエラー値として-1を返す
+            default:
+                return -1;
+        }
     }
 
     public void PhasePanelSetActive(bool active)

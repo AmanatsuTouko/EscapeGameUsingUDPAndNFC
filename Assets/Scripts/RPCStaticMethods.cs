@@ -13,8 +13,9 @@ public class RPCStaticMethods : MonoBehaviour
         GameManager.Instance.DisableQuizPanelIfWhileReadCard();
     }
 
-    public static void QuizClear(CardID cardID)
+    public static void QuizClear(string quizCardUUIDString)
     {
-        PhaseManager.Instance.QuizClear(cardID);
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(quizCardUUIDString);
+        PhaseManager.Instance.QuizClear((CardID)cardID);
     }
 }

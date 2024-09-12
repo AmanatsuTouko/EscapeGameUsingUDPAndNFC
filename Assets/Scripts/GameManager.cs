@@ -121,9 +121,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     }
 
     // 別クライアントでクイズのクリア処理を行う
-    public void QuizClearOnRemoteClient(CardID cardID)
+    public void QuizClearOnRemoteClient(CardID quizCardID)
     {
-        string jsonMethod = RPCManager.GetJsonFromMethodArgs(nameof(RPCStaticMethods), nameof(RPCStaticMethods.QuizClear), new string[]{cardID.ToString()});
+        string uuidString = DataBase.Instance.GetUUIDFromCardID(quizCardID);
+        string jsonMethod = RPCManager.GetJsonFromMethodArgs(nameof(RPCStaticMethods), nameof(RPCStaticMethods.QuizClear), new string[]{uuidString});
         udpSender.SendMessage(jsonMethod);
     }
 
