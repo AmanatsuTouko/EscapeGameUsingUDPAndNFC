@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public enum Phase
 {
@@ -73,6 +74,9 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 
     public void QuizClear(CardID cardID)
     {
+        // このクライアントが担当しているクイズかどうか
+        bool isOwnQuizCorrected = false;
+
         // どのクライアントが担当しているクイズかどうかを判別して、残りクイズ数を減少させる
         if(DataBase.Instance.IsExistQuiz(cardID, Client.FirstFloor))
         {
@@ -80,6 +84,14 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
             {
                 firstFloorRemainQuiz -= 1;
                 IsClearQuizIndex[GetQuizIndex(cardID)] = true;
+            }
+            else
+            {
+                Debug.Log("既に正解したクイズを再度正解しています．");
+            }
+            if (DataBase.Instance.Client == Client.FirstFloor)
+            {
+                isOwnQuizCorrected = true;
             }
         }
         else if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
@@ -89,21 +101,46 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
                 secondFloorRemainQuiz -= 1;
                 IsClearQuizIndex[GetQuizIndex(cardID)] = true;
             }
+            else
+            {
+                Debug.Log("既に正解したクイズを再度正解しています．");
+            }
+            if (DataBase.Instance.Client == Client.SecondFloor)
+            {
+                isOwnQuizCorrected = true;
+            }
         }
         else
         {
             Debug.LogError($"エラー：クイズとして登録されていないCardID{cardID}のクリア通知を受信しました。");
             return;
+        }        
+
+        // 画面演出を行う
+        QuizClearProcessUniTask(isOwnQuizCorrected).Forget();
+    }
+
+    // クイズをクリアした時の画面演出操作
+    private async UniTask QuizClearProcessUniTask(bool isOwnQuizCorrected)
+    {
+        // このクライアントが担当しているクイズの場合はCorrect!を表示する
+        if(isOwnQuizCorrected)
+        {
+            // 正解！のUIを表示してメイン画面に戻る
+            await UIManager.Instance.DisplayCorrectAndBackMainUniTask();
+        }
+        else
+        {
+            Debug.Log("別のクライアントでクイズがクリアされました．");
         }
 
-        // TODO:
-        // 正解！のUIを表示してメイン画面に戻る
+        // UIの更新
+        UpdateLockedQuizUI();
 
-        
         // 残りクイズ数がどのクライアントも0になった場合はフェーズクリア
-        if(firstFloorRemainQuiz == 0 && SecondFloorRemainQuiz == 0)
+        if (firstFloorRemainQuiz == 0 && SecondFloorRemainQuiz == 0)
         {
-            PhaseClear();
+            await PhaseClear();
         }
 
         // UIの更新
@@ -137,7 +174,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         PhasePanel.SetActive(active);
     }
 
-    private void PhaseClear()
+    private async UniTask PhaseClear()
     {
         switch(phase)
         {
@@ -145,15 +182,17 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
                 phase = Phase.Phase2;
                 firstFloorRemainQuiz = 2;
                 secondFloorRemainQuiz = 2;
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase1);
                 break;
 
             case Phase.Phase2:
                 phase = Phase.Phase3;
-                
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase2);
                 break;
+
             case Phase.Phase3:
                 phase = Phase.Finish;
-                
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase3);
                 break;
         }
     }

@@ -26,6 +26,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     // プログレスバーが上昇中かどうか
     public bool IsUpdatingProgressBar { get; private set; } = false;
+
     // 読み込み中の文言
     [SerializeField] TextMeshProUGUI progressText;
 
@@ -44,6 +45,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] TextMeshProUGUI ErrorTypeText;
     [SerializeField] TextMeshProUGUI ErrorMessageText;
 
+    [Header("Correct Process")]
+    [SerializeField] Image CorrectBGImage;
+    [SerializeField] GameObject CorrectTexts;
+
     [Header("For Unique Method")]
     [SerializeField] GameObject SnowParticle;
     public Image SnowFadeImage;
@@ -56,6 +61,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         progressText.enabled = false;
         currentDisplayQuestionCard = null;
         currentDisplayHintCard = null;
+
+        // デバッグ時にTokenSourceがnullとなるので初期化だけしておく
+        // （カードをスキャンせずに，クリア演出をしようとするとなる）
+        InitializeCancellationTokenSource();
     }
 
     private void Update()
@@ -458,5 +467,59 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // 特殊なヒントカード Hint06_Sirenを読み込んだこととして
         // 固有メソッドでフェードアウトしながらdogに変更する
         DisplayQuestionImageWithProgressBar(CardID.Hint06_Siren);
+    }
+
+    // 正解を表示して，暫く経ったらメイン画面に戻る
+    public async UniTask DisplayCorrectAndBackMainUniTask()
+    {
+        Debug.Log("正解を表示して，メイン画面に戻る");
+        if (IsUpdatingProgressBar) return;
+        IsUpdatingProgressBar = true;        
+
+        // 初期化
+        CorrectBGImage.enabled = true;
+        var color = CorrectBGImage.color;
+        color.a = 1.0f;
+        CorrectBGImage.color = color;
+        CorrectTexts.SetActive(true);
+
+        Debug.Log("Call");
+
+        // 暫く経ったら文字を消去する
+        await UniTask.WaitForSeconds(4.0f);
+        CorrectTexts.SetActive(false);
+
+        // 徐々にフェードアウトする
+        await FadeOut(CorrectBGImage, 2.0f, Easing.Ease.InCubic);
+        QuizPanelSetActive(false);
+
+        IsUpdatingProgressBar = false;
+    }
+
+    // フェーズクリア時の演出をする
+    public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
+    {
+        Debug.Log("フェーズクリア!");
+        if (IsUpdatingProgressBar) return;
+        IsUpdatingProgressBar = true;
+
+        // クリアしたフェーズによって処理を変える
+        switch (clearedPhase)
+        {
+            case Phase.Phase1:
+                Debug.Log("フェーズ1クリア!");
+                break;
+            case Phase.Phase2:
+                Debug.Log("フェーズ2クリア!");
+                Debug.Log("最終問題の出題!");
+                break;
+            case Phase.Phase3:
+                Debug.Log("フェーズ3クリア!");
+                break;
+        }
+
+        await UniTask.WaitForSeconds(5.0f);
+
+        IsUpdatingProgressBar = false;
     }
 }
