@@ -37,6 +37,13 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // 現在読み込んでいるヒントカード
     CardID? currentDisplayHintCard = null;
 
+    [Header("Non Hint Error Panel")]
+    [SerializeField] GameObject NonHintErrorPanel;
+    [SerializeField] Image NonHintErrorPanelBGImage; 
+    [SerializeField] GameObject ErrorTexts;
+    [SerializeField] TextMeshProUGUI ErrorTypeText;
+    [SerializeField] TextMeshProUGUI ErrorMessageText;
+
     [Header("For Unique Method")]
     [SerializeField] GameObject SnowParticle;
     public Image SnowFadeImage;
@@ -208,6 +215,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // プログレスバーを動的に変化させる
         await InCreaseProgressBarUniTask(false, isDefaultHint);
 
+        // クイズが表示されていないときは、ERROR表示してメイン画面に戻る
+        if(currentDisplayQuestionCard == null)
+        {
+            await DisplayNonHintError();
+        }
+
         // 特殊処理が設定されていた場合は追加で実行する
         if(IsValidCurrentQuiz() && IsValidCurrentHint())
         {
@@ -265,7 +278,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         postProcessVolume.enabled = false;
 
         // 雪を降らせる
-        DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
+        if(currentDisplayQuestionCard != null)
+        {
+            DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
+        }
 
         // ImageをONにする
         QuizPanelComponentSetActive(true, isDefaultHint);
@@ -290,6 +306,76 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
     }
 
+    // クイズが表示されていないときの演出
+    private async UniTask DisplayNonHintError()
+    {
+        // メイン画面に戻る
+        QuizPanelSetActive(false);
+        
+        // ERROR!
+        // クイズが読み込まれていませんを表示する
+        NonHintErrorPanel.SetActive(true);
+
+        // 文字を点滅させる
+        await UniTask.WaitForSeconds(0.1f);
+        NonHintErrorTextSetActive(false);
+
+        await UniTask.WaitForSeconds(0.2f);
+        NonHintErrorTextSetActive(true);
+
+        await UniTask.WaitForSeconds(0.1f);
+        NonHintErrorTextSetActive(false);
+
+        await UniTask.WaitForSeconds(0.2f);
+        NonHintErrorTextSetActive(true);
+
+        // 2秒待つ
+        await UniTask.WaitForSeconds(2.0f);
+
+        // フェードアウトしながらメイン画面に戻る
+        ErrorTexts.SetActive(false);
+        await FadeOut(NonHintErrorPanelBGImage, 1.0f, Easing.Ease.InQuad);
+        NonHintErrorPanel.SetActive(false);
+
+        // リセット処理
+        ErrorTexts.SetActive(true);
+        NonHintErrorTextSetActive(true);
+        Color color = NonHintErrorPanelBGImage.color;
+        color.a = 1.0f;
+        NonHintErrorPanelBGImage.color = color;
+    }
+
+    private static async UniTask FadeOut(Image image, float seconds, Easing.Ease ease)
+    {
+        Color color = image.color;
+        Func<float, float> easingMethod = Easing.GetEasingMethod(ease);
+
+        float rate = 0;
+        while (rate < 1.0f)
+        {
+            await UniTask.Yield();
+            rate += Time.deltaTime / seconds;
+            if (rate >= 1.0f) rate = 1.0f;
+
+            color.a = easingMethod(1.0f - rate);
+            image.color = color;
+        }
+    }
+
+    private void NonHintErrorTextSetActive(bool active)
+    {
+        if(active)
+        {
+            ErrorTypeText.alpha = 1;
+            ErrorMessageText.alpha = 1;
+        }
+        else
+        {
+            ErrorTypeText.alpha = 0;
+            ErrorMessageText.alpha = 0;
+        }
+    }
+
     private void UpdateProgressText(string text)
     {
         // プログレスバーに記載されている文字を変更する
@@ -311,7 +397,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             // 雪の日表示
             SnowParticle.SetActive(false);
             // 現在読み込んでいる問題をリセットする
-            // currentDisplayQuestionCard = null;
+            currentDisplayQuestionCard = null;
         }
     }
     public void QuizPanelComponentSetActive(bool quizImageActive, bool hintImageActive)
