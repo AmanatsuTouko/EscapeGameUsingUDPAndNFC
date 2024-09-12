@@ -37,8 +37,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             DisableQuizPanel();
         }
 
-        // マウスクリックでスピーカーが起動した処理を行う
-        if(Input.GetMouseButtonDown(0))
+        // マウスホイールクリックでスピーカーが起動した処理を行う
+        if(Input.GetMouseButtonDown(2))
         {
             UIManager.Instance.OnActionSirenWhenDisplayTrafficJam();
         }
