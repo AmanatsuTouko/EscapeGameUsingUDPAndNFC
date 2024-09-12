@@ -49,6 +49,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public Image SnowFadeImage;
     public Image BugImage;
     public Image KillBugSprayImage;
+    public Image DogFadeImageForQuizTrafficJam;
 
     private void Start()
     {

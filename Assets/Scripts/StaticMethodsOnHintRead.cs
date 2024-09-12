@@ -119,6 +119,16 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     {
         Debug.Log("フェードアウトしながらdogを表示する");
 
-        
+        UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
+        Image image = UIManager.Instance.DogFadeImageForQuizTrafficJam;
+        image.enabled = true;
+
+        // 上に重ねたUI画像の透明度を少しずつ下げてフェードアウトさせる
+        await FadeOut(image, 4.0f, Easing.Ease.InCubic);
+
+        // リセット処理
+        image.enabled = false;
+        ResetAlphaImage(image);
+        UIManager.Instance.IsUpdatingProgressBarFromExternal = false;
     }
 }
