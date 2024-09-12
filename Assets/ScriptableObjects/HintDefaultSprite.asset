@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: HintDefaultSprite
   m_EditorClassIdentifier: 
   HintImagePairs:
-  - HintCardID: 7
-    Sprite: {fileID: 21300000, guid: 10a5f14ef229e40a19ecccf9bcc986f6, type: 3}
   - HintCardID: 8
-    Sprite: {fileID: 21300000, guid: b52e82b8c175c4e90a43119efae8677a, type: 3}
+    Sprite: {fileID: 21300000, guid: 10a5f14ef229e40a19ecccf9bcc986f6, type: 3}
   - HintCardID: 9
-    Sprite: {fileID: 21300000, guid: 5b14dff686707405c85ee6f65c1774b6, type: 3}
+    Sprite: {fileID: 21300000, guid: b52e82b8c175c4e90a43119efae8677a, type: 3}
   - HintCardID: 10
-    Sprite: {fileID: 21300000, guid: 42be2825c5e9b422785919a539caefcf, type: 3}
+    Sprite: {fileID: 21300000, guid: 5b14dff686707405c85ee6f65c1774b6, type: 3}
   - HintCardID: 11
-    Sprite: {fileID: 21300000, guid: 1d7ff540038a440ae975d35f3f55acdb, type: 3}
+    Sprite: {fileID: 21300000, guid: 42be2825c5e9b422785919a539caefcf, type: 3}
   - HintCardID: 12
+    Sprite: {fileID: 21300000, guid: 1d7ff540038a440ae975d35f3f55acdb, type: 3}
+  - HintCardID: 13
     Sprite: {fileID: 21300000, guid: b8457b435854c438d951d7a262c404e0, type: 3}
   - HintCardID: 14
     Sprite: {fileID: 0}
@@ -35,6 +35,8 @@ MonoBehaviour:
     Sprite: {fileID: 0}
   - HintCardID: 18
     Sprite: {fileID: 0}
+  - HintCardID: 19
+    Sprite: {fileID: 0}
   - HintCardID: 20
     Sprite: {fileID: 0}
   - HintCardID: 21
@@ -42,4 +44,6 @@ MonoBehaviour:
   - HintCardID: 22
     Sprite: {fileID: 0}
   - HintCardID: 23
+    Sprite: {fileID: 0}
+  - HintCardID: 24
     Sprite: {fileID: 0}

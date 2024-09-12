@@ -112,8 +112,6 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     public static async UniTask OnReadQuizTrafficJamHintUniTask()
     {
         Debug.Log("OnReadQuizTrafficJamHintUniTask");
-
-        // フェードアウトして"dog"の画像を表示させる
-        
+        Debug.Log("マウスクリックでスピーカーの再生を検知したことをクライアントに通知できるようになった！"); 
     }
 }

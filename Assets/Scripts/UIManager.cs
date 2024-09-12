@@ -441,4 +441,20 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             SnowParticle.SetActive(false);
         }
     }
+
+    // 渋滞問題が表示されていてかつ、スピーカーがヒントとして読み込まれているとき
+    // dogの画像に変える
+    public void OnActionSirenWhenDisplayTrafficJam()
+    {
+        if( currentDisplayQuestionCard != CardID.Question06_TrafficJam || 
+            currentDisplayHintCard != CardID.Hint06_Speaker)
+        {
+            Debug.LogError($"問題{CardID.Question06_TrafficJam}にて、正答のサイレンが流された時の挙動がリクエストされましたが、"
+                        + "\n正常な問題とヒントが表示されていないため処理を中断します。");
+            return;
+        }
+        
+        // 問題dogを読み込んだ時の挙動を行う
+        DisplayQuestionImageWithProgressBar(CardID.Question06_TrafficJamAfterSiren);
+    }
 }

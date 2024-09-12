@@ -28,60 +28,63 @@ MonoBehaviour:
   - CardID: 4
     CardType: 0
     Uuid: 04-A6-73-2A-02-12-90
-  - CardID: 5
-    CardType: 0
-    Uuid: 04-86-75-2A-02-12-90
   - CardID: 6
     CardType: 0
-    Uuid: 04-B1-6E-2A-02-12-90
+    Uuid: 04-86-75-2A-02-12-90
+  - CardID: 5
+    CardType: 0
+    Uuid: 04-AB-E8-2A-02-12-90
   - CardID: 7
-    CardType: 1
-    Uuid: 04-78-68-E3-78-00-00
+    CardType: 0
+    Uuid: 04-B1-6E-2A-02-12-90
   - CardID: 8
     CardType: 1
-    Uuid: 04-E8-3B-DC-78-00-00
+    Uuid: 04-78-68-E3-78-00-00
   - CardID: 9
     CardType: 1
-    Uuid: 04-D3-85-DD-78-00-00
+    Uuid: 04-E8-3B-DC-78-00-00
   - CardID: 10
     CardType: 1
-    Uuid: 04-54-42-D9-78-00-00
+    Uuid: 04-D3-85-DD-78-00-00
   - CardID: 11
     CardType: 1
-    Uuid: 04-24-8A-DD-78-00-00
+    Uuid: 04-54-42-D9-78-00-00
   - CardID: 12
     CardType: 1
-    Uuid: 04-97-C4-D9-78-00-00
+    Uuid: 04-24-8A-DD-78-00-00
   - CardID: 13
     CardType: 1
-    Uuid: 04-46-BB-E2-78-00-00
+    Uuid: 04-97-C4-D9-78-00-00
   - CardID: 14
     CardType: 1
-    Uuid: 04-92-31-DD-78-00-00
+    Uuid: 04-46-BB-E2-78-00-00
   - CardID: 15
     CardType: 1
-    Uuid: 04-39-84-DA-78-00-00
+    Uuid: 04-92-31-DD-78-00-00
   - CardID: 16
     CardType: 1
-    Uuid: 04-1F-F9-E1-78-00-00
+    Uuid: 04-39-84-DA-78-00-00
   - CardID: 17
     CardType: 1
-    Uuid: 04-4F-16-DE-78-00-00
+    Uuid: 04-1F-F9-E1-78-00-00
   - CardID: 18
     CardType: 1
-    Uuid: 04-12-7C-E2-78-00-00
+    Uuid: 04-4F-16-DE-78-00-00
   - CardID: 19
     CardType: 1
-    Uuid: 04-BB-1C-DC-78-00-00
+    Uuid: 04-12-7C-E2-78-00-00
   - CardID: 20
     CardType: 1
-    Uuid: 04-1A-73-E2-78-00-00
+    Uuid: 04-BB-1C-DC-78-00-00
   - CardID: 21
     CardType: 1
-    Uuid: 04-8F-61-E0-78-00-00
+    Uuid: 04-1A-73-E2-78-00-00
   - CardID: 22
     CardType: 1
-    Uuid: 04-79-2C-DB-78-00-00
+    Uuid: 04-8F-61-E0-78-00-00
   - CardID: 23
+    CardType: 1
+    Uuid: 04-79-2C-DB-78-00-00
+  - CardID: 24
     CardType: 1
     Uuid: 04-3C-8A-DB-78-00-00

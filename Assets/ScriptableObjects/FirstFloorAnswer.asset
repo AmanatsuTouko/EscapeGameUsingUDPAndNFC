@@ -14,14 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnswerPairs:
   - QuizCardID: 0
-    HintCardID: 7
-    AnswerCardID: 14
+    HintCardID: 8
+    AnswerCardID: 15
     Sprite: {fileID: 0}
   - QuizCardID: 2
-    HintCardID: 9
-    AnswerCardID: 16
-    Sprite: {fileID: 0}
-  - QuizCardID: 6
-    HintCardID: 13
-    AnswerCardID: 19
+    HintCardID: 10
+    AnswerCardID: 17
     Sprite: {fileID: 0}

@@ -7,6 +7,7 @@ public enum CardID
     Question03_Snow,
     Question04_Loop,
     Question05_Bug,
+    Question06_TrafficJamAfterSiren,
     Question06_TrafficJam,
     Question07_FinalQuestion,
 

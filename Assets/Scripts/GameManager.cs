@@ -36,6 +36,12 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         {
             DisableQuizPanel();
         }
+
+        // マウスクリックでスピーカーが起動した処理を行う
+        if(Input.GetMouseButtonDown(0))
+        {
+            UIManager.Instance.OnActionSirenWhenDisplayTrafficJam();
+        }
     }
 
     public void OnRead(string uuid)
