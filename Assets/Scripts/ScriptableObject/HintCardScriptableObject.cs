@@ -103,5 +103,11 @@ public class HintCardScriptableObject : ScriptableObject
         Debug.Log("OnReadQuizTrafficJamHint");
         StaticMethodsOnHintRead.OnReadQuizTrafficJamHintUniTask().Forget();
     }
+
+    public void OnReadSirenHintTrafficJam()
+    {
+        Debug.Log("OnReadSirenHintTrafficJam");
+        StaticMethodsOnHintRead.OnReadSirenHintTafficJamUniTask().Forget();
+    }
 }
 

@@ -35,4 +35,8 @@ public enum CardID
     HintDummy_Grass,
     HintDummy_Pumpkin,
     HintDummy_SandClock,
+
+    // 渋滞クイズのために追加
+    // スピーカー設置後にサイレンを鳴らしたことを検知した場合に、特殊なヒントカードを読み込んだこととする
+    Hint06_Siren
 }

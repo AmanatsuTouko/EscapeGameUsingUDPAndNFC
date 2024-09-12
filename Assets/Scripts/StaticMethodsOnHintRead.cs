@@ -114,4 +114,11 @@ public class StaticMethodsOnHintRead : MonoBehaviour
         Debug.Log("OnReadQuizTrafficJamHintUniTask");
         Debug.Log("マウスクリックでスピーカーの再生を検知したことをクライアントに通知できるようになった！"); 
     }
+
+    public static async UniTask OnReadSirenHintTafficJamUniTask()
+    {
+        Debug.Log("フェードアウトしながらdogを表示する");
+
+        
+    }
 }

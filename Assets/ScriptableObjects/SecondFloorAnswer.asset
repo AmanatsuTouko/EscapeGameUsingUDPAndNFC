@@ -21,7 +21,7 @@ MonoBehaviour:
     HintCardID: 12
     AnswerCardID: 18
     Sprite: {fileID: 0}
-  - QuizCardID: 5
-    HintCardID: 13
+  - QuizCardID: 6
+    HintCardID: 25
     AnswerCardID: 19
     Sprite: {fileID: 0}

@@ -453,8 +453,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                         + "\n正常な問題とヒントが表示されていないため処理を中断します。");
             return;
         }
-        
-        // 問題dogを読み込んだ時の挙動を行う
-        DisplayQuestionImageWithProgressBar(CardID.Question06_TrafficJamAfterSiren);
+
+        // 特殊なヒントカード Hint06_Sirenを読み込んだこととして
+        // 固有メソッドでフェードアウトしながらdogに変更する
+        DisplayQuestionImageWithProgressBar(CardID.Hint06_Siren);
     }
 }

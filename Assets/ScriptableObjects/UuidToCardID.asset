@@ -31,9 +31,6 @@ MonoBehaviour:
   - CardID: 6
     CardType: 0
     Uuid: 04-86-75-2A-02-12-90
-  - CardID: 5
-    CardType: 0
-    Uuid: 04-AB-E8-2A-02-12-90
   - CardID: 7
     CardType: 0
     Uuid: 04-B1-6E-2A-02-12-90
@@ -55,6 +52,9 @@ MonoBehaviour:
   - CardID: 13
     CardType: 1
     Uuid: 04-97-C4-D9-78-00-00
+  - CardID: 25
+    CardType: 1
+    Uuid: 04-AB-E8-2A-02-12-90
   - CardID: 14
     CardType: 1
     Uuid: 04-46-BB-E2-78-00-00

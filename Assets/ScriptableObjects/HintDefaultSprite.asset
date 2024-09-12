@@ -25,6 +25,8 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: 1d7ff540038a440ae975d35f3f55acdb, type: 3}
   - HintCardID: 13
     Sprite: {fileID: 21300000, guid: b8457b435854c438d951d7a262c404e0, type: 3}
+  - HintCardID: 25
+    Sprite: {fileID: 0}
   - HintCardID: 14
     Sprite: {fileID: 0}
   - HintCardID: 15
