@@ -8,29 +8,32 @@ public class DebugInput : MonoBehaviour
     // テスト用に送受信するUUIDのインデックス
     public CardID TestCardID;
 
-#if UNITY_EDITOR
-    void Update()
+    // NFCカードを読み込んだ際の挙動をデバッグする
+    public void Read()
     {
-        // NFCカードを読み込んだ際の挙動をデバッグする(R:Readの略)
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log($"デバッグ：NFCカード{TestCardID}を読み込んだ際の挙動");
-            GameManager.Instance.OnRead(GetUUIDFromCardID(TestCardID));
-        }
+        Debug.Log($"デバッグ：NFCカード{TestCardID}を読み込んだ際の挙動");
+        GameManager.Instance.OnRead(GetUUIDFromCardID(TestCardID));
+    }
 
-        // NFCカードを読み込んだ後のUDP送信をデバッグする(S:Sendの略)
-        if(Input.GetKeyDown(KeyCode.S))
-        {
-            Debug.Log($"デバッグ：NFCカード{TestCardID}を読み込んで他クライアントに送信する際の挙動");
-            GameManager.Instance.DisplayImageOnRemoteClientFromUUID(GetUUIDFromCardID(TestCardID));
-        }
+    // NFCカードを読み込んだ後のUDP送信をデバッグする
+    public void SendReadedCard()
+    {
+        Debug.Log($"デバッグ：NFCカード{TestCardID}を読み込んで他クライアントに送信する際の挙動");
+        GameManager.Instance.DisplayImageOnRemoteClientFromUUID(GetUUIDFromCardID(TestCardID));
+    }
+    
+    // 別クライアントから送信されたきた時をデバッグする
+    public void RecieveReadedCard()
+    {
+        Debug.Log($"デバッグ：NFCカード{TestCardID}が他クライアントから送信されてきた際の挙動");
+        RPCStaticMethods.DisplayQuestionImage(GetUUIDFromCardID(TestCardID));
+    }
 
-        // 別クライアントから送信されたきた時をデバッグする(M:Messageの略)
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log($"デバッグ：NFCカード{TestCardID}が他クライアントから送信されてきた際の挙動");
-            RPCStaticMethods.DisplayQuestionImage(GetUUIDFromCardID(TestCardID));
-        }
+    // クイズカードをクリアした時をデバッグする
+    public void ClearQuiz()
+    {
+        PhaseManager.Instance.QuizClear(TestCardID);
+        // GameManager.Instance.QuizClearOnRemoteClient(TestCardID);
     }
 
     private string GetUUIDFromCardID(CardID cardID)
@@ -43,6 +46,4 @@ public class DebugInput : MonoBehaviour
         }
         return (string)uuid;
     }
-
-#endif
 }

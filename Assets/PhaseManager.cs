@@ -52,6 +52,8 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
     [SerializeField]
     Sprite lockedSpriteBlue;
 
+    public bool[] IsClearQuizIndex = new bool[6];
+
     void Start()
     {
         // クイズの残り数の初期化とUIの更新
@@ -74,25 +76,34 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         // どのクライアントが担当しているクイズかどうかを判別して、残りクイズ数を減少させる
         if(DataBase.Instance.IsExistQuiz(cardID, Client.FirstFloor))
         {
-            firstFloorRemainQuiz -= 1;
+            if(IsClearQuizIndex[(int)cardID] == false)
+            {
+                firstFloorRemainQuiz -= 1;
+                IsClearQuizIndex[(int)cardID] = true;
+            }
         }
         else if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
         {
-            secondFloorRemainQuiz -= 1;
+            if(IsClearQuizIndex[(int)cardID] == false)
+            {
+                secondFloorRemainQuiz -= 1;
+                IsClearQuizIndex[(int)cardID] = true;
+            }
         }
         else
         {
             Debug.LogError($"エラー：クイズとして登録されていないCardID{cardID}のクリア通知を受信しました。");
             return;
         }
-        // UIの更新
-        UpdateLockedQuizUI();
-
+        
         // 残りクイズ数がどのクライアントも0になった場合はフェーズクリア
         if(firstFloorRemainQuiz == 0 && SecondFloorRemainQuiz == 0)
         {
             PhaseClear();
         }
+
+        // UIの更新
+        UpdateLockedQuizUI();
     }
 
     public void PhasePanelSetActive(bool active)
