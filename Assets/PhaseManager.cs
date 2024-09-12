@@ -13,6 +13,7 @@ public enum Phase
 
 public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 {
+    [Header("Phase Detail")]
     [SerializeField]
     private Phase phase;    
     public Phase Phase
@@ -37,6 +38,9 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         private set { secondFloorRemainQuiz = value; }
     }
 
+    [Header("UI Component")]
+    [SerializeField]
+    GameObject PhasePanel;
     // 鍵のアイコンのUI画像
     [SerializeField]
     List<Image> firstFloorLockImage;
@@ -54,6 +58,15 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         firstFloorRemainQuiz = 1;
         secondFloorRemainQuiz = 1;
         UpdateLockedQuizUI();
+        // クイズ画像の初期化
+        foreach(var image in firstFloorLockImage)
+        {
+            image.sprite = lockedSpriteBlue;
+        }
+        foreach(var image in secondFloorLockImage)
+        {
+            image.sprite = lockedSpriteRed;
+        }
     }
 
     public void QuizClear(CardID cardID)
@@ -63,9 +76,14 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         {
             firstFloorRemainQuiz -= 1;
         }
-        if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
+        else if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
         {
             secondFloorRemainQuiz -= 1;
+        }
+        else
+        {
+            Debug.LogError($"エラー：クイズとして登録されていないCardID{cardID}のクリア通知を受信しました。");
+            return;
         }
         // UIの更新
         UpdateLockedQuizUI();
@@ -75,6 +93,11 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         {
             PhaseClear();
         }
+    }
+
+    public void PhasePanelSetActive(bool active)
+    {
+        PhasePanel.SetActive(active);
     }
 
     private void PhaseClear()

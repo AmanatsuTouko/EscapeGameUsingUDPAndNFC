@@ -114,6 +114,13 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         udpSender.SendMessage(jsonMethod);
     }
 
+    // 別クライアントでクイズのクリア処理を行う
+    public void QuizClearOnRemoteClient(CardID cardID)
+    {
+        string jsonMethod = RPCManager.GetJsonFromMethodArgs(nameof(RPCStaticMethods), nameof(RPCStaticMethods.QuizClear), new string[]{cardID.ToString()});
+        udpSender.SendMessage(jsonMethod);
+    }
+
     // カード読み込み中だった場合には，クイズ画像を非表示にする
     public void DisableQuizPanelIfWhileReadCard()
     {

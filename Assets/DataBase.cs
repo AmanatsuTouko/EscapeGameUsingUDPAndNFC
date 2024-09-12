@@ -105,6 +105,10 @@ public class DataBase : SingletonMonobehaviour<DataBase>
     {
         return cardUUID.GetCardTypeFromCardID(cardID);
     }
+    public CardID? GetCardIDFromAnswer(CardID answer)
+    {
+        return GetAnswer().GetCardIDFromAnswer(answer);
+    }
 
     public void GetHintDefaultPosSize(CardID quiz, out Vector2 pos, out Vector2 size)
     {

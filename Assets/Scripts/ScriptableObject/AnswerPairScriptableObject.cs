@@ -53,6 +53,18 @@ public class AnswerPairScriptableObject : ScriptableObject
         // ImageへSpriteを反映させる
         TargetImage.sprite = sprite;
     }
+
+    public CardID? GetCardIDFromAnswer(CardID answer)
+    {
+        foreach(var pair in AnswerPairs)
+        {
+            if(pair.AnswerCardID == answer)
+            {
+                return pair.QuizCardID;
+            }
+        }
+        return null;
+    }
 }
 
 // 問題カードとヒントカードに対応する解答カードと表示する画像のペア

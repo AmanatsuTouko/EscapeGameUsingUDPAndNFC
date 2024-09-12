@@ -60,19 +60,29 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         return false;
     }
 
-    public void CorrectPerformance(string uuid)
+    public void CorrectPerformance(string answerUUID)
     {
         Debug.LogError("未実装の関数がコールされました。");
 
-        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
-        if(cardID == null)
+        CardID? answer = DataBase.Instance.GetCardIDFromUUID(answerUUID);
+        if(answer == null)
         {
-            Debug.LogError($"正答したカードのUUID:{uuid}は，登録されていないUUIDのため，正答処理を中断します．");
+            Debug.LogError($"正答したカードのUUID:{answerUUID}は，登録されていないUUIDのため，正答処理を中断します．");
+            return;
         }
 
         // 正解！を表示する
 
+
         // CardIDやPhaseに応じて，正答処理を行う
+        CardID? quiz = DataBase.Instance.GetCardIDFromAnswer((CardID)answer);
+        if(quiz == null)
+        {
+            Debug.LogError($"正答したカード:{answer}の問題が定義されていないため、正答処理を中断します。");
+            return;
+        }
+        // PhaseManager.Instance.QuizClear((CardID)cardID);
+        GameManager.Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
 
     // 交通系ICを読み込んだ時に正答だったら処理を行う
