@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(DebugInput))] // 拡張するクラスを指定する
 public class DebugInputEditor : Editor
 {
@@ -36,3 +37,4 @@ public class DebugInputEditor : Editor
         }
     }
 }
+#endif
