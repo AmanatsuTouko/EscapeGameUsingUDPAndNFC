@@ -135,11 +135,14 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // 交通系ICを読み込んだ時に正答だったら処理を行う
     public void CorrectPerformanceOfTransportationICCard()
     {
+        Debug.Log("交通系ICが読み込まれた");
         // 現在、問題4(Loop)が表示されていてかつ、ヒント4(Arrow)が読み込まれた後の画像かどうか
         if (currentDisplayQuestionCard == CardID.Question04_Loop && currentDisplayHintCard == CardID.Hint04_Arrow)
         {
             // 処理を行う
-            Debug.LogError("Suicaを読みこんで正答した際の処理が未実装です。");
+            Debug.LogError("Suicaを読みこんで正答した際の処理");
+            PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
+            GameManager.Instance.QuizClearOnRemoteClient(CardID.Question04_Loop);
         }
     }
 
