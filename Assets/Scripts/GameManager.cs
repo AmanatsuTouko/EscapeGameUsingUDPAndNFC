@@ -138,6 +138,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             {
                 return;
             }
+            // カード読み込みをキャンセルする
+            UIManager.Instance.CancelReadingProgressBar();
             DisableQuizPanel();
         }
     }

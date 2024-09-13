@@ -129,11 +129,6 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         if(IsPhaseProcessing) { return; }
         IsPhaseProcessing = true;
 
-        // 正解！のUIを表示してメイン画面に戻る
-        // このクライアントが担当しているクイズの場合はCorrect!を表示する
-        // フェーズクリアの時間の同期を取るため，このクライアント以外でクリアした際も待機する
-        await UIManager.Instance.DisplayCorrectAndBackMainUniTask(isOwnQuizCorrected);
-
         if (isOwnQuizCorrected)
         {
             Debug.Log("このクライアントでクイズがクリアされました．");
@@ -142,6 +137,25 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         {
             Debug.Log("別のクライアントでクイズがクリアされました．");
         }
+
+        // 同期したいので，別クライアントが正解した際もこのクライアントは裏で実行しておく
+        if(isOwnQuizCorrected)
+        {
+            UIManager.Instance.QuizPanelSetActive(true);
+            UIManager.Instance.QuizPanelComponentSetActive(false, false);
+        }
+        // プログレスバーを動的に変化させる
+        await UIManager.Instance.InCreaseProgressBarUniTask(true, false);
+        if(isOwnQuizCorrected)
+        {
+            UIManager.Instance.QuizPanelSetActive(false);
+            UIManager.Instance.QuizPanelComponentSetActive(false, false);
+        }
+
+        // 正解！のUIを表示してメイン画面に戻る
+        // このクライアントが担当しているクイズの場合はCorrect!を表示する
+        // フェーズクリアの時間の同期を取るため，このクライアント以外でクリアした際も待機する
+        await UIManager.Instance.DisplayCorrectAndBackMainUniTask(isOwnQuizCorrected);
 
         // UIの更新
         UpdateLockedQuizUI();

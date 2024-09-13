@@ -271,10 +271,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     }
 
     // プログレスバーを表示する
-    private async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, bool isDefaultHint)
+    public async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, bool isDefaultHint)
     {
         // クイズの正答かどうか
-        bool isAnswer = false;
+        bool isAnswer = isCorrectQuiz;
 
         // リセット処理
         ProgressBarSlider.value = 0;
@@ -476,8 +476,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // パネルをOFFにする時に，プログレスバーが進行中であればUniTaskのキャンセル処理を行う
         if(active == false)
         {
-            cancellationTokenSource.Cancel();
-            IsUpdatingProgressBar = false;
             // PostProcessの再開
             postProcessVolume.enabled = true;
             // 雪の日表示
@@ -486,6 +484,13 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             currentDisplayQuestionCard = null;
         }
     }
+
+    public void CancelReadingProgressBar()
+    {
+        cancellationTokenSource.Cancel();
+        IsUpdatingProgressBar = false;
+    }
+
     public void QuizPanelComponentSetActive(bool quizImageActive, bool hintImageActive)
     {
         QuizDisplayImage.enabled = quizImageActive;
@@ -558,7 +563,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         {
             // クイズ画面を非表示にする
             QuizPanelSetActive(false);
-        }        
+        }
+
+        postProcessVolume.enabled = true;
 
         // 初期化
         CorrectBGImage.enabled = true;
