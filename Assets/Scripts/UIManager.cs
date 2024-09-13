@@ -121,7 +121,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             PhaseManager.Instance.QuizClear((CardID)quiz);
         }, null);
         
-
         GameManager.Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
 
@@ -486,11 +485,19 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     }
 
     // 正解を表示して，暫く経ったらメイン画面に戻る
-    public async UniTask DisplayCorrectAndBackMainUniTask()
+    public async UniTask DisplayCorrectAndBackMainUniTask(bool isOwnQuizCorrected)
     {
         Debug.Log("正解を表示して，メイン画面に戻る");
         if (IsUpdatingProgressBar) return;
-        IsUpdatingProgressBar = true;        
+        IsUpdatingProgressBar = true;
+
+        // 自分のクイズではない時は，クイズ画面を非表示にしない
+        // クイズを解いている間は別クライアントでの正解を表示しない
+        if(isOwnQuizCorrected)
+        {
+            // クイズ画面を非表示にする
+            QuizPanelSetActive(false);
+        }        
 
         // 初期化
         CorrectBGImage.enabled = true;
@@ -499,15 +506,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         CorrectBGImage.color = color;
         CorrectTexts.SetActive(true);
 
-        Debug.Log("Call");
-
         // 暫く経ったら文字を消去する
         await UniTask.WaitForSeconds(4.0f);
         CorrectTexts.SetActive(false);
 
         // 徐々にフェードアウトする
         await FadeOut(CorrectBGImage, 2.0f, Easing.Ease.InCubic);
-        QuizPanelSetActive(false);
 
         IsUpdatingProgressBar = false;
     }

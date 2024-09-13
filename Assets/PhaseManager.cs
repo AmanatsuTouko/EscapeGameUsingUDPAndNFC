@@ -114,7 +114,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         {
             Debug.LogError($"エラー：クイズとして登録されていないCardID{cardID}のクリア通知を受信しました。");
             return;
-        }        
+        }
 
         // 画面演出を行う
         QuizClearProcessUniTask(isOwnQuizCorrected).Forget();
@@ -123,11 +123,14 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
     // クイズをクリアした時の画面演出操作
     private async UniTask QuizClearProcessUniTask(bool isOwnQuizCorrected)
     {
+        // 正解！のUIを表示してメイン画面に戻る
         // このクライアントが担当しているクイズの場合はCorrect!を表示する
-        if(isOwnQuizCorrected)
+        // フェーズクリアの時間の同期を取るため，このクライアント以外でクリアした際も待機する
+        await UIManager.Instance.DisplayCorrectAndBackMainUniTask(isOwnQuizCorrected);
+
+        if (isOwnQuizCorrected)
         {
-            // 正解！のUIを表示してメイン画面に戻る
-            await UIManager.Instance.DisplayCorrectAndBackMainUniTask();
+            Debug.Log("このクライアントでクイズがクリアされました．");
         }
         else
         {

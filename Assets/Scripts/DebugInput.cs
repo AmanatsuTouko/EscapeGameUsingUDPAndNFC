@@ -33,7 +33,7 @@ public class DebugInput : MonoBehaviour
     public void ClearQuiz()
     {
         PhaseManager.Instance.QuizClear(TestCardID);
-        // GameManager.Instance.QuizClearOnRemoteClient(TestCardID);
+        GameManager.Instance.QuizClearOnRemoteClient(TestCardID);
     }
 
     private string GetUUIDFromCardID(CardID cardID)
