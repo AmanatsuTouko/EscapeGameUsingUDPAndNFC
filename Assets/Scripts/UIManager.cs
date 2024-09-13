@@ -523,16 +523,22 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         if (IsUpdatingProgressBar) return;
         IsUpdatingProgressBar = true;
 
+        // クイズが表示されている場合は非表示にする
+        QuizPanelSetActive(false);
+
         // クリアしたフェーズによって処理を変える
         switch (clearedPhase)
         {
             case Phase.Phase1:
                 Debug.Log("フェーズ1クリア!");
+                
                 break;
+
             case Phase.Phase2:
                 Debug.Log("フェーズ2クリア!");
                 Debug.Log("最終問題の出題!");
                 break;
+
             case Phase.Phase3:
                 Debug.Log("フェーズ3クリア!");
                 break;
