@@ -55,6 +55,9 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 
     public bool[] IsClearQuizIndex = new bool[6];
 
+    // フェーズ演出をしているかどうか
+    public bool IsPhaseProcessing { get; private set; } = false;
+
     void Start()
     {
         // クイズの残り数の初期化とUIの更新
@@ -123,6 +126,9 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
     // クイズをクリアした時の画面演出操作
     private async UniTask QuizClearProcessUniTask(bool isOwnQuizCorrected)
     {
+        if(IsPhaseProcessing) { return; }
+        IsPhaseProcessing = true;
+
         // 正解！のUIを表示してメイン画面に戻る
         // このクライアントが担当しているクイズの場合はCorrect!を表示する
         // フェーズクリアの時間の同期を取るため，このクライアント以外でクリアした際も待機する
@@ -148,6 +154,8 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 
         // UIの更新
         UpdateLockedQuizUI();
+
+        IsPhaseProcessing = false;
     }
 
     private int GetQuizIndex(CardID cardID)

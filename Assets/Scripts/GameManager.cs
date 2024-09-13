@@ -133,6 +133,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         if (UIManager.Instance.IsUpdatingProgressBar)
         {
+            // Phase処理中だった場合は何もしない
+            if(PhaseManager.Instance.IsPhaseProcessing)
+            {
+                return;
+            }
             DisableQuizPanel();
         }
     }
