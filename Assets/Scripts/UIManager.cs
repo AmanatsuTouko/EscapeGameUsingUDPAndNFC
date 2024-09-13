@@ -250,10 +250,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // プログレスバーを動的に変化させる
         // dogを出現させるときはプログレスバーを表示しない
-        if(currentDisplayHintCard != CardID.Hint06_Siren)
-        {
-            await InCreaseProgressBarUniTask(false, isDefaultHint);
-        }
+        await InCreaseProgressBarUniTask(false, isDefaultHint);
+        
 
         // クイズが表示されていないときは、ERROR表示してメイン画面に戻る
         if(currentDisplayQuestionCard == null)
