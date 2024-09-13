@@ -53,7 +53,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
     [SerializeField]
     Sprite lockedSpriteBlue;
 
-    public bool[] IsClearQuizIndex = new bool[6];
+    public bool[] IsClearQuizIndex = new bool[7];
 
     // フェーズ演出をしているかどうか
     public bool IsPhaseProcessing { get; private set; } = false;
@@ -188,6 +188,8 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
                 return 4;
             case CardID.Question06_TrafficJam:
                 return 5;
+            case CardID.Question07_FinalQuestion:
+                return 6;
             // それ以外の場合はエラー値として-1を返す
             default:
                 return -1;
@@ -212,6 +214,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
 
             case Phase.Phase2:
                 phase = Phase.Phase3;
+                firstFloorRemainQuiz = 1;
                 await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase2);
                 break;
 

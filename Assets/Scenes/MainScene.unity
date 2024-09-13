@@ -1478,7 +1478,7 @@ MonoBehaviour:
   - {fileID: 1781949381}
   - {fileID: 867693171}
   allImages: []
-  TimerTextTrans: {fileID: 0}
+  TimerTextTrans: {fileID: 1076510655}
 --- !u!4 &455825254
 Transform:
   m_ObjectHideFlags: 0
@@ -2339,7 +2339,7 @@ MonoBehaviour:
   - {fileID: 1918156866}
   lockedSpriteRed: {fileID: 21300000, guid: 48b2f7b53c4467b41804d43f19252d30, type: 3}
   lockedSpriteBlue: {fileID: 21300000, guid: 151441b317df71244bf4e82e21961325, type: 3}
-  IsClearQuizIndex: 000000000000
+  IsClearQuizIndex: 00000000000000
 --- !u!1 &711165803
 GameObject:
   m_ObjectHideFlags: 0

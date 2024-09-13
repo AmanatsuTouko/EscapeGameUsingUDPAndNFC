@@ -249,7 +249,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
 
         // プログレスバーを動的に変化させる
-        await InCreaseProgressBarUniTask(false, isDefaultHint);
+        // dogを出現させるときはプログレスバーを表示しない
+        if(currentDisplayHintCard != CardID.Hint06_Siren)
+        {
+            await InCreaseProgressBarUniTask(false, isDefaultHint);
+        }
 
         // クイズが表示されていないときは、ERROR表示してメイン画面に戻る
         if(currentDisplayQuestionCard == null)
@@ -606,6 +610,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                 Debug.Log("フェーズ2クリア!");
                 Debug.Log("階段の行き来が可能になる");
                 await Phase2ClearUnitask();
+                // 
                 break;
 
             case Phase.Phase3:
@@ -689,6 +694,9 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
         await FadeOut(PhaseClearMiniMessage, 0.2f, Easing.Ease.InSine);
         await FadeOut(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
+
+        // 最終問題を出題
+        CircleClockQuizManager.Instance.DisplayQuiz();
     }
 
     private async UniTask Phase3ClearUnitask()

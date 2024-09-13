@@ -21,7 +21,7 @@ public class CircleClockQuizManager : SingletonMonobehaviour<CircleClockQuizMana
 
     [SerializeField] private List<Image> allImages;
 
-    [SerializeField] Transform TimerTextTrans;
+    [SerializeField] RectTransform TimerTextTrans;
     private Vector3 initTimerTextPos;
 
     private void Start()
@@ -60,11 +60,11 @@ public class CircleClockQuizManager : SingletonMonobehaviour<CircleClockQuizMana
     {
         if(IsDisplayed())
         {
-            TimerTextTrans.position = new Vector3(0, 200, 0);
+            TimerTextTrans.localPosition = new Vector3(0, 200, 0);
         }
         else
         {
-            TimerTextTrans.position = initTimerTextPos;
+            TimerTextTrans.localPosition = initTimerTextPos;
         }
     }
 

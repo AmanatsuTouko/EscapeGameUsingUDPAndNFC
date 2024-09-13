@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,6 +42,22 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         if(Input.GetMouseButtonDown(2))
         {
             UIManager.Instance.OnActionSirenWhenDisplayTrafficJam();
+        }
+
+        // 最後の問題のクリアを判定する
+        if(Input.GetMouseButton(0) && Input.GetMouseButton(1) && Input.GetMouseButtonDown(2))
+        {
+            if(PhaseManager.Instance.Phase != Phase.Phase3)
+            {
+                return;
+            }
+            
+            // 最後の問題をクリアしたことを送信する
+            PhaseManager.Instance.QuizClear(CardID.Question07_FinalQuestion);
+            QuizClearOnRemoteClient(CardID.Question07_FinalQuestion);
+            
+            // タイマーストップ
+            TimeManager.Instance.Timer.Stop();
         }
     }
 
