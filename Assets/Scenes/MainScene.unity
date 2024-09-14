@@ -1139,7 +1139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.21
+  remoteIpAddress: 192.168.11.15
   remotePort: 50400
 --- !u!114 &368395506
 MonoBehaviour:
@@ -9000,7 +9000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1505526b4ea93fe4ab14fd62b704f25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  client: 0
+  client: 1
   firstFloorQuiz: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
   firstFloorHint: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
   firstFloorAnswer: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
