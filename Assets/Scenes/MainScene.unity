@@ -1029,7 +1029,7 @@ MonoBehaviour:
   postProcessVolume: {fileID: 547987914}
   mainPanel: {fileID: 434963946}
   limitTimeText: {fileID: 1076510656}
-  QuizPanel: {fileID: 0}
+  QuizPanelPrefab: {fileID: 5713830232762603457, guid: 4f89f1a941989a14ebbc7e738e9b6cdc, type: 3}
   ProgressBarPanel: {fileID: 4974817255559147140, guid: 80abaee1690f1cb4ca64a7b06209be57, type: 3}
   CorrectPanelPrefab: {fileID: 8562931107229721747, guid: eb1c7e77816ec2846bb6abd62286e9ab, type: 3}
   PhaseClearBGPanelImage: {fileID: 958163061}
@@ -7662,7 +7662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1505526b4ea93fe4ab14fd62b704f25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  client: 1
+  client: 0
   firstFloorQuiz: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
   firstFloorHint: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
   firstFloorAnswer: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
