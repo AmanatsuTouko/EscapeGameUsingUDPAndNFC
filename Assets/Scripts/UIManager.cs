@@ -38,13 +38,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // 現在読み込んでいるヒントカード
     CardID? currentDisplayHintCard = null;
 
-    [Header("Non Hint Error Panel")]
-    [SerializeField] GameObject NonHintErrorPanel;
-    [SerializeField] Image NonHintErrorPanelBGImage; 
-    [SerializeField] GameObject ErrorTexts;
-    [SerializeField] TextMeshProUGUI ErrorTypeText;
-    [SerializeField] TextMeshProUGUI ErrorMessageText;
-
     [Header("Correct Process")]
     [SerializeField] Image CorrectBGImage;
     [SerializeField] GameObject CorrectTexts;
@@ -65,6 +58,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public Image DogFadeImageForQuizTrafficJam;
 
     private SynchronizationContext mainThreadContext;
+
+    [Header("Non Hint Error Panel")]
+    [SerializeField] GameObject NonHintPanelPrefab;
+
+    [Header("Canvas")]
+    [SerializeField] GameObject Canvas;
     
     private void Start()
     {
@@ -350,37 +349,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // メイン画面に戻る
         QuizPanelSetActive(false);
         
-        // ERROR!
-        // クイズが読み込まれていませんを表示する
-        NonHintErrorPanel.SetActive(true);
-
-        // 文字を点滅させる
-        await UniTask.WaitForSeconds(0.1f);
-        NonHintErrorTextSetActive(false);
-
-        await UniTask.WaitForSeconds(0.2f);
-        NonHintErrorTextSetActive(true);
-
-        await UniTask.WaitForSeconds(0.1f);
-        NonHintErrorTextSetActive(false);
-
-        await UniTask.WaitForSeconds(0.2f);
-        NonHintErrorTextSetActive(true);
-
-        // 2秒待つ
-        await UniTask.WaitForSeconds(2.0f);
-
-        // フェードアウトしながらメイン画面に戻る
-        ErrorTexts.SetActive(false);
-        await FadeOut(NonHintErrorPanelBGImage, 1.0f, Easing.Ease.InQuad);
-        NonHintErrorPanel.SetActive(false);
-
-        // リセット処理
-        ErrorTexts.SetActive(true);
-        NonHintErrorTextSetActive(true);
-        Color color = NonHintErrorPanelBGImage.color;
-        color.a = 1.0f;
-        NonHintErrorPanelBGImage.color = color;
+        // ERROR!クイズが読み込まれていませんを表示する
+        GameObject nonHintPanel = Instantiate(NonHintPanelPrefab, Canvas.transform);
+        await nonHintPanel.GetComponent<NonHintError>().Action();
+        
+        // リセット処理として消去する
+        Destroy(nonHintPanel);
     }
 
     private static async UniTask FadeOut(Image image, float seconds, Easing.Ease ease)
@@ -447,20 +421,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
             color.a = easingMethod(rate);
             text.color = color;
-        }
-    }
-
-    private void NonHintErrorTextSetActive(bool active)
-    {
-        if(active)
-        {
-            ErrorTypeText.alpha = 1;
-            ErrorMessageText.alpha = 1;
-        }
-        else
-        {
-            ErrorTypeText.alpha = 0;
-            ErrorMessageText.alpha = 0;
         }
     }
 
