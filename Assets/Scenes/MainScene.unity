@@ -1258,11 +1258,6 @@ MonoBehaviour:
   ProgressBarSlider: {fileID: 955941483}
   DefaultHintImage: {fileID: 1569583693}
   progressText: {fileID: 1911449741}
-  NonHintErrorPanel: {fileID: 0}
-  NonHintErrorPanelBGImage: {fileID: 0}
-  ErrorTexts: {fileID: 0}
-  ErrorTypeText: {fileID: 0}
-  ErrorMessageText: {fileID: 0}
   CorrectBGImage: {fileID: 1565955429}
   CorrectTexts: {fileID: 97184656}
   PhaseClearBGPanelImage: {fileID: 958163061}

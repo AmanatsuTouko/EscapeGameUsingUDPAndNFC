@@ -38,9 +38,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     // 現在読み込んでいるヒントカード
     CardID? currentDisplayHintCard = null;
 
-    [Header("Correct Process")]
-    [SerializeField] Image CorrectBGImage;
-    [SerializeField] GameObject CorrectTexts;
+    [Header("Correct Panel")]
+    [SerializeField] GameObject CorrectPanelPrefab;
 
     [Header("Phase Clear")]
     [SerializeField] Image PhaseClearBGPanelImage;
@@ -529,19 +528,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         postProcessVolume.enabled = true;
 
-        // 初期化
-        CorrectBGImage.enabled = true;
-        var color = CorrectBGImage.color;
-        color.a = 1.0f;
-        CorrectBGImage.color = color;
-        CorrectTexts.SetActive(true);
-
-        // 暫く経ったら文字を消去する
-        await UniTask.WaitForSeconds(4.0f);
-        CorrectTexts.SetActive(false);
-
-        // 徐々にフェードアウトする
-        await FadeOut(CorrectBGImage, 2.0f, Easing.Ease.InCubic);
+        // Correct!の表示をする
+        GameObject correctPanel = Instantiate(CorrectPanelPrefab, Canvas.transform);
+        await correctPanel.GetComponent<CorrectPanel>().Action();
+        Destroy(correctPanel);
 
         IsUpdatingProgressBar = false;
     }
