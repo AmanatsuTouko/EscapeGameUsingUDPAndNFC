@@ -10,7 +10,7 @@ public class QuizCardScriptableObject : ScriptableObject
     [System.NonSerialized]
     public Image TargetImage;
 
-    private Sprite? GetSpriteFromCardID(CardID cardID)
+    public Sprite GetSpriteFromCardID(CardID cardID)
     {
         foreach(QuizImagePair pair in QuizImagePairs)
         {

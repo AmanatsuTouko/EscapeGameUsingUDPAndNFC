@@ -37,6 +37,18 @@ public class HintCardScriptableObject : ScriptableObject
         return false;
     }
 
+    public Sprite GetSpriteFromCardID(CardID questionCardID, CardID hintCardD)
+    {
+        foreach(QuizHintImagePair pair in QuizHintImagePairs)
+        {
+            if(pair.QuizCardID == questionCardID && pair.HintCardID == hintCardD)
+            {
+                return pair.Sprite;
+            }
+        }
+        return null;
+    }
+
     public void DisplayQuestionImage(CardID questionCardID, CardID hintCardD)
     {
         // nullチェック
@@ -47,15 +59,7 @@ public class HintCardScriptableObject : ScriptableObject
         }
 
         // 対応するクイズとヒントのペアに一致するSpriteを取得
-        Sprite sprite = null;
-        foreach(QuizHintImagePair pair in QuizHintImagePairs)
-        {
-            if(pair.QuizCardID == questionCardID && pair.HintCardID == hintCardD)
-            {
-                sprite = pair.Sprite;
-                break;
-            }
-        }
+        Sprite sprite = GetSpriteFromCardID(questionCardID, hintCardD);
 
         // Spriteのnullチェック
         if (sprite == null)

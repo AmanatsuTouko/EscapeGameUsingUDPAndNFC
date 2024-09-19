@@ -119,14 +119,13 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         // 文字列のUUIDからCardIDに変換する
         CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuidString);
-
         if (cardID == null)
         {
             Debug.LogError($"{uuidString}をCardIDに変換できないため，処理を停止します．");
             return;
         }
         // クイズ画像の表示
-        UIManager.Instance.DisplayQuestionImageWithProgressBar((CardID)cardID);
+        UIManager.Instance.DisplayQuestionImageWithProgressBarUniTask((CardID)cardID).Forget();
     }
 
     // 別クライアントでクイズ画像を非表示にする

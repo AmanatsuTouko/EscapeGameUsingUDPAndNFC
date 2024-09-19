@@ -77,22 +77,6 @@ public class DataBase : SingletonMonobehaviour<DataBase>
         }
     }
 
-    // Imageの参照の設定
-    private void Start()
-    {
-        firstFloorQuiz.TargetImage = UIManager.Instance.QuizDisplayImage;
-        firstFloorHint.TargetImage = UIManager.Instance.QuizDisplayImage;
-        firstFloorAnswer.TargetImage = UIManager.Instance.QuizDisplayImage;
-
-        secondFloorQuiz.TargetImage = UIManager.Instance.QuizDisplayImage;
-        secondFloorHint.TargetImage = UIManager.Instance.QuizDisplayImage;
-        secondFloorAnswer.TargetImage = UIManager.Instance.QuizDisplayImage;
-
-        hintDefaultSprite.TargetImage = UIManager.Instance.DefaultHintImage;
-    }
-
-    // 他のクラスから呼び出す関数
-
     public CardID? GetCardIDFromUUID(string uuid)
     {
         return cardUUID.GetCardIDFromUUID(uuid);
@@ -124,17 +108,17 @@ public class DataBase : SingletonMonobehaviour<DataBase>
         return GetAnswer().IsExistPair(quiz, hint, answer);
     }
 
-    public void DisplayQuiz(CardID cardID)
+    public Sprite GetQuizSprite(CardID cardID)
     {
-        GetQuiz().DisplayQuestionImage(cardID);
+        return GetQuiz().GetSpriteFromCardID(cardID);
     }
-    public void DisplayQuizAddedHint(CardID quiz, CardID hint)
+    public Sprite GetQuizAddedHintSprite(CardID quiz, CardID hint)
     {
-        GetHint().DisplayQuestionImage(quiz, hint);
+        return GetHint().GetSpriteFromCardID(quiz, hint);
     }
-    public void DisplayQuizWrongHint(CardID quiz, CardID wrongHint)
+    public Sprite GetQuizWrongHintSprite(CardID wrongHint)
     {
-        hintDefaultSprite.DisplayIncorrectHintImage(quiz, wrongHint);
+        return hintDefaultSprite.GetSpriteFromCardID( wrongHint);
     }
 
     public void InvokeMethodOnHintDisplay(CardID quiz, CardID hint)

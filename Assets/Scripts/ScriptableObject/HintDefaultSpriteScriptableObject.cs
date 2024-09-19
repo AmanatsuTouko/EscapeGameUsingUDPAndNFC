@@ -10,11 +10,11 @@ public class HintDefaultSpriteScriptableObject : ScriptableObject
     [System.NonSerialized]
     public Image TargetImage;
 
-    private Sprite? GetSpriteFromCardID(CardID cardID)
+    public Sprite GetSpriteFromCardID(CardID hint)
     {
         foreach (HintImagePair pair in HintImagePairs)
         {
-            if (pair.HintCardID == cardID)
+            if (pair.HintCardID == hint)
             {
                 return pair.Sprite;
             }

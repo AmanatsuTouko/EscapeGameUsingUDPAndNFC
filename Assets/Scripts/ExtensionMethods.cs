@@ -73,4 +73,26 @@ public static class ExtensionMethods
             text.color = color;
         }
     }
+
+    // For Slider
+    public static async UniTask EasingSecondsFromTo(
+        this UnityEngine.UI.Slider slider, 
+        float seconds, 
+        float fromValue, 
+        float toValue, 
+        Easing.Ease easing, 
+        System.Threading.CancellationTokenSource cancellationTokenSource
+        )
+    {
+        Func<float, float> easingMethod = Easing.GetEasingMethod(easing);
+        float rate = 0;
+        float sub = toValue - fromValue;
+        while (rate < 1.0f)
+        {
+            await UniTask.Yield(cancellationTokenSource.Token);            
+            rate += Time.deltaTime / seconds;
+            if (rate >= 1.0f) rate = 1.0f;
+            slider.value = fromValue + easingMethod(rate) * sub;
+        }
+    }
 }
