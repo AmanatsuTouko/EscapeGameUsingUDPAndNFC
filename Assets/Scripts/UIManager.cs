@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using System.Threading;
 using UnityEngine.Rendering.PostProcessing;
-using System.Collections.Generic;
 
 public class UIManager : SingletonMonobehaviour<UIManager>
 {
@@ -35,14 +35,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
     [Header("Correct Panel")]
     [SerializeField] GameObject CorrectPanelPrefab;
-
-    [Header("Phase Clear")]
-    [SerializeField] Image PhaseClearBGPanelImage;
-    [SerializeField] TextMeshProUGUI PhaseClearText;
-    [SerializeField] TextMeshProUGUI PhaseClearMiniMessage;
-    [SerializeField] Color Phase1TextColor;
-    [SerializeField] Color Phase2TextColor;
-    [SerializeField] Color Phase3TextColor;
 
     [Header("For Unique Method")]
     [SerializeField] GameObject SnowParticle;
@@ -394,6 +386,8 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         IsUpdatingProgressBar = false;
     }
 
+    [SerializeField] GameObject PhaseClearPanelPrefab;
+
     // フェーズクリア時の演出をする
     public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
     {
@@ -401,75 +395,13 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         if (IsUpdatingProgressBar) return;
         IsUpdatingProgressBar = true;
 
-        // クイズが表示されている場合は非表示にする
-        QuizPanelSetActive(false);
-
-        // クリアしたフェーズによって処理を変える
-        switch (clearedPhase)
-        {
-            case Phase.Phase1:
-                Debug.Log("フェーズ1クリア!");
-                await DisplayTextsOnAnimationUniTask("PHASE1 クリア!", "行動範囲が拡大された", Phase1TextColor);
-                break;
-
-            case Phase.Phase2:
-                Debug.Log("フェーズ2クリア!");
-                // 文字を表示して最終問題を出題
-                await DisplayTextsOnAnimationUniTask("PHASE2 クリア!", "階段の行き来が\n可能になった", Phase2TextColor);
-                CircleClockQuizManager.Instance.DisplayQuiz();
-                break;
-
-            case Phase.Phase3:
-                Debug.Log("フェーズ3クリア!");
-                await DisplayTextsOnAnimationUniTask("脱出成功", "Congratulations!", Phase3TextColor);
-                break;
-        }
+        // Panelを生成して，演出を行う
+        GameObject phaseClearPanelObj = Instantiate(PhaseClearPanelPrefab, Canvas.transform);
+        PhaseClearPanel phaseClearPanel = phaseClearPanelObj.GetComponent<PhaseClearPanel>();
+        await phaseClearPanel.Action(clearedPhase);
+        // 演出終了時にオブジェクトを破棄する
+        Destroy(phaseClearPanelObj);
 
         IsUpdatingProgressBar = false;
-    }
-
-    private async UniTask DisplayTextsOnAnimationUniTask(string mainText, string subText, Color mainTextColor)
-    {
-        // 文字色を変更
-        PhaseClearText.color = mainTextColor;
-        PhaseClearText.text = "";
-        PhaseClearMiniMessage.text = "";
-
-        // BGPanelを徐々に表示
-        await PhaseClearBGPanelImage.FadeIn(1.0f, Easing.Ease.InSine);
-
-        // 文字を点滅しながら出現
-        PhaseClearText.text = mainText;
-        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
-        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
-        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
-        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
-        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
-
-        // 横に流れるようにして，下の文字を表示する
-        await PhaseClearMiniMessage.FadeIn(0.1f, Easing.Ease.InQuad);
-        await AddTextDynamic(PhaseClearMiniMessage, subText);
-
-        await UniTask.WaitForSeconds(5.0f);
-
-        // BGPanelを徐々に非表示
-        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
-        await PhaseClearMiniMessage.FadeOut(0.2f, Easing.Ease.InSine);
-        await PhaseClearBGPanelImage.FadeOut(1.0f, Easing.Ease.InSine);
-    }
-
-    // 流れるようにメッセージを追加する
-    private static async UniTask AddTextDynamic(TextMeshProUGUI textMesh, string addText)
-    {
-        textMesh.text = "";
-        int textLen = addText.Length;
-        int idx = 0;
-        while (idx < textLen)
-        {
-            await UniTask.Yield(PlayerLoopTiming.Update);
-            await UniTask.WaitForSeconds(0.2f);
-            textMesh.text += addText[idx];
-            idx += 1;
-        }
-    }
+    } 
 }
