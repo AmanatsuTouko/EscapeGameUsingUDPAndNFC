@@ -278,7 +278,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         } 
     }
 
-
     // クイズが表示されていないときの演出
     private async UniTask DisplayNonHintError()
     {
@@ -291,73 +290,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         
         // リセット処理として消去する
         Destroy(nonHintPanel);
-    }
-
-    private static async UniTask FadeOut(Image image, float seconds, Easing.Ease ease)
-    {
-        Color color = image.color;
-        Func<float, float> easingMethod = Easing.GetEasingMethod(ease);
-
-        float rate = 0;
-        while (rate < 1.0f)
-        {
-            await UniTask.Yield();
-            rate += Time.deltaTime / seconds;
-            if (rate >= 1.0f) rate = 1.0f;
-
-            color.a = easingMethod(1.0f - rate);
-            image.color = color;
-        }
-    }
-    private static async UniTask FadeOut(TextMeshProUGUI text, float seconds, Easing.Ease ease)
-    {
-        Color color = text.color;
-        Func<float, float> easingMethod = Easing.GetEasingMethod(ease);
-
-        float rate = 0;
-        while (rate < 1.0f)
-        {
-            await UniTask.Yield();
-            rate += Time.deltaTime / seconds;
-            if (rate >= 1.0f) rate = 1.0f;
-
-            color.a = easingMethod(1.0f - rate);
-            text.color = color;
-        }
-    }
-
-    private static async UniTask FadeIn(Image image, float seconds, Easing.Ease ease)
-    {
-        Color color = image.color;
-        Func<float, float> easingMethod = Easing.GetEasingMethod(ease);
-
-        float rate = 0;
-        while (rate < 1.0f)
-        {
-            await UniTask.Yield();
-            rate += Time.deltaTime / seconds;
-            if (rate >= 1.0f) rate = 1.0f;
-
-            color.a = easingMethod(rate);
-            image.color = color;
-        }
-    }
-
-    private static async UniTask FadeIn(TextMeshProUGUI text, float seconds, Easing.Ease ease)
-    {
-        Color color = text.color;
-        Func<float, float> easingMethod = Easing.GetEasingMethod(ease);
-
-        float rate = 0;
-        while (rate < 1.0f)
-        {
-            await UniTask.Yield();
-            rate += Time.deltaTime / seconds;
-            if (rate >= 1.0f) rate = 1.0f;
-
-            color.a = easingMethod(rate);
-            text.color = color;
-        }
     }
 
     // UI要素のON・OFF
@@ -477,53 +409,53 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         {
             case Phase.Phase1:
                 Debug.Log("フェーズ1クリア!");
-                await Phase1ClearUnitask();
+                await DisplayTextsOnAnimationUniTask("PHASE1 クリア!", "行動範囲が拡大された", Phase1TextColor);
                 break;
 
             case Phase.Phase2:
                 Debug.Log("フェーズ2クリア!");
-                Debug.Log("階段の行き来が可能になる");
-                await Phase2ClearUnitask();
-                // 
+                // 文字を表示して最終問題を出題
+                await DisplayTextsOnAnimationUniTask("PHASE2 クリア!", "階段の行き来が\n可能になった", Phase2TextColor);
+                CircleClockQuizManager.Instance.DisplayQuiz();
                 break;
 
             case Phase.Phase3:
                 Debug.Log("フェーズ3クリア!");
-                await Phase3ClearUnitask();
+                await DisplayTextsOnAnimationUniTask("脱出成功", "Congratulations!", Phase3TextColor);
                 break;
         }
-
-        //await UniTask.WaitForSeconds(5.0f);
 
         IsUpdatingProgressBar = false;
     }
 
-    private async UniTask Phase1ClearUnitask()
+    private async UniTask DisplayTextsOnAnimationUniTask(string mainText, string subText, Color mainTextColor)
     {
-        // BGPanelを徐々に表示
-        await FadeIn(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
-
         // 文字色を変更
-        PhaseClearText.color = Phase1TextColor;
+        PhaseClearText.color = mainTextColor;
+        PhaseClearText.text = "";
+        PhaseClearMiniMessage.text = "";
+
+        // BGPanelを徐々に表示
+        await PhaseClearBGPanelImage.FadeIn(1.0f, Easing.Ease.InSine);
 
         // 文字を点滅しながら出現
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
+        PhaseClearText.text = mainText;
+        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
+        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
+        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
+        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
+        await PhaseClearText.FadeIn(0.2f, Easing.Ease.InSine);
 
-        // 横に流れるようにして，行動範囲が拡大されたを表示する
-        PhaseClearMiniMessage.text = "";
-        await FadeIn(PhaseClearMiniMessage, 0.1f, Easing.Ease.InQuad);
-        await AddTextDynamic(PhaseClearMiniMessage, "行動範囲が拡大された");
+        // 横に流れるようにして，下の文字を表示する
+        await PhaseClearMiniMessage.FadeIn(0.1f, Easing.Ease.InQuad);
+        await AddTextDynamic(PhaseClearMiniMessage, subText);
 
         await UniTask.WaitForSeconds(5.0f);
 
         // BGPanelを徐々に非表示
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearMiniMessage, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
+        await PhaseClearText.FadeOut(0.2f, Easing.Ease.InSine);
+        await PhaseClearMiniMessage.FadeOut(0.2f, Easing.Ease.InSine);
+        await PhaseClearBGPanelImage.FadeOut(1.0f, Easing.Ease.InSine);
     }
 
     // 流れるようにメッセージを追加する
@@ -532,73 +464,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         textMesh.text = "";
         int textLen = addText.Length;
         int idx = 0;
-        while(idx < textLen)
+        while (idx < textLen)
         {
             await UniTask.Yield(PlayerLoopTiming.Update);
             await UniTask.WaitForSeconds(0.2f);
             textMesh.text += addText[idx];
             idx += 1;
         }
-    }
-
-    private async UniTask Phase2ClearUnitask()
-    {
-        // BGPanelを徐々に表示
-        await FadeIn(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
-
-        // 文字色を変更
-        PhaseClearText.color = Phase2TextColor;
-        PhaseClearText.text = "PHASE2 クリア!";
-
-        // 文字を点滅しながら出現
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-
-        // 横に流れるようにして，行動範囲が拡大されたを表示する
-        PhaseClearMiniMessage.text = "";
-        await FadeIn(PhaseClearMiniMessage, 0.1f, Easing.Ease.InQuad);
-        await AddTextDynamic(PhaseClearMiniMessage, "階段の行き来が\n可能になった");
-
-        await UniTask.WaitForSeconds(5.0f);
-
-        // BGPanelを徐々に非表示
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearMiniMessage, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
-
-        // 最終問題を出題
-        CircleClockQuizManager.Instance.DisplayQuiz();
-    }
-
-    private async UniTask Phase3ClearUnitask()
-    {
-        // BGPanelを徐々に表示
-        await FadeIn(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
-
-        // 文字色を変更
-        PhaseClearText.color = Phase3TextColor;
-        PhaseClearText.text = "脱出成功";
-
-        // 文字を点滅しながら出現
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeIn(PhaseClearText, 0.2f, Easing.Ease.InSine);
-
-        // 横に流れるようにして，行動範囲が拡大されたを表示する
-        PhaseClearMiniMessage.text = "";
-        await FadeIn(PhaseClearMiniMessage, 0.1f, Easing.Ease.InQuad);
-        await AddTextDynamic(PhaseClearMiniMessage, "Congratulations!");
-
-        await UniTask.WaitForSeconds(5.0f);
-
-        // BGPanelを徐々に非表示
-        await FadeOut(PhaseClearText, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearMiniMessage, 0.2f, Easing.Ease.InSine);
-        await FadeOut(PhaseClearBGPanelImage, 1.0f, Easing.Ease.InSine);
     }
 }
