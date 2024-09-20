@@ -30,9 +30,7 @@ public class QuizPanel : MonoBehaviour, IActivable
         HintImage.sprite = hint;
 
         // 画像を表示する座標とWidthHeightを取得する
-        Vector2 size = Vector2.zero;
-        Vector2 pos = Vector2.zero;
-        DataBase.Instance.GetHintDefaultPosSize(quiz, out pos, out size);
+        DataBase.Instance.GetHintDefaultPosSize(quiz, out Vector2 pos, out Vector2 size);
 
         // ImageのSprite,位置,座標を変更する
         HintImage.sprite = hint;
