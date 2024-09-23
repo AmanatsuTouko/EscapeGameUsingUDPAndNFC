@@ -36,13 +36,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [Header("Correct Panel")]
     [SerializeField] GameObject CorrectPanelPrefab;
 
-    [Header("For Unique Method")]
-    [SerializeField] GameObject SnowParticle;
-    public Image SnowFadeImage;
-    public Image BugImage;
-    public Image KillBugSprayImage;
-    public Image DogFadeImageForQuizTrafficJam;
-
     private SynchronizationContext mainThreadContext;
 
     [Header("Non Hint Error Panel")]
@@ -176,6 +169,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         GameObject quizPanelObj = Instantiate(QuizPanelPrefab, Canvas.transform);
         QuizPanel quizPanel = quizPanelObj.GetComponent<QuizPanel>();
 
+        // 特定の問題の場合，雪を降らせる
+        if(currentDisplayQuestionCard == CardID.Question03_Snow)
+        {
+            quizPanel.StartSnowParticle();
+        }
+
         // カードの種類を取得する
         CardType? cardType = DataBase.Instance.GetCardTypeFromCardID(cardID);        
         switch(cardType)
@@ -263,11 +262,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // PostProcessをOFFにする
         postProcessVolume.enabled = false;
 
-        // 雪を降らせる
-        if(currentDisplayQuestionCard != null)
-        {
-            DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
-        } 
+        //// 雪を降らせる
+        //if(currentDisplayQuestionCard != null)
+        //{
+        //    DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
+        //} 
     }
 
     // クイズが表示されていないときの演出
@@ -296,7 +295,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             // PostProcessの再開
             postProcessVolume.enabled = true;
             // 雪の日表示
-            SnowParticle.SetActive(false);
+            //SnowParticle.SetActive(false);
             // 現在読み込んでいる問題をリセットする
             currentDisplayQuestionCard = null;
         }
@@ -331,18 +330,18 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
     }
 
-    // 指定したカードならば雪を降らせる
-    private void DisplaySnowParticleIfCan(CardID quiz)
-    {
-        if(quiz == CardID.Question03_Snow)
-        {
-            SnowParticle.SetActive(true);
-        }
-        else
-        {
-            SnowParticle.SetActive(false);
-        }
-    }
+    //// 指定したカードならば雪を降らせる
+    //private void DisplaySnowParticleIfCan(CardID quiz)
+    //{
+    //    if(quiz == CardID.Question03_Snow)
+    //    {
+    //        SnowParticle.SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        SnowParticle.SetActive(false);
+    //    }
+    //}
 
     // 渋滞問題が表示されていてかつ、スピーカーがヒントとして読み込まれているとき
     // dogの画像に変える

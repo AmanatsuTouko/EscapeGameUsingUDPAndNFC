@@ -534,9 +534,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BgPanel: {fileID: 4681599647790859616}
+  QuizImage: {fileID: 664192870196861166}
   UniqueProcessPanel: {fileID: 2871538092870375807}
   HintImage: {fileID: 8627234417469497678}
-  QuizImage: {fileID: 664192870196861166}
+  SnowParticlePrefab: {fileID: 1667572811496577732, guid: 8c5207db8ae26492f9da7d028099839e, type: 3}
+  SnowFadeImage: {fileID: 5142765454851518555}
+  BugImage: {fileID: 3334220237745885872}
+  KillBugSprayImage: {fileID: 5845424361856759662}
+  DogFadeImageForQuizTrafficJam: {fileID: 7127723149418152393}
 --- !u!1 &5781363014859557749
 GameObject:
   m_ObjectHideFlags: 0
