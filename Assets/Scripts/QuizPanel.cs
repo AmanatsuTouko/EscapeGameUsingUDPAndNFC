@@ -68,6 +68,6 @@ public class QuizPanel : MonoBehaviour, IActivable
     // 雪が溶けていく様子を演出する
     private async UniTask MeltSnowUniTask()
     {
-        
+        await UniTask.Yield();
     }
 }

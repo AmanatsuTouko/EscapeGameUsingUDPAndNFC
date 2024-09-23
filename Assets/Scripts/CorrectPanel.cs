@@ -12,20 +12,20 @@ public class CorrectPanel : MonoBehaviour, IFadeable, IActivable
 
     public async UniTask FadeIn(float duration, Easing.Ease ease)
     {
-        bgImage.FadeIn(duration, ease);
+        bgImage.FadeIn(duration, ease).Forget();
         foreach(var text in textMeshProUGUIs)
         {
-            text.FadeIn(duration, ease);
+            text.FadeIn(duration, ease).Forget();
         }
         await UniTask.WaitForSeconds(duration);
     }
 
     public async UniTask FadeOut(float duration, Easing.Ease ease)
     {
-        bgImage.FadeOut(duration, ease);
+        bgImage.FadeOut(duration, ease).Forget();
         foreach (var text in textMeshProUGUIs)
         {
-            text.FadeOut(duration, ease);
+            text.FadeOut(duration, ease).Forget();
         }
         await UniTask.WaitForSeconds(duration);
     }

@@ -9,6 +9,7 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     public static async UniTask OnReadQuizSnowHintUniTask()
     {
         Debug.Log("OnReadQuizHintUniTask");
+        await UniTask.Yield();
 
         //Image image = UIManager.Instance.SnowFadeImage;
         //image.enabled = true;
@@ -36,6 +37,7 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     public static async UniTask OnReadQuizBugHintUniTask()
     {
         Debug.Log("OnReadQuizBugHintUniTask");
+        await UniTask.Yield();
         
         // 毛虫, 殺虫剤の画像の表示
         //Image bug = UIManager.Instance.BugImage;
@@ -73,11 +75,13 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     {
         Debug.Log("OnReadQuizTrafficJamHintUniTask");
         Debug.Log("マウスクリックでスピーカーの再生を検知したことをクライアントに通知できるようになった！"); 
+        await UniTask.Yield();
     }
 
     public static async UniTask OnReadSirenHintTafficJamUniTask()
     {
         Debug.Log("フェードアウトしながらdogを表示する");
+        await UniTask.Yield();
 
         //UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
         //Image image = UIManager.Instance.DogFadeImageForQuizTrafficJam;
