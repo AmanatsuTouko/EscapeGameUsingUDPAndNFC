@@ -240,12 +240,13 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         if(active == false)
         {
             // QuizPanelを削除する
-            GameObject quizPanel = GameObject.FindObjectOfType<QuizPanel>().gameObject;
-            Destroy(quizPanel);
+            QuizPanel quizPanel = FindObjectOfType<QuizPanel>();
+            if(quizPanel)
+            {
+                Destroy(quizPanel.gameObject);
+            }
             // PostProcessの再開
             postProcessVolume.enabled = true;
-            // 雪の日表示
-            //SnowParticle.SetActive(false);
             // 現在読み込んでいる問題をリセットする
             currentDisplayQuestionCard = null;
         }
@@ -283,7 +284,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public async UniTask DisplayCorrectAndBackMainUniTask(bool isOwnQuizCorrected)
     {
         Debug.Log("正解を表示して，メイン画面に戻る");
-        if (IsUpdatingProgressBar()) return;
 
         // 自分のクイズではない時は，クイズ画面を非表示にしない
         // クイズを解いている間は別クライアントでの正解を表示しない
@@ -307,7 +307,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
     {
         Debug.Log("フェーズクリア!");
-        if (IsUpdatingProgressBar()) return;
 
         // Panelを生成して，演出を行う
         GameObject phaseClearPanelObj = Instantiate(PhaseClearPanelPrefab, Canvas.transform);
