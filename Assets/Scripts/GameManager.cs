@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
 public class GameManager : SingletonMonobehaviour<GameManager>
 {
@@ -14,6 +15,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // NFCカードの読み込み
     [Header("Read NFC Card")]
     [SerializeField] NFCReader nfcReader;
+
+    private SynchronizationContext mainThreadContext;
 
     private void Start()
     {
@@ -28,6 +31,9 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         // カード読み込み中にカードを離した場合は，読み込み処理を中断する
         nfcReader.ActionOnReleaseCard += DisableQuizPanelIfWhileReadCardOnRemoteClient;
+
+        // メインスレッドのSynchronizationContextを取得
+        mainThreadContext = SynchronizationContext.Current;
     }
 
     private void Update()
@@ -77,7 +83,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         if(isCorrectQuestion)
         {
             // クリアフラグをONにして、演出を追加する、その後メイン画面に戻る
-            UIManager.Instance.CorrectPerformance(uuid);
+            CorrectPerformance(uuid);
         }
         // そうではない場合は、問題カードorヒントカードなので、他クライアントに送信する
         else
@@ -98,7 +104,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 交通系IC読み取り時に実行する関数
     void ActionOnReadTransportationICCard()
     {
-        UIManager.Instance.CorrectPerformanceOfTransportationICCard();
+        CorrectPerformanceOfTransportationICCard();
     }
 
     // 受信した文字列に応じて関数を実行する
@@ -147,7 +153,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // カード読み込み中だった場合には，クイズ画像を非表示にする
     public void DisableQuizPanelIfWhileReadCard()
     {
-        if (UIManager.Instance.IsUpdatingProgressBar)
+        if (UIManager.Instance.IsUpdatingProgressBar())
         {
             // Phase処理中だった場合は何もしない
             if(PhaseManager.Instance.IsPhaseProcessing)
@@ -159,9 +165,52 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             DisableQuizPanel();
         }
     }
+    
     // クイズ画像の非表示
     private void DisableQuizPanel()
     {
         UIManager.Instance.QuizPanelSetActive(false);
+    }
+
+    public void CorrectPerformance(string answerUUID)
+    {
+        Debug.LogError("未実装の関数がコールされました。");
+
+        CardID? answer = DataBase.Instance.GetCardIDFromUUID(answerUUID);
+        if(answer == null)
+        {
+            Debug.LogError($"正答したカードのUUID:{answerUUID}は，登録されていないUUIDのため，正答処理を中断します．");
+            return;
+        }
+
+        // CardIDやPhaseに応じて，正答処理を行う
+        CardID? quiz = DataBase.Instance.GetCardIDFromAnswer((CardID)answer);
+        if(quiz == null)
+        {
+            Debug.LogError($"正答したカード:{answer}の問題が定義されていないため、正答処理を中断します。");
+            return;
+        }
+
+        // メインスレッドに処理を戻して，登録したメソッドを実行する
+        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
+        mainThreadContext.Post(_ =>
+        {
+            PhaseManager.Instance.QuizClear((CardID)quiz);
+        }, null);
+        
+        Instance.QuizClearOnRemoteClient((CardID)quiz);
+    }
+
+    // 交通系ICを読み込んだ時に正答だったら処理を行う
+    public void CorrectPerformanceOfTransportationICCard()
+    {
+        Debug.Log("交通系ICが読み込まれた");
+        if (UIManager.Instance.IsDisplayQuizAndHintForTransportation())
+        {
+            // 処理を行う
+            Debug.LogError("Suicaを読みこんで正答した際の処理");
+            PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
+            QuizClearOnRemoteClient(CardID.Question04_Loop);
+        }
     }
 }

@@ -10,7 +10,6 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     {
         Debug.Log("OnReadQuizHintUniTask");
 
-        UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
         //Image image = UIManager.Instance.SnowFadeImage;
         //image.enabled = true;
 
@@ -32,13 +31,11 @@ public class StaticMethodsOnHintRead : MonoBehaviour
         //}
 
         //image.enabled = false;
-        UIManager.Instance.IsUpdatingProgressBarFromExternal = false;
     }
 
     public static async UniTask OnReadQuizBugHintUniTask()
     {
         Debug.Log("OnReadQuizBugHintUniTask");
-        UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
         
         // 毛虫, 殺虫剤の画像の表示
         //Image bug = UIManager.Instance.BugImage;
@@ -63,7 +60,6 @@ public class StaticMethodsOnHintRead : MonoBehaviour
 
         //bug.enabled = false;
         //spray.enabled = false;
-        UIManager.Instance.IsUpdatingProgressBarFromExternal = false;
     }
 
     private static void ResetAlphaImage(Image image)
@@ -93,6 +89,5 @@ public class StaticMethodsOnHintRead : MonoBehaviour
         //// リセット処理
         //image.enabled = false;
         //ResetAlphaImage(image);
-        UIManager.Instance.IsUpdatingProgressBarFromExternal = false;
     }
 }

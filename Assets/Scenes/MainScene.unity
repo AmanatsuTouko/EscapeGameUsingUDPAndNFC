@@ -864,11 +864,6 @@ MonoBehaviour:
   QuizPanelPrefab: {fileID: 5713830232762603457, guid: 4f89f1a941989a14ebbc7e738e9b6cdc, type: 3}
   ProgressBarPanel: {fileID: 4974817255559147140, guid: 80abaee1690f1cb4ca64a7b06209be57, type: 3}
   CorrectPanelPrefab: {fileID: 8562931107229721747, guid: eb1c7e77816ec2846bb6abd62286e9ab, type: 3}
-  SnowParticle: {fileID: 0}
-  SnowFadeImage: {fileID: 0}
-  BugImage: {fileID: 0}
-  KillBugSprayImage: {fileID: 0}
-  DogFadeImageForQuizTrafficJam: {fileID: 0}
   NonHintPanelPrefab: {fileID: 4235700088001763993, guid: ef7d116cc5da2476598b89a25867db25, type: 3}
   Canvas: {fileID: 711165803}
   PhaseClearPanelPrefab: {fileID: 0}

@@ -144,7 +144,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
             UIManager.Instance.QuizPanelSetActive(true);
         }
         // プログレスバーを動的に変化させる
-        await UIManager.Instance.InCreaseProgressBarUniTask(true, false);
+        await UIManager.Instance.IncreaseProgressBarUniTask(true);
         if(isOwnQuizCorrected)
         {
             UIManager.Instance.QuizPanelSetActive(false);

@@ -23,7 +23,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] GameObject ProgressBarPanel;
 
     // プログレスバーが上昇中かどうか
-    public bool IsUpdatingProgressBar { get; private set; } = false;
+    // public bool IsUpdatingProgressBar { get; private set; } = false;
 
     // UniTaskのキャンセル用トークン
     public CancellationTokenSource cancellationTokenSource { get; private set; }
@@ -36,7 +36,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [Header("Correct Panel")]
     [SerializeField] GameObject CorrectPanelPrefab;
 
-    private SynchronizationContext mainThreadContext;
 
     [Header("Non Hint Error Panel")]
     [SerializeField] GameObject NonHintPanelPrefab;
@@ -52,9 +51,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         // デバッグ時にTokenSourceがnullとなるので初期化だけしておく
         // （カードをスキャンせずに，クリア演出をしようとするとなる）
         InitializeCancellationTokenSource();
-
-        // メインスレッドのSynchronizationContextを取得
-        mainThreadContext = SynchronizationContext.Current;
     }
 
     private void Update()
@@ -77,49 +73,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         return false;
     }
 
-    public void CorrectPerformance(string answerUUID)
-    {
-        Debug.LogError("未実装の関数がコールされました。");
-
-        CardID? answer = DataBase.Instance.GetCardIDFromUUID(answerUUID);
-        if(answer == null)
-        {
-            Debug.LogError($"正答したカードのUUID:{answerUUID}は，登録されていないUUIDのため，正答処理を中断します．");
-            return;
-        }
-
-        // CardIDやPhaseに応じて，正答処理を行う
-        CardID? quiz = DataBase.Instance.GetCardIDFromAnswer((CardID)answer);
-        if(quiz == null)
-        {
-            Debug.LogError($"正答したカード:{answer}の問題が定義されていないため、正答処理を中断します。");
-            return;
-        }
-
-        // メインスレッドで実行しなければならない
-        // メインスレッドに処理を戻して，登録したメソッドを実行する
-        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
-        mainThreadContext.Post(_ =>
-        {
-            PhaseManager.Instance.QuizClear((CardID)quiz);
-        }, null);
-        
-        GameManager.Instance.QuizClearOnRemoteClient((CardID)quiz);
-    }
-
-    // 交通系ICを読み込んだ時に正答だったら処理を行う
-    public void CorrectPerformanceOfTransportationICCard()
-    {
-        Debug.Log("交通系ICが読み込まれた");
-        // 現在、問題4(Loop)が表示されていてかつ、ヒント4(Arrow)が読み込まれた後の画像かどうか
-        if (currentDisplayQuestionCard == CardID.Question04_Loop && currentDisplayHintCard == CardID.Hint04_Arrow)
-        {
-            // 処理を行う
-            Debug.LogError("Suicaを読みこんで正答した際の処理");
-            PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
-            GameManager.Instance.QuizClearOnRemoteClient(CardID.Question04_Loop);
-        }
-    }
+    
 
     // 問題とヒントのNullチェック
     private bool IsValidCurrentQuiz()
@@ -152,18 +106,25 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         cancellationTokenSource = new CancellationTokenSource();
     }
 
+    public bool IsUpdatingProgressBar()
+    {
+        return FindObjectOfType<ProgressBarPanel>() != null;
+    }
+
     public async UniTask DisplayQuestionImageWithProgressBarUniTask(CardID cardID)
     {
         // 読み込み演出の途中で新たに読み込み演出をしないようにする
-        if (IsUpdatingProgressBar)
+        if (IsUpdatingProgressBar())
         {
             return;
         }
-        IsUpdatingProgressBar = true;
+        // 既にQuizPanelがある場合は削除する
+        if(FindObjectOfType<QuizPanel>() is QuizPanel deleteQuizPanel)
+        {
+            Destroy(deleteQuizPanel.gameObject);
+        }
 
         InitializeCancellationTokenSource();
-
-        bool isDefaultHint = false;
 
         // クイズ画像を表示するためのUIの生成
         GameObject quizPanelObj = Instantiate(QuizPanelPrefab, Canvas.transform);
@@ -207,8 +168,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                         // 現在表示している画像の指定の位置にヒント画像を乗せて表示する
                         Sprite sprite = DataBase.Instance.GetQuizWrongHintSprite(cardID);
                         quizPanel.DisplayHint((CardID)currentDisplayQuestionCard, sprite);
-
-                        isDefaultHint = true;
                     }
                     // 現在表示しているヒントの変数を更新する
                     currentDisplayHintCard = cardID;
@@ -218,7 +177,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // プログレスバーを動的に変化させる
         // dogを出現させるときはプログレスバーを表示しない
-        await InCreaseProgressBarUniTask(false, isDefaultHint);
+        await IncreaseProgressBarUniTask(false);
         
         // クイズが表示されていないときは、ERROR表示してメイン画面に戻る
         if(currentDisplayQuestionCard == null)
@@ -235,21 +194,18 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         {
             Debug.LogError($"問題：{currentDisplayQuestionCard}の時にヒント：{currentDisplayQuestionCard}を読み込んだ際の関数が登録されていないので、実行しません。");
         }
-
-        IsUpdatingProgressBar = false;
     }
 
     // プログレスバーを表示する
-    public async UniTask InCreaseProgressBarUniTask(bool isCorrectQuiz, bool isDefaultHint)
+    public async UniTask IncreaseProgressBarUniTask(bool isCorrectQuiz)
     {
-        // クイズの正答かどうか
-        bool isAnswer = isCorrectQuiz;
-
+        // PostProcessをONにする
         postProcessVolume.enabled = true;
 
+        // プログレスバーの生成と動作の実行
         GameObject progressBar = Instantiate(ProgressBarPanel, Canvas.transform);
         ProgressBarPanel progressBarPanel = progressBar.GetComponent<ProgressBarPanel>();
-        if(isAnswer)
+        if(isCorrectQuiz)
         {
             await progressBarPanel.ActionCorrect(cancellationTokenSource);
         }
@@ -261,12 +217,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
 
         // PostProcessをOFFにする
         postProcessVolume.enabled = false;
-
-        //// 雪を降らせる
-        //if(currentDisplayQuestionCard != null)
-        //{
-        //    DisplaySnowParticleIfCan((CardID)currentDisplayQuestionCard);
-        //} 
     }
 
     // クイズが表示されていないときの演出
@@ -304,7 +254,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public void CancelReadingProgressBar()
     {
         cancellationTokenSource.Cancel();
-        IsUpdatingProgressBar = false;
     }
 
     // 時刻の更新
@@ -312,36 +261,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     {
         limitTimeText.text = text;
     }
-
-    // 固有メソッドからプログレスバーのUpdate状態を編集できるようにする
-    // TODO:
-    // ReadOnlyなのを壊してしまうので、他の解決策を模索中
-    // UniTaskの関数をInspectorに登録できれば万事解決なのだけれども
-    // ScriptableObjectに関数を登録するという考えが良くない？
-    public bool IsUpdatingProgressBarFromExternal 
-    {
-        get
-        {
-            return IsUpdatingProgressBar;
-        } 
-        set
-        {
-            IsUpdatingProgressBar = value;
-        }
-    }
-
-    //// 指定したカードならば雪を降らせる
-    //private void DisplaySnowParticleIfCan(CardID quiz)
-    //{
-    //    if(quiz == CardID.Question03_Snow)
-    //    {
-    //        SnowParticle.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        SnowParticle.SetActive(false);
-    //    }
-    //}
 
     // 渋滞問題が表示されていてかつ、スピーカーがヒントとして読み込まれているとき
     // dogの画像に変える
@@ -364,8 +283,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public async UniTask DisplayCorrectAndBackMainUniTask(bool isOwnQuizCorrected)
     {
         Debug.Log("正解を表示して，メイン画面に戻る");
-        if (IsUpdatingProgressBar) return;
-        IsUpdatingProgressBar = true;
+        if (IsUpdatingProgressBar()) return;
 
         // 自分のクイズではない時は，クイズ画面を非表示にしない
         // クイズを解いている間は別クライアントでの正解を表示しない
@@ -381,8 +299,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         GameObject correctPanel = Instantiate(CorrectPanelPrefab, Canvas.transform);
         await correctPanel.GetComponent<CorrectPanel>().Action();
         Destroy(correctPanel);
-
-        IsUpdatingProgressBar = false;
     }
 
     [SerializeField] GameObject PhaseClearPanelPrefab;
@@ -391,8 +307,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
     {
         Debug.Log("フェーズクリア!");
-        if (IsUpdatingProgressBar) return;
-        IsUpdatingProgressBar = true;
+        if (IsUpdatingProgressBar()) return;
 
         // Panelを生成して，演出を行う
         GameObject phaseClearPanelObj = Instantiate(PhaseClearPanelPrefab, Canvas.transform);
@@ -400,7 +315,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         await phaseClearPanel.Action(clearedPhase);
         // 演出終了時にオブジェクトを破棄する
         Destroy(phaseClearPanelObj);
+    }
 
-        IsUpdatingProgressBar = false;
-    } 
+    public bool IsDisplayQuizAndHintForTransportation()
+    {
+        // 現在、問題4(Loop)が表示されていてかつ、ヒント4(Arrow)が読み込まれた後の画像かどうか
+        return currentDisplayQuestionCard == CardID.Question04_Loop && currentDisplayHintCard == CardID.Hint04_Arrow;
+    }
 }
