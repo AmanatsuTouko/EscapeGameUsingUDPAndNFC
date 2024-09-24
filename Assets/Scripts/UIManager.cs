@@ -137,54 +137,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
     }
 
-    // 読み込んだカードが現在読み込んでいる問題の答えかどうか
-    public bool IsCorrectForCurrentQuestion(CardID readCardID)
-    {
-        if(IsValidCurrentQuiz() && IsValidCurrentHint())
-        {
-            return DataBase.Instance.IsCorrectAnswer((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard, readCardID);
-        }
-        Debug.LogError($"読み込んだカード{readCardID}は現在読み込んでいる問題の答えではありません。");
-        return false;
-    }
-
-    // 問題とヒントのNullチェック
-    private bool IsValidCurrentQuiz()
-    {
-        if(currentDisplayQuestionCard == null)
-        {
-            Debug.LogError("エラー：問題が表示されていません。");
-            return false;
-        }
-        return true;
-    }
-    private bool IsValidCurrentHint()
-    {
-        if(currentDisplayHintCard == null)
-        {
-            Debug.LogError("エラー：ヒントが表示されていません。");
-            return false;
-        }
-        return true;
-    }
-
-    // トークンソースを開放して初期化する
-    public void InitializeCancellationTokenSource()
-    {
-        if (cancellationTokenSource != null)
-        {
-            cancellationTokenSource.Dispose();
-        }
-        // CancellationTokenSource を初期化
-        cancellationTokenSource = new CancellationTokenSource();
-    }
-
-    // プログレスバーが表示中かどうか
-    public bool IsDisplayProgressBar()
-    {
-        return FindObjectOfType<ProgressBarPanel>() != null;
-    }
-
     // プログレスバーを表示する
     public async UniTask DisplayProgressBarUniTask(bool isCorrectQuiz)
     {
@@ -222,7 +174,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         Destroy(nonHintPanel);
     }
 
-    // UI要素のON・OFF
+    // クイズ画面を削除してメイン画面に戻す
     public void DeleteQuizPanel()
     {
         // QuizPanelを削除する
@@ -242,15 +194,31 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         currentDisplayHintCard = null;   
     }
 
-    public void CancelReadingProgressBar()
+    // 正解を表示して，暫く経ったらメイン画面に戻る
+    public async UniTask DisplayCorrectAndBackMainUniTask()
     {
-        cancellationTokenSource.Cancel();
+        Debug.Log("正解を表示して，メイン画面に戻る");
+
+        // クイズ画面を非表示にする
+        DeleteQuizPanel();
+        // Correct!の表示をする
+        GameObject correctPanel = Instantiate(CorrectPanelPrefab, Canvas.transform);
+        await correctPanel.GetComponent<CorrectPanel>().Action();
+        // 演出終了時にオブジェクトを破棄する
+        Destroy(correctPanel);
     }
 
-    // 時刻の更新
-    public void SetLimitTimeText(string text)
+    // フェーズクリア時の演出をする
+    public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
     {
-        limitTimeText.text = text;
+        Debug.Log("フェーズクリア!");
+
+        // Panelを生成して，演出を行う
+        GameObject phaseClearPanelObj = Instantiate(PhaseClearPanelPrefab, Canvas.transform);
+        PhaseClearPanel phaseClearPanel = phaseClearPanelObj.GetComponent<PhaseClearPanel>();
+        await phaseClearPanel.Action(clearedPhase);
+        // 演出終了時にオブジェクトを破棄する
+        Destroy(phaseClearPanelObj);
     }
 
     // 渋滞問題が表示されていてかつ、スピーカーがヒントとして読み込まれているとき
@@ -271,32 +239,63 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
     }
 
-    // 正解を表示して，暫く経ったらメイン画面に戻る
-    public async UniTask DisplayCorrectAndBackMainUniTask(bool isOwnQuizCorrected)
+    // 読み込んだカードが現在読み込んでいる問題の答えかどうか
+    public bool IsCorrectForCurrentQuestion(CardID readCardID)
     {
-        Debug.Log("正解を表示して，メイン画面に戻る");
-
-        // クイズ画面を非表示にする
-        DeleteQuizPanel();
-        // Correct!の表示をする
-        GameObject correctPanel = Instantiate(CorrectPanelPrefab, Canvas.transform);
-        await correctPanel.GetComponent<CorrectPanel>().Action();
-        // 演出終了時にオブジェクトを破棄する
-        Destroy(correctPanel);
+        if(IsValidCurrentQuiz() && IsValidCurrentHint())
+        {
+            return DataBase.Instance.IsCorrectAnswer((CardID)currentDisplayQuestionCard, (CardID)currentDisplayHintCard, readCardID);
+        }
+        Debug.LogError($"読み込んだカード{readCardID}は現在読み込んでいる問題の答えではありません。");
+        return false;
     }
 
-
-    // フェーズクリア時の演出をする
-    public async UniTask PhaseClearProcessUniTask(Phase clearedPhase)
+    // トークンソースを開放して初期化する
+    public void InitializeCancellationTokenSource()
     {
-        Debug.Log("フェーズクリア!");
+        if (cancellationTokenSource != null)
+        {
+            cancellationTokenSource.Dispose();
+        }
+        // CancellationTokenSource を初期化
+        cancellationTokenSource = new CancellationTokenSource();
+    }
 
-        // Panelを生成して，演出を行う
-        GameObject phaseClearPanelObj = Instantiate(PhaseClearPanelPrefab, Canvas.transform);
-        PhaseClearPanel phaseClearPanel = phaseClearPanelObj.GetComponent<PhaseClearPanel>();
-        await phaseClearPanel.Action(clearedPhase);
-        // 演出終了時にオブジェクトを破棄する
-        Destroy(phaseClearPanelObj);
+    public void CancelReadingProgressBar()
+    {
+        cancellationTokenSource.Cancel();
+    }
+
+    // 時刻の更新
+    public void SetLimitTimeText(string text)
+    {
+        limitTimeText.text = text;
+    }
+
+    // 問題とヒントのNullチェック
+    private bool IsValidCurrentQuiz()
+    {
+        if(currentDisplayQuestionCard == null)
+        {
+            Debug.LogError("エラー：問題が表示されていません。");
+            return false;
+        }
+        return true;
+    }
+    private bool IsValidCurrentHint()
+    {
+        if(currentDisplayHintCard == null)
+        {
+            Debug.LogError("エラー：ヒントが表示されていません。");
+            return false;
+        }
+        return true;
+    }
+
+    // プログレスバーが表示中かどうか
+    public bool IsDisplayProgressBar()
+    {
+        return FindObjectOfType<ProgressBarPanel>() != null;
     }
 
     public bool IsCurrentQuizSnow()

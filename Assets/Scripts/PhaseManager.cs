@@ -53,7 +53,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
     [SerializeField]
     Sprite lockedSpriteBlue;
 
-    public bool[] IsClearQuizIndex = new bool[7];
+    public bool[] IsClearedQuiz = new bool[7];
 
     // フェーズ演出をしているかどうか
     public bool IsPhaseProcessing { get; private set; } = false;
@@ -63,7 +63,7 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         // クイズの残り数の初期化とUIの更新
         firstFloorRemainQuiz = 1;
         secondFloorRemainQuiz = 1;
-        UpdateLockedQuizUI();
+        UpdateLockIcon();
         // クイズ画像の初期化
         foreach(var image in firstFloorLockImage)
         {
@@ -83,10 +83,10 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         // どのクライアントが担当しているクイズかどうかを判別して、残りクイズ数を減少させる
         if(DataBase.Instance.IsExistQuiz(cardID, Client.FirstFloor))
         {
-            if(IsClearQuizIndex[GetQuizIndex(cardID)] == false)
+            if(IsClearQuizFromCardID(cardID) == false)
             {
                 firstFloorRemainQuiz -= 1;
-                IsClearQuizIndex[GetQuizIndex(cardID)] = true;
+                ClearQuiz(cardID);
             }
             else
             {
@@ -99,10 +99,10 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         }
         else if(DataBase.Instance.IsExistQuiz(cardID, Client.SecondFloor))
         {
-            if(IsClearQuizIndex[GetQuizIndex(cardID)] == false)
+            if(IsClearQuizFromCardID(cardID) == false)
             {
                 secondFloorRemainQuiz -= 1;
-                IsClearQuizIndex[GetQuizIndex(cardID)] = true;
+                ClearQuiz(cardID);
             }
             else
             {
@@ -138,32 +138,49 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
             Debug.Log("別のクライアントでクイズがクリアされました．");
         }
 
-        // 同期したいので，別クライアントが正解した際もこのクライアントは裏で実行しておく
         // プログレスバーを動的に変化させる
         await UIManager.Instance.DisplayProgressBarUniTask(true);
-        if(isOwnQuizCorrected)
-        {
-            UIManager.Instance.DeleteQuizPanel();
-        }
-
         // 正解！のUIを表示してメイン画面に戻る
-        // このクライアントが担当しているクイズの場合はCorrect!を表示する
-        // フェーズクリアの時間の同期を取るため，このクライアント以外でクリアした際も待機する
-        await UIManager.Instance.DisplayCorrectAndBackMainUniTask(isOwnQuizCorrected);
+        await UIManager.Instance.DisplayCorrectAndBackMainUniTask();
 
-        // UIの更新
-        UpdateLockedQuizUI();
+        // UIの更新（鍵のアイコンが減少）
+        UpdateLockIcon();
 
         // 残りクイズ数がどのクライアントも0になった場合はフェーズクリア
         if (firstFloorRemainQuiz == 0 && SecondFloorRemainQuiz == 0)
         {
-            await PhaseClear();
+            await PhaseClearUniTask();
         }
 
         // UIの更新
-        UpdateLockedQuizUI();
+        UpdateLockIcon();
 
         IsPhaseProcessing = false;
+    }
+
+    // フェーズクリア時の動作
+    private async UniTask PhaseClearUniTask()
+    {
+        switch(phase)
+        {
+            case Phase.Phase1:
+                phase = Phase.Phase2;
+                firstFloorRemainQuiz = 2;
+                secondFloorRemainQuiz = 2;
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase1);
+                break;
+
+            case Phase.Phase2:
+                phase = Phase.Phase3;
+                firstFloorRemainQuiz = 1;
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase2);
+                break;
+
+            case Phase.Phase3:
+                phase = Phase.Finish;
+                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase3);
+                break;
+        }
     }
 
     private int GetQuizIndex(CardID cardID)
@@ -190,36 +207,8 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         }
     }
 
-    public void PhasePanelSetActive(bool active)
-    {
-        PhasePanel.SetActive(active);
-    }
-
-    private async UniTask PhaseClear()
-    {
-        switch(phase)
-        {
-            case Phase.Phase1:
-                phase = Phase.Phase2;
-                firstFloorRemainQuiz = 2;
-                secondFloorRemainQuiz = 2;
-                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase1);
-                break;
-
-            case Phase.Phase2:
-                phase = Phase.Phase3;
-                firstFloorRemainQuiz = 1;
-                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase2);
-                break;
-
-            case Phase.Phase3:
-                phase = Phase.Finish;
-                await UIManager.Instance.PhaseClearProcessUniTask(Phase.Phase3);
-                break;
-        }
-    }
-
-    private void UpdateLockedQuizUI()
+    // 鍵のアイコンを更新する
+    private void UpdateLockIcon()
     {
         // クイズの残り数に応じて表示を変える
         foreach(var image in firstFloorLockImage)
@@ -238,5 +227,14 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         {
             secondFloorLockImage[i].enabled = true;
         }
+    }
+
+    private bool IsClearQuizFromCardID(CardID cardID)
+    {
+        return IsClearedQuiz[GetQuizIndex(cardID)];
+    }
+    private void ClearQuiz(CardID cardID)
+    {
+        IsClearedQuiz[GetQuizIndex(cardID)] = true;
     }
 }
