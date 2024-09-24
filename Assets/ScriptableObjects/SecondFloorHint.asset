@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuizHintImagePairs:
   - QuizCardID: 1
-    HintCardID: 9
+    HintCardID: 8
     Sprite: {fileID: 21300000, guid: f172c24ac9b10704b8770cbc20297fd2, type: 3}
     UnityEvent:
       m_PersistentCalls:
         m_Calls: []
   - QuizCardID: 4
-    HintCardID: 12
+    HintCardID: 11
     Sprite: {fileID: 21300000, guid: 5ac958e798525064e9a4394ec004d584, type: 3}
     UnityEvent:
       m_PersistentCalls:
@@ -37,8 +37,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - QuizCardID: 6
-    HintCardID: 13
+  - QuizCardID: 5
+    HintCardID: 12
     Sprite: {fileID: 21300000, guid: 23804ad1b5397ac41812b0ad202ba9dc, type: 3}
     UnityEvent:
       m_PersistentCalls:
@@ -55,8 +55,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - QuizCardID: 6
-    HintCardID: 25
+  - QuizCardID: 5
+    HintCardID: 13
     Sprite: {fileID: 21300000, guid: 6e66098e13cfeb649b54df573886f211, type: 3}
     UnityEvent:
       m_PersistentCalls:

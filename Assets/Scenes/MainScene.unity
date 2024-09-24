@@ -361,6 +361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 346951572}
   - component: {fileID: 346951573}
+  - component: {fileID: 346951574}
   m_Layer: 0
   m_Name: DebugInput(EditorOnly)
   m_TagString: EditorOnly
@@ -396,6 +397,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TestCardID: 0
+--- !u!114 &346951574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346951571}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 865e4300a22b93347bd413831103f723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nfcReader: {fileID: 2006035812}
+  registerTarget: {fileID: 11400000, guid: c9daf9775920c4200bdd11a580502624, type: 2}
+  nextRegister: 0
+  questionCardNum: 7
 --- !u!1 &368395503
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74716d24000bc44398607a5c41448109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remoteIpAddress: 192.168.11.15
+  remoteIpAddress: 192.168.11.20
   remotePort: 50400
   mode: 1
 --- !u!114 &368395506
@@ -1414,7 +1431,7 @@ MonoBehaviour:
   - {fileID: 1918156866}
   lockedSpriteRed: {fileID: 21300000, guid: 48b2f7b53c4467b41804d43f19252d30, type: 3}
   lockedSpriteBlue: {fileID: 21300000, guid: 151441b317df71244bf4e82e21961325, type: 3}
-  IsClearQuizIndex: 00000000000000
+  IsClearedQuiz: 00000000000000
 --- !u!1 &711165803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,7 +2597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1505526b4ea93fe4ab14fd62b704f25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  client: 1
+  client: 0
   firstFloorQuiz: {fileID: 11400000, guid: 02473433692f84da2a032d62c7f5cb19, type: 2}
   firstFloorHint: {fileID: 11400000, guid: 1154284886c5e6847b418557f62614d9, type: 2}
   firstFloorAnswer: {fileID: 11400000, guid: 93b8fdc38844a3a48af8e29d8e62eb14, type: 2}
@@ -3245,12 +3262,12 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 932652307}
   - {fileID: 1731116138}
-  - {fileID: 705124077}
   - {fileID: 1263602273}
+  - {fileID: 368395504}
+  - {fileID: 705124077}
   - {fileID: 547987912}
   - {fileID: 416231084}
   - {fileID: 455825254}
-  - {fileID: 368395504}
   - {fileID: 2006035811}
   - {fileID: 711165807}
   - {fileID: 762052973}

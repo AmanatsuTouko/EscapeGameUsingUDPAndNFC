@@ -41,7 +41,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         // スペースキー入力でクイズ画像を消せるようにする
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            DisableQuizPanel();
+            DisableQuizAndProgressBar();
         }
 
         // マウスホイールクリックでスピーカーが起動した処理を行う
@@ -104,14 +104,20 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 交通系IC読み取り時に実行する関数
     void ActionOnReadTransportationICCard()
     {
-        Debug.Log("交通系ICが読み込まれた");
-        if (UIManager.Instance.IsDisplayQuizAndHintForTransportation())
+        // メインスレッドに処理を戻して，登録したメソッドを実行する
+        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
+        mainThreadContext.Post(_ =>
         {
-            // 処理を行う
-            Debug.LogError("Suicaを読みこんで正答した際の処理");
-            PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
-            QuizClearOnRemoteClient(CardID.Question04_Loop);
-        }
+            Debug.Log("交通系ICが読み込まれた");
+            if (UIManager.Instance.IsDisplayQuizAndHintForTransportation())
+            {
+                // 処理を行う
+                Debug.LogError("Suicaを読みこんで正答した際の処理");
+
+                PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
+                QuizClearOnRemoteClient(CardID.Question04_Loop);
+            }
+        }, null);
     }
 
     // 受信した文字列に応じて関数を実行する
@@ -168,14 +174,15 @@ public class GameManager : SingletonMonobehaviour<GameManager>
                 return;
             }
             // カード読み込みをキャンセルする
-            UIManager.Instance.CancelReadingProgressBar();
-            DisableQuizPanel();
+            DisableQuizAndProgressBar();
         }
     }
     
-    // クイズ画像の非表示
-    private void DisableQuizPanel()
+    // クイズ画像、プログレスバーの非表示
+    private void DisableQuizAndProgressBar()
     {
+        UIManager.Instance.CancelReadingProgressBar();
+        UIManager.Instance.DeleteProgressBar();
         UIManager.Instance.DeleteQuizPanel();
     }
 

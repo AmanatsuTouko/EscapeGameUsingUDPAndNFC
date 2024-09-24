@@ -21,7 +21,7 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: 953e76a6ee9cd2545a0f6140cf3004b9, type: 3}
     HintDefaultPos: {x: 725, y: 21}
     HintDefaultSize: {x: 400, y: 400}
-  - QuizCardID: 6
+  - QuizCardID: 5
     Sprite: {fileID: 21300000, guid: de788e8054f750848bb5eeee9a89bfa6, type: 3}
     HintDefaultPos: {x: -758, y: -401}
     HintDefaultSize: {x: 300, y: 300}

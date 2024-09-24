@@ -1,4 +1,5 @@
 // NFCカードの識別子
+// ScriptableObjectの番号がずれるので、カードIDを追加するときは最下に追加すること
 public enum CardID
 {
     // 問題カード
@@ -7,7 +8,6 @@ public enum CardID
     Question03_Snow,
     Question04_Loop,
     Question05_Bug,
-    NoUse_Question06_TrafficJamAfterSiren,
     Question06_TrafficJam,
     Question07_FinalQuestion,
 
@@ -18,27 +18,20 @@ public enum CardID
     Hint04_Arrow,
     Hint05_KillBugSpray,
     Hint06_Speaker,
-    Hint07_FinalHint,
+    Hint06_Siren, // 渋滞クイズのために追加 スピーカー設置後にサイレンを鳴らしたことを検知した場合に、特殊なヒントカードを読み込んだこととする
 
     // 解答カード
     Answer01_Nuts,
     Answer02_JapaneseAlcohol,
     Answer03_BatteryCharger,
-    // 交通系ICを読み取るのは別の処理となるので、ここでは使用しない
-    // Answer04_SuicaICCard, 
+    Answer04_SuicaICCard, // 交通系ICを読み取るのは別の処理となるので、デバッグ用途でのみ使用
     Answer05_Kokeshi,
     Answer06_Dog,
-    Answer07_FinalAnswer,
 
     // ダミーのヒントカード
     HintDummy_SewingMachine,
     HintDummy_Grass,
     HintDummy_Pumpkin,
     HintDummy_SandClock,
-
-    // 渋滞クイズのために追加
-    // スピーカー設置後にサイレンを鳴らしたことを検知した場合に、特殊なヒントカードを読み込んだこととする
-    Hint06_Siren,
-
     HintDummy_Maid,
 }

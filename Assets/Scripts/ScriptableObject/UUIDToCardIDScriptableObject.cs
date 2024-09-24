@@ -58,6 +58,13 @@ public class UUIDCardID : IEquatable<UUIDCardID>
     public CardType CardType;
     public string Uuid;
 
+    public UUIDCardID(CardID cardID, CardType cardType, string uuid)
+    {
+        this.CardID = cardID;
+        this.CardType = cardType;
+        this.Uuid = uuid;
+    }
+
     public override string ToString()
     {
         return $"UUID:{Uuid}, CardID:{CardID}";

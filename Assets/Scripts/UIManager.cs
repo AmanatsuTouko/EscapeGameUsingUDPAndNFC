@@ -194,6 +194,21 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         currentDisplayHintCard = null;   
     }
 
+    // プログレスバーの停止と削除
+    public void DeleteProgressBar()
+    {
+        // QuizPanelを削除する
+        ProgressBarPanel progressBarPanel = FindObjectOfType<ProgressBarPanel>();
+        if(progressBarPanel)
+        {
+            Destroy(progressBarPanel.gameObject);
+        }
+        else
+        {
+            Debug.LogError("注意：ProgressBarが表示されていないときに、DeleteProgressBar()を実行しています。");
+        }
+    }
+
     // 正解を表示して，暫く経ったらメイン画面に戻る
     public async UniTask DisplayCorrectAndBackMainUniTask()
     {
