@@ -21,6 +21,15 @@ public class QuizPanel : MonoBehaviour, IActivable
     public Image KillBugSprayImage;
     public Image DogFadeImageForQuizTrafficJam;
 
+    private void Start()
+    {
+        // 特定の問題の場合，雪を降らせる
+        if(UIManager.Instance.IsCurrentQuizSnow())
+        {
+            StartSnowParticle();
+        }
+    }
+
     public void SetActive(bool active)
     {
         BgPanel.enabled = active;

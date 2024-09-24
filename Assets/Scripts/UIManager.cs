@@ -65,17 +65,17 @@ public class UIManager : SingletonMonobehaviour<UIManager>
             Destroy(deleteQuizPanel.gameObject);
         }
 
+        // トークンソースの初期化
         InitializeCancellationTokenSource();
+
+        // プログレスバーを動的に変化させる
+        // TODO:
+        // dogを出現させるときはプログレスバーを表示しない
+        await DisplayProgressBarUniTask(false);
 
         // クイズ画像を表示するためのUIの生成
         GameObject quizPanelObj = Instantiate(QuizPanelPrefab, Canvas.transform);
         QuizPanel quizPanel = quizPanelObj.GetComponent<QuizPanel>();
-
-        // 特定の問題の場合，雪を降らせる
-        if(currentDisplayQuestionCard == CardID.Question03_Snow)
-        {
-            quizPanel.StartSnowParticle();
-        }
 
         // カードの種類を取得する
         CardType? cardType = DataBase.Instance.GetCardTypeFromCardID(cardID);        
@@ -115,10 +115,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                 }
                 break;            
         }
-
-        // プログレスバーを動的に変化させる
-        // dogを出現させるときはプログレスバーを表示しない
-        await DisplayProgressBarUniTask(false);
         
         // クイズが表示されていないときは、ERROR表示してメイン画面に戻る
         if(currentDisplayQuestionCard == null)
@@ -133,7 +129,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         }
         else
         {
-            Debug.LogError($"問題：{currentDisplayQuestionCard}の時にヒント：{currentDisplayQuestionCard}を読み込んだ際の関数が登録されていないので、実行しません。");
+            Debug.Log($"問題：{currentDisplayQuestionCard}の時にヒント：{currentDisplayQuestionCard}を読み込んだ際の関数が登録されていないので、実行しません。");
         }
     }
 
@@ -297,6 +293,11 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         await phaseClearPanel.Action(clearedPhase);
         // 演出終了時にオブジェクトを破棄する
         Destroy(phaseClearPanelObj);
+    }
+
+    public bool IsCurrentQuizSnow()
+    {
+        return currentDisplayQuestionCard == CardID.Question03_Snow;
     }
 
     public bool IsDisplayQuizAndHintForTransportation()
