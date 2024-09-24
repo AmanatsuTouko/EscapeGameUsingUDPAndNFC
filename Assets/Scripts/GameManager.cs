@@ -168,12 +168,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         if (UIManager.Instance.IsDisplayProgressBar())
         {
-            // Phase処理中だった場合は何もしない
-            if(PhaseManager.Instance.IsPhaseProcessing)
-            {
-                return;
-            }
-            // カード読み込みをキャンセルする
             DisableQuizAndProgressBar();
         }
     }
@@ -181,6 +175,12 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // クイズ画像、プログレスバーの非表示
     private void DisableQuizAndProgressBar()
     {
+        // Phase処理中だった場合は何もしない
+        if(PhaseManager.Instance.IsPhaseProcessing)
+        {
+            return;
+        }
+        // カード読み込みをキャンセルして、クイズ画像とプログレスバーを非表示にする
         UIManager.Instance.CancelReadingProgressBar();
         UIManager.Instance.DeleteProgressBar();
         UIManager.Instance.DeleteQuizPanel();
