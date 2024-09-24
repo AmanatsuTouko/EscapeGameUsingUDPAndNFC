@@ -27,7 +27,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000}
           m_TargetAssemblyTypeName: HintCardScriptableObject, Assembly-CSharp
-          m_MethodName: OnReadQuizBugHint
+          m_MethodName: OnReadHintBugForBugQuiz
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -45,7 +45,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000}
           m_TargetAssemblyTypeName: HintCardScriptableObject, Assembly-CSharp
-          m_MethodName: OnReadQuizTrafficJamHint
+          m_MethodName: OnReadHintSpeakerForTrafficJamQuiz
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -63,7 +63,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000}
           m_TargetAssemblyTypeName: HintCardScriptableObject, Assembly-CSharp
-          m_MethodName: OnReadSirenHintTrafficJam
+          m_MethodName: OnReadHintSirenForTrafficJamQuiz
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

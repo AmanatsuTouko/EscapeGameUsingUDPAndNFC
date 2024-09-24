@@ -27,8 +27,6 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: b8457b435854c438d951d7a262c404e0, type: 3}
   - HintCardID: 25
     Sprite: {fileID: 0}
-  - HintCardID: 14
-    Sprite: {fileID: 0}
   - HintCardID: 15
     Sprite: {fileID: 21300000, guid: 7433017841cd64e8d975bf6f8bd3d280, type: 3}
   - HintCardID: 16
@@ -39,8 +37,6 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: c8942b70b255540aebff7c52a1508b17, type: 3}
   - HintCardID: 19
     Sprite: {fileID: 21300000, guid: 59b66952b7ab5453b8d669cd4c74c801, type: 3}
-  - HintCardID: 20
-    Sprite: {fileID: 0}
   - HintCardID: 21
     Sprite: {fileID: 21300000, guid: ef58e454b9f2b4a77b75dd45dbc6c944, type: 3}
   - HintCardID: 22

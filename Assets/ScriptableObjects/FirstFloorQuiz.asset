@@ -25,7 +25,3 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: aee62f75115306d4396e71d6e6c82882, type: 3}
     HintDefaultPos: {x: 25, y: 90}
     HintDefaultSize: {x: 350, y: 350}
-  - QuizCardID: 7
-    Sprite: {fileID: 0}
-    HintDefaultPos: {x: 0, y: 0}
-    HintDefaultSize: {x: 0, y: 0}

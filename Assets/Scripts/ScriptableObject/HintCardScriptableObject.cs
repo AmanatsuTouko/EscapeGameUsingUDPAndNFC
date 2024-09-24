@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 // CardIDと表示する画像のPair
 [System.Serializable]
@@ -21,9 +17,6 @@ public class QuizHintImagePair
 public class HintCardScriptableObject : ScriptableObject
 {
     public List<QuizHintImagePair> QuizHintImagePairs;
-
-    [System.NonSerialized]
-    public Image TargetImage;
    
     public bool IsExistQuestionAnswerCardIDPair(CardID questionCardID, CardID hintCardD)
     {
@@ -49,29 +42,6 @@ public class HintCardScriptableObject : ScriptableObject
         return null;
     }
 
-    public void DisplayQuestionImage(CardID questionCardID, CardID hintCardD)
-    {
-        // nullチェック
-        if(TargetImage == null)
-        {
-            Debug.LogError($"Error:Spriteの反映先のImageが登録されていません．");
-            return;
-        }
-
-        // 対応するクイズとヒントのペアに一致するSpriteを取得
-        Sprite sprite = GetSpriteFromCardID(questionCardID, hintCardD);
-
-        // Spriteのnullチェック
-        if (sprite == null)
-        {
-            Debug.LogError($"Error:{questionCardID}の問題のヒントとなる{hintCardD}は設定されていません．");
-            return;
-        }
-
-        // ImageへSpriteを反映させる
-        TargetImage.sprite = sprite;
-    }
-
     public bool InvokeUniqueMethodIfPossible(CardID quizCardID, CardID answerCardD)
     {
          foreach(QuizHintImagePair pair in QuizHintImagePairs)
@@ -90,28 +60,28 @@ public class HintCardScriptableObject : ScriptableObject
 
     // 固有メソッドを呼び出すラッパー
     // 実態はStaticMethodsOnHintReadに記述する
-    public void OnReadQuizSnowHint()
+    public void OnReadHintForSnowQuiz()
     {
-        Debug.Log("OnReadQuizSnowHint");
-        StaticMethodsOnHintRead.OnReadQuizSnowHintUniTask().Forget();
+        Debug.Log("OnReadHintForSnowQuiz");
+        StaticMethodsOnHintRead.OnReadHintForSnowQuizUniTask().Forget();
     }
 
-    public void OnReadQuizBugHint()
+    public void OnReadHintBugForBugQuiz()
     {
-        Debug.Log("OnReadQuizBugHint");
-        StaticMethodsOnHintRead.OnReadQuizBugHintUniTask().Forget();
+        Debug.Log("OnReadHintBugForBugQuiz");
+        StaticMethodsOnHintRead.OnReadHintBugForBugQuizUniTask().Forget();
     }
 
-    public void OnReadQuizTrafficJamHint()
+    public void OnReadHintSpeakerForTrafficJamQuiz()
     {
-        Debug.Log("OnReadQuizTrafficJamHint");
-        StaticMethodsOnHintRead.OnReadQuizTrafficJamHintUniTask().Forget();
+        Debug.Log("OnReadHintSpeakerForTrafficJamQuiz");
+        StaticMethodsOnHintRead.OnReadHintSpeakerForTrafficJamQuizUniTask().Forget();
     }
 
-    public void OnReadSirenHintTrafficJam()
+    public void OnReadHintSirenForTrafficJamQuiz()
     {
-        Debug.Log("OnReadSirenHintTrafficJam");
-        StaticMethodsOnHintRead.OnReadSirenHintTafficJamUniTask().Forget();
+        Debug.Log("OnReadHintSirenForTrafficJamQuiz");
+        StaticMethodsOnHintRead.OnReadHintSirenForTrafficJamQuizUniTask().Forget();
     }
 }
 

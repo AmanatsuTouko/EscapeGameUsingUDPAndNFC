@@ -27,7 +27,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 11400000}
           m_TargetAssemblyTypeName: HintCardScriptableObject, Assembly-CSharp
-          m_MethodName: OnReadQuizSnowHint
+          m_MethodName: OnReadHintForSnowQuiz
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

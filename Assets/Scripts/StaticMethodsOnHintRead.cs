@@ -6,7 +6,7 @@ using System;
 
 public class StaticMethodsOnHintRead : MonoBehaviour
 {
-    public static async UniTask OnReadQuizSnowHintUniTask()
+    public static async UniTask OnReadHintForSnowQuizUniTask()
     {
         Debug.Log("OnReadQuizHintUniTask");
         await UniTask.Yield();
@@ -34,7 +34,7 @@ public class StaticMethodsOnHintRead : MonoBehaviour
         //image.enabled = false;
     }
 
-    public static async UniTask OnReadQuizBugHintUniTask()
+    public static async UniTask OnReadHintBugForBugQuizUniTask()
     {
         Debug.Log("OnReadQuizBugHintUniTask");
         await UniTask.Yield();
@@ -64,21 +64,14 @@ public class StaticMethodsOnHintRead : MonoBehaviour
         //spray.enabled = false;
     }
 
-    private static void ResetAlphaImage(Image image)
-    {
-        Color color = image.color;
-        color.a = 1.0f;
-        image.color = color;
-    }
-
-    public static async UniTask OnReadQuizTrafficJamHintUniTask()
+    public static async UniTask OnReadHintSpeakerForTrafficJamQuizUniTask()
     {
         Debug.Log("OnReadQuizTrafficJamHintUniTask");
         Debug.Log("マウスクリックでスピーカーの再生を検知したことをクライアントに通知できるようになった！"); 
         await UniTask.Yield();
     }
 
-    public static async UniTask OnReadSirenHintTafficJamUniTask()
+    public static async UniTask OnReadHintSirenForTrafficJamQuizUniTask()
     {
         Debug.Log("フェードアウトしながらdogを表示する");
         await UniTask.Yield();

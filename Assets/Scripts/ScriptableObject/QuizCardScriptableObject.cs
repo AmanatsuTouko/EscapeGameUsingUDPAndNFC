@@ -7,9 +7,6 @@ public class QuizCardScriptableObject : ScriptableObject
 {
     public List<QuizImagePair> QuizImagePairs;
 
-    [System.NonSerialized]
-    public Image TargetImage;
-
     public Sprite GetSpriteFromCardID(CardID cardID)
     {
         foreach(QuizImagePair pair in QuizImagePairs)
@@ -20,25 +17,6 @@ public class QuizCardScriptableObject : ScriptableObject
             }
         }
         return null;
-    }
-
-    public void DisplayQuestionImage(CardID cardID)
-    {
-        // nullチェック
-        if(TargetImage == null)
-        {
-            Debug.LogError($"Error:Spriteの反映先のImageが登録されていません．");
-            return;
-        }
-
-        Sprite? sprite = GetSpriteFromCardID(cardID);
-        if(sprite == null)
-        {
-            Debug.LogError($"Error:{cardID}に対応するSpriteがnullか，{cardID}に対応するSpriteが登録されていません．");
-        }
-
-        // ImageへSpriteを反映させる
-        TargetImage.sprite = sprite;
     }
 
     private QuizImagePair GetQuizCard(CardID cardID)
