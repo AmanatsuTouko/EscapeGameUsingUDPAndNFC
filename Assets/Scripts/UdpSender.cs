@@ -11,9 +11,24 @@ public class UdpSender : MonoBehaviour
 
     private UdpClient udpClient;
 
+    // デバッグモードの指定
+    [SerializeField] Mode mode = Mode.Connection;
+
+    public enum Mode
+    {
+        Connection,
+        DebugLoopBack,
+    }
+
     void Start()
     {
         udpClient = new UdpClient();
+
+        // デバッグ時には，自身に送信が返ってくるようにループバックアドレスを用いる
+        if(mode == Mode.Debug_LoopBack)
+        {
+            remoteIpAddress = "127.0.0.1";
+        }
     }
 
     public new void SendMessage(string message)
