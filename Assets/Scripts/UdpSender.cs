@@ -25,7 +25,7 @@ public class UdpSender : MonoBehaviour
         udpClient = new UdpClient();
 
         // デバッグ時には，自身に送信が返ってくるようにループバックアドレスを用いる
-        if(mode == Mode.Debug_LoopBack)
+        if(mode == Mode.DebugLoopBack)
         {
             remoteIpAddress = "127.0.0.1";
         }

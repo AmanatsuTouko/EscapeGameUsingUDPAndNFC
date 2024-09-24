@@ -106,6 +106,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
                     }
                     else
                     {
+                        // 再度Quiz画像を表示する
+                        Sprite nowQuizSprite = DataBase.Instance.GetQuizSprite((CardID)currentDisplayQuestionCard);
+                        quizPanel.DisplayQuiz(nowQuizSprite);
+
                         // 現在表示している画像の指定の位置にヒント画像を乗せて表示する
                         Sprite sprite = DataBase.Instance.GetQuizWrongHintSprite(cardID);
                         quizPanel.DisplayHint((CardID)currentDisplayQuestionCard, sprite);
