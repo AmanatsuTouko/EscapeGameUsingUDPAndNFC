@@ -46,17 +46,15 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     public static async UniTask OnReadHintSirenForTrafficJamQuizUniTask()
     {
         Debug.Log("フェードアウトしながらdogを表示する");
-        await UniTask.Yield();
 
-        //UIManager.Instance.IsUpdatingProgressBarFromExternal = true;
-        //Image image = UIManager.Instance.DogFadeImageForQuizTrafficJam;
-        //image.enabled = true;
-
-        //// 上に重ねたUI画像の透明度を少しずつ下げてフェードアウトさせる
-        //await FadeOut(image, 4.0f, Easing.Ease.InCubic);
-
-        //// リセット処理
-        //image.enabled = false;
-        //ResetAlphaImage(image);
+        QuizPanel quizPanel = FindObjectOfType<QuizPanel>();
+        if (quizPanel)
+        {
+            await quizPanel.DisplayDogUnitask();
+        }
+        else
+        {
+            Debug.LogError($"エラー：QuizPanelが存在しない状態で，渋滞を遷移する演出を実行しようとしています．");
+        }
     }
 }

@@ -78,6 +78,8 @@ public class QuizPanel : MonoBehaviour, IActivable
         Destroy(snow);
     }
 
+    // =======特殊演出=======
+
     // 雪が溶けていく様子を演出する
     public async UniTask MeltSnowUniTask()
     {
@@ -114,5 +116,20 @@ public class QuizPanel : MonoBehaviour, IActivable
         // 毛虫, 殺虫剤の画像の無効化
         BugImage.enabled = false;
         KillBugSprayImage.enabled = false;
+    }
+
+    // 渋滞から遷移してdogに見える車列の表示をする
+    public async UniTask DisplayDogUnitask()
+    {
+        // 画像の有効か
+        DogFadeImageForQuizTrafficJam.enabled = true;
+        DogFadeImageForQuizTrafficJam.SetAlpha(255);
+
+        // 上に重ねた画像の透明度を少しずつ下げてフェードアウトさせる
+        await DogFadeImageForQuizTrafficJam.FadeOut(4.0f, Easing.Ease.InCubic);
+
+        // リセット処理
+        DogFadeImageForQuizTrafficJam.enabled = false;
+        DogFadeImageForQuizTrafficJam.SetAlpha(0);
     }
 }
