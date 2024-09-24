@@ -444,6 +444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   remoteIpAddress: 192.168.11.15
   remotePort: 50400
+  mode: 1
 --- !u!114 &368395506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,15 +859,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fd88eb1c7da3348bf9c987b75b4613, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  postProcessVolume: {fileID: 547987914}
   mainPanel: {fileID: 434963946}
   limitTimeText: {fileID: 1076510656}
-  QuizPanelPrefab: {fileID: 5713830232762603457, guid: 4f89f1a941989a14ebbc7e738e9b6cdc, type: 3}
+  Canvas: {fileID: 711165803}
   ProgressBarPanel: {fileID: 4974817255559147140, guid: 80abaee1690f1cb4ca64a7b06209be57, type: 3}
+  QuizPanelPrefab: {fileID: 5713830232762603457, guid: 4f89f1a941989a14ebbc7e738e9b6cdc, type: 3}
   CorrectPanelPrefab: {fileID: 8562931107229721747, guid: eb1c7e77816ec2846bb6abd62286e9ab, type: 3}
   NonHintPanelPrefab: {fileID: 4235700088001763993, guid: ef7d116cc5da2476598b89a25867db25, type: 3}
-  Canvas: {fileID: 711165803}
   PhaseClearPanelPrefab: {fileID: 213034934937392565, guid: 9711cd45e899343a2935778f20e5dddb, type: 3}
+  postProcessVolume: {fileID: 547987914}
 --- !u!114 &547987914
 MonoBehaviour:
   m_ObjectHideFlags: 0
