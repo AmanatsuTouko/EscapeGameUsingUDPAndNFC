@@ -46,6 +46,7 @@ public class QuizPanel : MonoBehaviour, IActivable
     // ヒント画像の表示
     public void DisplayHint(CardID quiz, Sprite hint)
     {
+        // Spriteの設定
         HintImage.sprite = hint;
 
         // 画像を表示する座標とWidthHeightを取得する
@@ -60,6 +61,9 @@ public class QuizPanel : MonoBehaviour, IActivable
         Vector2 nativeSize = HintImage.rectTransform.sizeDelta;
         float shrinkRate = size.x / nativeSize.x;
         HintImage.rectTransform.sizeDelta *= shrinkRate;
+
+        // Hint画像の有効化
+        HintImage.enabled = true;
     }
 
     // 雪を降らせる
@@ -75,8 +79,40 @@ public class QuizPanel : MonoBehaviour, IActivable
     }
 
     // 雪が溶けていく様子を演出する
-    private async UniTask MeltSnowUniTask()
+    public async UniTask MeltSnowUniTask()
     {
-        await UniTask.Yield();
+        // 雪が溶ける前の画像を有効化する
+        SnowFadeImage.enabled = true;
+        // 上に重ねたUI画像の透明度を少しずつ下げてフェードアウトさせる
+        await SnowFadeImage.FadeOut(4.0f, Easing.Ease.InCubic);
+        // 画像を無効化する
+        SnowFadeImage.enabled = false;
+    }
+
+    // 虫をスプレーで撃退する演出
+    public async UniTask EraseBugUniTask()
+    {
+        // 毛虫の有効化
+        BugImage.enabled = true;
+        KillBugSprayImage.enabled = true;
+
+        // 殺虫剤のみ透明にしておく
+        BugImage.SetAlpha(255);
+        KillBugSprayImage.SetAlpha(0);
+
+        // 殺虫剤画像のフェードイン
+        await KillBugSprayImage.FadeIn(2.0f, Easing.Ease.InCirc);
+        await UniTask.WaitForSeconds(1.0f);
+
+        // 毛虫画像をN秒かけてフェードアウト
+        await BugImage.FadeOut(2.0f, Easing.Ease.InCubic);
+        await UniTask.WaitForSeconds(1.0f);
+
+        // 殺虫剤をN秒かけてフェードアウト
+        await KillBugSprayImage.FadeOut(1.5f, Easing.Ease.OutCubic);
+
+        // 毛虫, 殺虫剤の画像の無効化
+        BugImage.enabled = false;
+        KillBugSprayImage.enabled = false;
     }
 }

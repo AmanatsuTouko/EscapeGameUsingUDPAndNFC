@@ -9,59 +9,31 @@ public class StaticMethodsOnHintRead : MonoBehaviour
     public static async UniTask OnReadHintForSnowQuizUniTask()
     {
         Debug.Log("OnReadQuizHintUniTask");
-        await UniTask.Yield();
 
-        //Image image = UIManager.Instance.SnowFadeImage;
-        //image.enabled = true;
-
-        // 上に重ねたUI画像の透明度を少しずつ下げてフェードアウトさせる
-        
-        //Color color = image.color;
-        //Func<float, float> easingMethod = Easing.GetEasingMethod(Easing.Ease.InCubic);
-
-        //float rate = 0;
-        //float seconds = 4.0f;
-        //while (rate < 1.0f)
-        //{
-        //    await UniTask.Yield();
-        //    rate += Time.deltaTime / seconds;
-        //    if (rate >= 1.0f) rate = 1.0f;
-
-        //    color.a = easingMethod(1.0f - rate);
-        //    image.color = color;
-        //}
-
-        //image.enabled = false;
+        QuizPanel quizPanel = FindObjectOfType<QuizPanel>();
+        if(quizPanel)
+        {
+            await quizPanel.MeltSnowUniTask();
+        }
+        else
+        {
+            Debug.LogError($"エラー：QuizPanelが存在しない状態で，雪が溶ける演出を実行しようとしています．");
+        }
     }
 
     public static async UniTask OnReadHintBugForBugQuizUniTask()
     {
         Debug.Log("OnReadQuizBugHintUniTask");
-        await UniTask.Yield();
-        
-        // 毛虫, 殺虫剤の画像の表示
-        //Image bug = UIManager.Instance.BugImage;
-        //Image spray = UIManager.Instance.KillBugSprayImage;
-        //bug.enabled = true;
-        //spray.enabled = true;
-        //// アルファ値のリセット
-        //ResetAlphaImage(bug);
-        //ResetAlphaImage(spray);
 
-        //// 殺虫剤画像のフェードイン
-        //await FadeIn(spray, 2.0f, Easing.Ease.InCirc);
-        //await UniTask.WaitForSeconds(1.0f);
-
-        //// 毛虫画像をN秒かけてフェードアウト
-        //// (音を鳴らす)
-        //await FadeOut(bug, 2.0f, Easing.Ease.InCubic);
-
-        //await UniTask.WaitForSeconds(1.0f);
-        //// 殺虫剤をN秒かけてフェードアウト
-        //await FadeOut(spray, 1.5f, Easing.Ease.OutCubic);
-
-        //bug.enabled = false;
-        //spray.enabled = false;
+        QuizPanel quizPanel = FindObjectOfType<QuizPanel>();
+        if (quizPanel)
+        {
+            await quizPanel.EraseBugUniTask();
+        }
+        else
+        {
+            Debug.LogError($"エラー：QuizPanelが存在しない状態で，虫をスプレーで消す演出を実行しようとしています．");
+        }
     }
 
     public static async UniTask OnReadHintSpeakerForTrafficJamQuizUniTask()

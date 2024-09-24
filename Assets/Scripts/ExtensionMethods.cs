@@ -39,6 +39,11 @@ public static class ExtensionMethods
             image.color = color;
         }
     }
+    // アルファ値の変更
+    public static void SetAlpha(this UnityEngine.UI.Image image, float alpha)
+    {
+        image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+    }
 
     // For Text
     public static async UniTask FadeIn(this TMPro.TextMeshProUGUI text, float duration, Easing.Ease ease)
