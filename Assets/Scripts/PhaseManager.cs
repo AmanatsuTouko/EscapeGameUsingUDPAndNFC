@@ -139,15 +139,11 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
         }
 
         // 同期したいので，別クライアントが正解した際もこのクライアントは裏で実行しておく
-        if(isOwnQuizCorrected)
-        {
-            UIManager.Instance.QuizPanelSetActive(true);
-        }
         // プログレスバーを動的に変化させる
-        await UIManager.Instance.IncreaseProgressBarUniTask(true);
+        await UIManager.Instance.DisplayProgressBarUniTask(true);
         if(isOwnQuizCorrected)
         {
-            UIManager.Instance.QuizPanelSetActive(false);
+            UIManager.Instance.DeleteQuizPanel();
         }
 
         // 正解！のUIを表示してメイン画面に戻る

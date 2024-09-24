@@ -153,7 +153,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // カード読み込み中だった場合には，クイズ画像を非表示にする
     public void DisableQuizPanelIfWhileReadCard()
     {
-        if (UIManager.Instance.IsUpdatingProgressBar())
+        if (UIManager.Instance.IsDisplayProgressBar())
         {
             // Phase処理中だった場合は何もしない
             if(PhaseManager.Instance.IsPhaseProcessing)
@@ -169,7 +169,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // クイズ画像の非表示
     private void DisableQuizPanel()
     {
-        UIManager.Instance.QuizPanelSetActive(false);
+        UIManager.Instance.DeleteQuizPanel();
     }
 
     public void CorrectPerformance(string answerUUID)
