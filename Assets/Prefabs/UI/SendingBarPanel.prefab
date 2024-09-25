@@ -395,6 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 3602211453217244846}
   textMeshProUGUI: {fileID: 1319291571014521705}
+  fillAreaImage: {fileID: 1362697767705807323}
 --- !u!1 &7841766744546213940
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ public class SendingBarPanel : MonoBehaviour
 {
     [SerializeField] Slider slider;
     [SerializeField] TextMeshProUGUI textMeshProUGUI;
+    [SerializeField] Image fillAreaImage;
 
     // UniTaskのキャンセル用トークン
     public CancellationTokenSource cancellationTokenSource { get; private set; }
@@ -58,6 +59,10 @@ public class SendingBarPanel : MonoBehaviour
         // 送信完了を表示
         textMeshProUGUI.text = "送信完了!";
         await UniTask.Delay(1000);
+
+        // フェードアウトする
+        textMeshProUGUI.FadeOut(1.0f, Easing.Ease.OutExpo).Forget();
+        await fillAreaImage.FadeOut(1.0f, Easing.Ease.OutExpo);
     }
 
     // トークンソースを開放して初期化する

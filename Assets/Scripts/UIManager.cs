@@ -218,7 +218,10 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         await sendingPabel.GetComponent<SendingBarPanel>().ActionOnSend();
 
         // 消去する
-        Destroy(sendingPabel);
+        if(sendingPabel != null)
+        {
+            Destroy(sendingPabel);
+        }
     }
 
     public void DeleteSendingBarPanel()
