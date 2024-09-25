@@ -4,6 +4,7 @@ using System.Linq;
 using PCSC;
 using PCSC.Iso7816;
 using PCSC.Monitoring;
+using System.Threading;
 
 public class NFCReader : MonoBehaviour
 {
@@ -18,7 +19,9 @@ public class NFCReader : MonoBehaviour
     // 交通系ICを読み込んだ時に実行する関数
     public Action ActionOnReadTranspotationICCard;
     public Action ActionOnReleaseCard;
-    
+
+    // カード読み込み時にメインスレッドに処理を戻して実行できるようにする
+    private SynchronizationContext mainThreadContext;    
 
     void Start()
     {
@@ -56,40 +59,48 @@ public class NFCReader : MonoBehaviour
         // カードを読み込んだ時に実行する関数を追加
         monitor.StatusChanged += StatusChanged;
         monitor.Start(mainReaderName);
+
+        // メインスレッドのSynchronizationContextを取得
+        mainThreadContext = SynchronizationContext.Current;
     }
 
     // カードリーダーの状態が変化したときに実行する関数
     private void StatusChanged(object sender, StatusChangeEventArgs args)
     {
-        switch(args.NewState)
+        // メインスレッドに処理を戻して実行する
+        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
+        mainThreadContext.Post(_ =>
         {
-            // カードを認識 or 処理中（データの読み取りや書き込みを行っている可能性がある）
-            case SCRState.Present:
-            case SCRState.Present | SCRState.InUse:
-                Debug.Log($"カードを認識 or 処理中. カードリーダーの状態:{args.NewState}");
-                DoMethodOnScan();
-                break;
+            switch(args.NewState)
+            {
+                // カードを認識 or 処理中（データの読み取りや書き込みを行っている可能性がある）
+                case SCRState.Present:
+                case SCRState.Present | SCRState.InUse:
+                    Debug.Log($"カードを認識 or 処理中. カードリーダーの状態:{args.NewState}");
+                    DoMethodOnScan();
+                    break;
 
-            // カードが物理的にリーダから離れた状態
-            case SCRState.Empty:
-                Debug.Log($"カードを認識しなくなったことを検出．カードリーダーの状態:{args.NewState}");
-                // カードリリース時の関数を実行する
-                if(ActionOnReleaseCard != null)
-                {
-                    ActionOnReleaseCard.Invoke();
-                }
-                break;
-            
-            // カードの認識はされているが，通信が行われていない状態
-            // リーダーがカードと通信を開始するためのリスクエストを送っていない もしくは カードがリクエストに応じていない
-            case SCRState.Present | SCRState.Mute:
-                Debug.Log($"カードを認識＋通信の失敗を検出．カードリーダーの状態:{args.NewState}");
-                break;
+                // カードが物理的にリーダから離れた状態
+                case SCRState.Empty:
+                    Debug.Log($"カードを認識しなくなったことを検出．カードリーダーの状態:{args.NewState}");
+                    // カードリリース時の関数を実行する
+                    if(ActionOnReleaseCard != null)
+                    {
+                        ActionOnReleaseCard.Invoke();
+                    }
+                    break;
+                
+                // カードの認識はされているが，通信が行われていない状態
+                // リーダーがカードと通信を開始するためのリスクエストを送っていない もしくは カードがリクエストに応じていない
+                case SCRState.Present | SCRState.Mute:
+                    Debug.Log($"カードを認識＋通信の失敗を検出．カードリーダーの状態:{args.NewState}");
+                    break;
 
-            default:
-                Debug.LogError($"カードリーダーが設定されていない状態:{args.NewState}を検出.");
-                break;
-        }
+                default:
+                    Debug.LogError($"カードリーダーが設定されていない状態:{args.NewState}を検出.");
+                    break;
+            }
+        }, null);
     }
 
     void DoMethodOnScan()

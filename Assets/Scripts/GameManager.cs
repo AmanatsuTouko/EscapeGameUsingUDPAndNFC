@@ -16,8 +16,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [Header("Read NFC Card")]
     [SerializeField] NFCReader nfcReader;
 
-    private SynchronizationContext mainThreadContext;
-
     private void Start()
     {
         // カード読み取り時に実行する関数を登録する
@@ -31,9 +29,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         // カード読み込み中にカードを離した場合は，読み込み処理を中断する
         nfcReader.ActionOnReleaseCard += OnReleaseCard;
-
-        // メインスレッドのSynchronizationContextを取得
-        mainThreadContext = SynchronizationContext.Current;
     }
 
     private void Update()
@@ -107,20 +102,15 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // 交通系IC読み取り時に実行する関数
     void ActionOnReadTransportationICCard()
     {
-        // メインスレッドに処理を戻して，登録したメソッドを実行する
-        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
-        mainThreadContext.Post(_ =>
+        Debug.Log("交通系ICが読み込まれた");
+        if (UIManager.Instance.IsDisplayQuizAndHintForTransportation())
         {
-            Debug.Log("交通系ICが読み込まれた");
-            if (UIManager.Instance.IsDisplayQuizAndHintForTransportation())
-            {
-                // 処理を行う
-                Debug.LogError("Suicaを読みこんで正答した際の処理");
+            // 処理を行う
+            Debug.LogError("Suicaを読みこんで正答した際の処理");
 
-                PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
-                QuizClearOnRemoteClient(CardID.Question04_Loop);
-            }
-        }, null);
+            PhaseManager.Instance.QuizClear(CardID.Question04_Loop);
+            QuizClearOnRemoteClient(CardID.Question04_Loop);
+        }
     }
 
     // 受信した文字列に応じて関数を実行する
@@ -217,13 +207,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             return;
         }
 
-        // メインスレッドに処理を戻して，登録したメソッドを実行する
-        // (UnityのUI操作などの関数はメインスレッドからしか実行できないため)
-        mainThreadContext.Post(_ =>
-        {
-            PhaseManager.Instance.QuizClear((CardID)quiz);
-        }, null);
-        
+        // クイズのクリアを伝える
+        PhaseManager.Instance.QuizClear((CardID)quiz);
         Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
 }
