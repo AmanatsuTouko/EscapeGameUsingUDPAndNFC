@@ -884,6 +884,7 @@ MonoBehaviour:
   CorrectPanelPrefab: {fileID: 8562931107229721747, guid: eb1c7e77816ec2846bb6abd62286e9ab, type: 3}
   NonHintPanelPrefab: {fileID: 4235700088001763993, guid: ef7d116cc5da2476598b89a25867db25, type: 3}
   PhaseClearPanelPrefab: {fileID: 213034934937392565, guid: 9711cd45e899343a2935778f20e5dddb, type: 3}
+  SendingBarPanelPrefab: {fileID: 6747160733482053211, guid: 4e23c008da306429b911fe6ba83bba46, type: 3}
   postProcessVolume: {fileID: 547987914}
 --- !u!114 &547987914
 MonoBehaviour:

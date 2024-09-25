@@ -30,7 +30,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         udpReceiver.ActionRecieveData += OnRecieveMessage;
 
         // カード読み込み中にカードを離した場合は，読み込み処理を中断する
-        nfcReader.ActionOnReleaseCard += DisableQuizPanelIfWhileReadCardOnRemoteClient;
+        nfcReader.ActionOnReleaseCard += OnReleaseCard;
 
         // メインスレッドのSynchronizationContextを取得
         mainThreadContext = SynchronizationContext.Current;
@@ -41,6 +41,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         // スペースキー入力でクイズ画像を消せるようにする
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // クイズ画像を消す
             DisableQuizAndProgressBar();
         }
 
@@ -88,6 +89,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         // そうではない場合は、問題カードorヒントカードなので、他クライアントに送信する
         else
         {
+            // 送信中のプログレスバーを表示する
+            UIManager.Instance.DisplaySendingBarPanelUniTask().Forget();
             // 問題カードかヒントカードかどうかは他クライアントが判別して処理を行う
             DisplayImageOnRemoteClientFromUUID(uuid);
         }
@@ -131,6 +134,15 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         {
             Debug.LogError("関数として無効な文字列を受信したため，動作を終了しました．");
         }
+    }
+
+    // カード読み込み中にカードを離した場合の処理
+    private void OnReleaseCard()
+    {
+        // 別クライアントでの読み込みを中止する
+        DisableQuizPanelIfWhileReadCardOnRemoteClient();
+        // 自クライアントでの送信中...の表示を中止する
+        UIManager.Instance.DeleteSendingBarPanel();
     }
 
     // 受信した時に実行する関数

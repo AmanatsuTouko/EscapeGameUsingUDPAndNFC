@@ -21,6 +21,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] GameObject CorrectPanelPrefab;
     [SerializeField] GameObject NonHintPanelPrefab;
     [SerializeField] GameObject PhaseClearPanelPrefab;
+    [SerializeField] GameObject SendingBarPanelPrefab;
 
      // PostProcess
     [Header("Post Process")]
@@ -206,6 +207,33 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         else
         {
             Debug.LogError("注意：ProgressBarが表示されていないときに、DeleteProgressBar()を実行しています。");
+        }
+    }
+
+    // 送信中のプログレスバーの表示
+    public async UniTask DisplaySendingBarPanelUniTask()
+    {
+        // 送信中...を表示する
+        GameObject sendingPabel = Instantiate(SendingBarPanelPrefab, Canvas.transform);
+        await sendingPabel.GetComponent<SendingBarPanel>().ActionOnSend();
+
+        // 消去する
+        Destroy(sendingPabel);
+    }
+
+    public void DeleteSendingBarPanel()
+    {
+        SendingBarPanel sendingBarPanel = FindObjectOfType<SendingBarPanel>();
+        if (sendingBarPanel)
+        {
+            // プログレスバーの上昇を止める(UniTaskのキャンセルを行う)
+            sendingBarPanel.CancelProgressBar();
+            // SendingBarPanelを削除する
+            Destroy(sendingBarPanel.gameObject);
+        }
+        else
+        {
+            Debug.LogError("注意：SendingBarPanelが表示されていないときに、 DeleteSendingBarPanel()を実行しています。");
         }
     }
 
