@@ -19,6 +19,13 @@ public class SendingBarPanel : MonoBehaviour
     {
         slider.value = 0;
         textMeshProUGUI.text = "";
+
+        // 同時に2つ以上のSendingBarが存在しないようにする
+        if(FindObjectsOfType<SendingBarPanel>().Length > 1)
+        {
+            Debug.LogError("既にSendingBarが存在しているため、生成せずに削除します。");
+            Destroy(gameObject);
+        }
     }
 
     public void SetActive(bool active)
@@ -59,10 +66,17 @@ public class SendingBarPanel : MonoBehaviour
         // 送信完了を表示
         textMeshProUGUI.text = "送信完了!";
         await UniTask.Delay(1000);
-
+        
         // フェードアウトする
-        textMeshProUGUI.FadeOut(1.0f, Easing.Ease.OutExpo).Forget();
-        await fillAreaImage.FadeOut(1.0f, Easing.Ease.OutExpo);
+        // nullチェックを行うのは、高速にカードを読み取った場合に、SendingBarの削除が間に合わずアクセスし続けてしまう時があり、それを避けるため
+        if(textMeshProUGUI)
+        {
+            textMeshProUGUI.FadeOut(1.0f, Easing.Ease.OutExpo).Forget();
+        }
+        if(fillAreaImage)
+        {
+            await fillAreaImage.FadeOut(1.0f, Easing.Ease.OutExpo);
+        }
     }
 
     // トークンソースを開放して初期化する
