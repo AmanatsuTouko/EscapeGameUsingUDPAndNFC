@@ -19,6 +19,9 @@ MonoBehaviour:
   - QuizCardID: 2
     HintCardID: 9
     AnswerCardID: 16
+  - QuizCardID: 3
+    HintCardID: 10
+    AnswerCardID: 17
   - QuizCardID: 6
     HintCardID: 10
     AnswerCardID: 17
