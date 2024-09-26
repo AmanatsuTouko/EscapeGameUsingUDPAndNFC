@@ -76,7 +76,7 @@ public class CircleClockQuizManager : MonoBehaviour
     {
         if(IsDisplayed())
         {
-            TimerTextTrans.localPosition = new Vector3(0, 200, 0);
+            TimerTextTrans.localPosition = new Vector3(0, 150, 0);
         }
         else
         {
