@@ -119,6 +119,12 @@ public class PhaseManager : SingletonMonobehaviour<PhaseManager>
             return;
         }
 
+        // 最終問題の場合はタイマーストップする
+        if(cardID == CardID.Question07_FinalQuestion)
+        {
+            TimeManager.Instance.Timer.Stop();
+        }
+
         // 画面演出を行う
         QuizClearProcessUniTask(isOwnQuizCorrected).Forget();
     }
