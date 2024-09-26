@@ -37,7 +37,7 @@ public class DebugInputEditor : Editor
         }
 
         GUILayout.Label("Timer Debug");
-        if(GUILayout.Button("SynchronizeTimer"))
+        if(GUILayout.Button("Synchronize Timer"))
         {
             debugInput.SynchronizeTimer();
         }
