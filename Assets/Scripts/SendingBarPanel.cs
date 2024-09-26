@@ -65,6 +65,9 @@ public class SendingBarPanel : MonoBehaviour
 
         // 送信完了を表示
         textMeshProUGUI.text = "送信完了!";
+        // 送信完了音を鳴らす
+        SoundManager.Instance.PlaySE(SE.FinishSendCard);
+        // しばらく表示しておく
         await UniTask.Delay(1000);
         
         // フェードアウトする

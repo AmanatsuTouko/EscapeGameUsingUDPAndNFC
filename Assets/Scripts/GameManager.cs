@@ -65,8 +65,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     public void OnRead(string uuid)
     {
-        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
+        // 読み込み音を鳴らす
+        SoundManager.Instance.PlaySE(SE.OnReadCard);
 
+        CardID? cardID = DataBase.Instance.GetCardIDFromUUID(uuid);
         if(cardID == null)
         {
             Debug.LogError($"エラー：登録されていないカードのUUID:{uuid}が読み込まれました。");
@@ -129,6 +131,8 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     // カード読み込み中にカードを離した場合の処理
     private void OnReleaseCard()
     {
+        // キャンセル音を鳴らす
+        SoundManager.Instance.PlaySE(SE.OnCancelRead);
         // 別クライアントでの読み込みを中止する
         DisableQuizPanelIfWhileReadCardOnRemoteClient();
         // 自クライアントでの送信中...の表示を中止する

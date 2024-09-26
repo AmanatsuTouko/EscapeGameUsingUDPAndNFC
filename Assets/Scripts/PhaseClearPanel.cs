@@ -52,22 +52,25 @@ public class PhaseClearPanel : MonoBehaviour, IFadeable, IActivable
         switch (clearedPhase)
         {
             case Phase.Phase1:
-                await DisplayTextsOnAnimationUniTask("PHASE1 クリア!", "行動範囲が拡大された", Phase1TextColor);
+                await DisplayTextsOnAnimationUniTask("PHASE1 クリア!", "行動範囲が拡大された", Phase1TextColor, 
+                    SE.ClearPhase);
                 break;
 
             case Phase.Phase2:
                 // 文字を表示して最終問題を出題
-                await DisplayTextsOnAnimationUniTask("PHASE2 クリア!", "階段の行き来が\n可能になった", Phase2TextColor);
+                await DisplayTextsOnAnimationUniTask("PHASE2 クリア!", "階段の行き来が\n可能になった", Phase2TextColor, 
+                    SE.ClearPhase);
                 UIManager.Instance.DisplayCircleClockQuiz();
                 break;
 
             case Phase.Phase3:
-                await DisplayTextsOnAnimationUniTask("脱出成功", "Congratulations!", Phase3TextColor);
+                await DisplayTextsOnAnimationUniTask("脱出成功", "Congratulations!", Phase3TextColor, 
+                    SE.ExitSuccess);
                 break;
         }
     }
 
-    private async UniTask DisplayTextsOnAnimationUniTask(string mainText, string subText, Color mainTextColor)
+    private async UniTask DisplayTextsOnAnimationUniTask(string mainText, string subText, Color mainTextColor, SE se)
     {
         // 文字色を変更
         MainText.color = mainTextColor;
@@ -76,6 +79,9 @@ public class PhaseClearPanel : MonoBehaviour, IFadeable, IActivable
 
         // BGPanelを徐々に表示
         await BgImage.FadeIn(1.0f, Easing.Ease.InSine);
+        
+        // クリア音を鳴らす
+        SoundManager.Instance.PlaySE(se);
 
         // 文字を点滅しながら出現
         MainText.text = mainText;

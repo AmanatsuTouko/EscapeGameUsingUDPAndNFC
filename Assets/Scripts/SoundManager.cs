@@ -4,22 +4,11 @@ using UnityEngine;
 // 一部参考：https://i-school.memo.wiki/d/SoundManager%A4%C7%A5%B2%A1%BC%A5%E0%C6%E2%A4%CE%B2%BB%B8%BB%A4%F2%B4%C9%CD%FD%A4%B9%A4%EB
 public class SoundManager : SingletonMonobehaviour<SoundManager>
 {
-    // AudioClipの種類を記述する
-    // 最下に追加していくこと（InspectorのListがズレてしまうため）
-    public enum SE
-    {
-        OnReadCard,
-        OnCancelRead,
-        ErrorNoHint,
-        ClearQuiz,
-        ClearPhase,
-    }
-
     [Range(0, 1)]
     public float SEMasterVolume = 1.0f;
     public bool Mute = false;
 
-    public List<SEData> SEDatas;
+    public SEScriptableObject SEDatas;
     private AudioSource[] SE_Sources = new AudioSource[16];
 
     public override void Awake()
@@ -42,7 +31,7 @@ public class SoundManager : SingletonMonobehaviour<SoundManager>
     
     public void PlaySE(SE se)  
     {
-        AudioClip audioClip = GetAudioClipFromSE(se);
+        AudioClip audioClip = SEDatas.GetAudioClipFromSE(se);
         if(audioClip == null)
         {
             return;
@@ -72,27 +61,17 @@ public class SoundManager : SingletonMonobehaviour<SoundManager>
             source.clip = null;
         }
     }
-
-    private AudioClip GetAudioClipFromSE(SE se)
-    {
-        foreach(var ses in SEDatas)
-        {
-            if(ses.SE == se)
-            {
-                return ses.AudioClip;
-            }
-        }
-        Debug.LogError($"エラー：登録されていないSE：{se}を再生しようとしています。");
-        return null;
-    }
-
-    // SEの種類とAudioClip, 音量などを保持するクラス
-    [System.Serializable]
-    public class SEData
-    {
-        public SE SE;
-        public AudioClip AudioClip;
-        public float Volume = 1.0f;
-    }
 }
 
+// AudioClipの種類を記述する
+// 最下に追加していくこと（InspectorのListがズレてしまうため）
+public enum SE
+{
+    OnReadCard,
+    OnCancelRead,
+    ErrorNoHint,
+    ClearQuiz,
+    ClearPhase,
+    FinishSendCard,
+    ExitSuccess, // 脱出成功
+}

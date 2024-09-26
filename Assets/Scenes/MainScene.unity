@@ -577,22 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SEMasterVolume: 1
   Mute: 0
-  SEDatas:
-  - SE: 0
-    AudioClip: {fileID: 8300000, guid: 96dca282ad5d46d48a1391f6b2403abe, type: 3}
-    Volume: 1
-  - SE: 0
-    AudioClip: {fileID: 8300000, guid: 469e6ffa93ae97949a310d4e020e170f, type: 3}
-    Volume: 1
-  - SE: 0
-    AudioClip: {fileID: 8300000, guid: 193afe48b5762a542bbc5041c0275699, type: 3}
-    Volume: 1
-  - SE: 0
-    AudioClip: {fileID: 8300000, guid: ffe3dc7eed555d447990554234078a4d, type: 3}
-    Volume: 1
-  - SE: 0
-    AudioClip: {fileID: 8300000, guid: 5ac6b3868b947de489f32224b407aec9, type: 3}
-    Volume: 1
+  SEDatas: {fileID: 11400000, guid: 5f285138c98229e4e9066dfa0862676f, type: 2}
 --- !u!1 &618481190
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59906b84780d88c4e8752916ba310d59, type: 3}
+  m_Name: SEScriptableObject
+  m_EditorClassIdentifier: 
+  SEs:
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: 96dca282ad5d46d48a1391f6b2403abe, type: 3}
+    Volume: 1
+  - SE: 1
+    AudioClip: {fileID: 8300000, guid: 469e6ffa93ae97949a310d4e020e170f, type: 3}
+    Volume: 1
+  - SE: 2
+    AudioClip: {fileID: 8300000, guid: 193afe48b5762a542bbc5041c0275699, type: 3}
+    Volume: 1
+  - SE: 3
+    AudioClip: {fileID: 8300000, guid: ffe3dc7eed555d447990554234078a4d, type: 3}
+    Volume: 1
+  - SE: 4
+    AudioClip: {fileID: 8300000, guid: 5ac6b3868b947de489f32224b407aec9, type: 3}
+    Volume: 1
+  - SE: 5
+    AudioClip: {fileID: 8300000, guid: b13ed89b3437e75469efaaf8474e9f3d, type: 3}
+    Volume: 1
+  - SE: 6
+    AudioClip: {fileID: 8300000, guid: 742cc8a46bf518945a5b60e39226db29, type: 3}
+    Volume: 1

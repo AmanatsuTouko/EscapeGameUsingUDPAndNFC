@@ -62,6 +62,8 @@ public class NonHintError : MonoBehaviour, IFadeable, IActivable
     // 表示したときの一覧の流れ
     public async UniTask Action()
     {
+        // エラー音を鳴らす
+        SoundManager.Instance.PlaySE(SE.ErrorNoHint);
         // 文字を点滅させる
         await Blinking();
         // 2秒待つ

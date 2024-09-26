@@ -47,6 +47,9 @@ public class CorrectPanel : MonoBehaviour, IFadeable, IActivable
     // 表示したときの一覧の流れ
     public async UniTask Action()
     {
+        // クイズをクリアした音を鳴らす
+        SoundManager.Instance.PlaySE(SE.ClearQuiz);
+
         // 2秒待つ
         await UniTask.WaitForSeconds(2.0f);
         // フェードアウトしながらメイン画面に戻る
