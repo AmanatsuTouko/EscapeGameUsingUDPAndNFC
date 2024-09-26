@@ -58,7 +58,7 @@ public class PhaseClearPanel : MonoBehaviour, IFadeable, IActivable
             case Phase.Phase2:
                 // 文字を表示して最終問題を出題
                 await DisplayTextsOnAnimationUniTask("PHASE2 クリア!", "階段の行き来が\n可能になった", Phase2TextColor);
-                CircleClockQuizManager.Instance.DisplayQuiz();
+                UIManager.Instance.DisplayCircleClockQuiz();
                 break;
 
             case Phase.Phase3:

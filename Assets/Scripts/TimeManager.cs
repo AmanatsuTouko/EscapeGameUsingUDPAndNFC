@@ -11,6 +11,9 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
     // 初期制限時間 (Hours, Minites, Seconds)
     [SerializeField] HMSTimeStruct INIT_TIME_LIMIT = new HMSTimeStruct(1, 0, 0);
 
+    // 1秒おきに実行する関数
+    public Action<List<int>> ActionOnPassedOneSecond;
+
     void Start()
     {
         // タイマーの初期化
@@ -28,10 +31,14 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
         // UIの更新
         UIManager.Instance.SetLimitTimeText(remainText);
 
-        // 1秒経過ごとにクイズの表示を更新する
-        if(CircleClockQuizManager.Instance.IsDisplayed() && IsPassedOneSecond(remainTime))
+        // 1秒おきに登録された関数を実行する
+        // CircleClockQuizから関数を登録できるようにする
+        if(IsPassedOneSecond(remainTime))
         {
-            CircleClockQuizManager.Instance.DisplayCircleNumber(GetIncludedNumbers(remainTime));
+            if(ActionOnPassedOneSecond != null)
+            {
+                ActionOnPassedOneSecond.Invoke(GetIncludedNumbers(remainTime));
+            }
         }
     }
 

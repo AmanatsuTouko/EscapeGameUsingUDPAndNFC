@@ -34,6 +34,12 @@ public class DebugInput : MonoBehaviour
     {
         PhaseManager.Instance.QuizClear(TestCardID);
         GameManager.Instance.QuizClearOnRemoteClient(TestCardID);
+
+        // 最終問題がクリアされたときはタイマーをストップする
+        if(TestCardID == CardID.Question07_FinalQuestion)
+        {
+            TimeManager.Instance.Timer.Stop();
+        }
     }
 
     private string GetUUIDFromCardID(CardID cardID)

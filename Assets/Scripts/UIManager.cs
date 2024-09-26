@@ -22,6 +22,7 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     [SerializeField] GameObject NonHintPanelPrefab;
     [SerializeField] GameObject PhaseClearPanelPrefab;
     [SerializeField] GameObject SendingBarPanelPrefab;
+    [SerializeField] GameObject CircleClockQuizPanelPrefab;
 
      // PostProcess
     [Header("Post Process")]
@@ -238,6 +239,12 @@ public class UIManager : SingletonMonobehaviour<UIManager>
         {
             Debug.LogError("注意：SendingBarPanelが表示されていないときに、 DeleteSendingBarPanel()を実行しています。");
         }
+    }
+
+    // 最終問題の表示
+    public void DisplayCircleClockQuiz()
+    {
+        GameObject circleQuiz = Instantiate(CircleClockQuizPanelPrefab, Canvas.transform);
     }
 
     // 正解を表示して，暫く経ったらメイン画面に戻る

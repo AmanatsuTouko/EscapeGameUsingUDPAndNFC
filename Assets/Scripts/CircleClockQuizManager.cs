@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CircleClockQuizManager : SingletonMonobehaviour<CircleClockQuizManager>
+public class CircleClockQuizManager : MonoBehaviour
 {
     [SerializeField] GameObject QuizParent;
 
+    [SerializeField] RectTransform TimerTextTrans;
+    private Vector3 initTimerTextPos;
+
     // List<List> Image がなぜかInspectorに表示されないので仕方なく全部定義する
+    [Header("Images")]
     [SerializeField] List<Image> ZeroImages;
     [SerializeField] List<Image> OneImages;
     [SerializeField] List<Image> TwoImages;
@@ -21,13 +25,25 @@ public class CircleClockQuizManager : SingletonMonobehaviour<CircleClockQuizMana
 
     [SerializeField] private List<Image> allImages;
 
-    [SerializeField] RectTransform TimerTextTrans;
-    private Vector3 initTimerTextPos;
-
     private void Start()
     {
+        // 全てのImageへの参照を取得しておく
         AddAllImages();
+
+        // タイマーの2:00:00の文字列のTransformを取得
+        TimerTextTrans = TimeManager.Instance.GetComponent<RectTransform>();
         initTimerTextPos = TimerTextTrans.position;
+
+        // タイマーの位置を変更する
+        MoveTimerUI();
+
+        // タイマーからデータを送信してもらう関数を登録する
+        TimeManager.Instance.ActionOnPassedOneSecond += DisplayCircleNumber;
+    }
+
+    private void OnDestroy()
+    {
+        TimeManager.Instance.ActionOnPassedOneSecond -= DisplayCircleNumber;
     }
 
     public bool IsDisplayed()
