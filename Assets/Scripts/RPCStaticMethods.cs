@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 // RPCで実行される関数(publicでstaticでなければならない)
@@ -17,5 +18,10 @@ public class RPCStaticMethods : MonoBehaviour
     {
         CardID? cardID = DataBase.Instance.GetCardIDFromUUID(quizCardUUIDString);
         PhaseManager.Instance.QuizClear((CardID)cardID);
+    }
+
+    public static void SynchronizeTimer(DateTime dateTime)
+    {
+        TimeManager.Instance.SetStartTime(dateTime);
     }
 }

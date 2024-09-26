@@ -211,4 +211,17 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         PhaseManager.Instance.QuizClear((CardID)quiz);
         Instance.QuizClearOnRemoteClient((CardID)quiz);
     }
+
+    // Timerの時刻同期メソッド
+    // 別クライアントでTimerの時刻同期を行う
+    public void SynchronizeTimerOnRemoteClient()
+    {
+        // UUIDを引数に，画像を表示する関数を別クライアントで実行する
+        string jsonMethod = RPCManager.GetJsonFromMethodArgs(
+            nameof(RPCStaticMethods), 
+            nameof(RPCStaticMethods.SynchronizeTimer), 
+            new string[]{TimeManager.Instance.GetStartTime().ToString()}
+        );
+        udpSender.SendMessage(jsonMethod);
+    }
 }

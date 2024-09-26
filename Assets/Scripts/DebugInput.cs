@@ -52,4 +52,10 @@ public class DebugInput : MonoBehaviour
         }
         return (string)uuid;
     }
+
+    // 時刻同期
+    public void SynchronizeTimer()
+    {
+        GameManager.Instance.SynchronizeTimerOnRemoteClient();
+    }
 }

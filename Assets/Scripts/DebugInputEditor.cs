@@ -15,7 +15,7 @@ public class DebugInputEditor : Editor
         // targetを変換して拡張対象クラスを取得
         DebugInput debugInput = target as DebugInput;
 
-        GUILayout.Label("Buttons");
+        GUILayout.Label("Mock NFC Read");
         // ボタンを表示する
         if(GUILayout.Button("Read Test Card"))
         {
@@ -34,6 +34,12 @@ public class DebugInputEditor : Editor
         if(GUILayout.Button("ClearQuiz of Test Card"))
         {
             debugInput.ClearQuiz();
+        }
+
+        GUILayout.Label("Timer Debug");
+        if(GUILayout.Button("SynchronizeTimer"))
+        {
+            debugInput.SynchronizeTimer();
         }
     }
 }

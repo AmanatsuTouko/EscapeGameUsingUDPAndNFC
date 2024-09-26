@@ -73,6 +73,16 @@ public class TimeManager : SingletonMonobehaviour<TimeManager>
         return new List<int>(set);
     }
 
+    // 時刻同期に用いるメソッド
+    public void SetStartTime(DateTime dateTime)
+    {
+        this.timer.StartTime = dateTime;
+    }
+    public DateTime GetStartTime()
+    {
+        return this.timer.StartTime;
+    }
+
     public Timer Timer
     { 
         get
