@@ -531,6 +531,68 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!1 &558507417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 558507418}
+  - component: {fileID: 558507419}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &558507418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558507417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &558507419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558507417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abea4da542005846882a811e0d1df25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SEMasterVolume: 1
+  Mute: 0
+  SEDatas:
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: 96dca282ad5d46d48a1391f6b2403abe, type: 3}
+    Volume: 1
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: 469e6ffa93ae97949a310d4e020e170f, type: 3}
+    Volume: 1
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: 193afe48b5762a542bbc5041c0275699, type: 3}
+    Volume: 1
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: ffe3dc7eed555d447990554234078a4d, type: 3}
+    Volume: 1
+  - SE: 0
+    AudioClip: {fileID: 8300000, guid: 5ac6b3868b947de489f32224b407aec9, type: 3}
+    Volume: 1
 --- !u!1 &618481190
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,6 +1664,7 @@ SceneRoots:
   - {fileID: 705124077}
   - {fileID: 547987912}
   - {fileID: 2006035811}
+  - {fileID: 558507418}
   - {fileID: 711165807}
   - {fileID: 762052973}
   - {fileID: 346951572}
