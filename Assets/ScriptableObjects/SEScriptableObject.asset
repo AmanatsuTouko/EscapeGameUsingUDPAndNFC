@@ -15,7 +15,7 @@ MonoBehaviour:
   SEs:
   - SE: 0
     AudioClip: {fileID: 8300000, guid: 96dca282ad5d46d48a1391f6b2403abe, type: 3}
-    Volume: 1
+    Volume: 0.5
   - SE: 1
     AudioClip: {fileID: 8300000, guid: 469e6ffa93ae97949a310d4e020e170f, type: 3}
     Volume: 1
